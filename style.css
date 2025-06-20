@@ -2,7 +2,7 @@
 Theme Name: Fitness Coach Pro
 Description: A modern, responsive WordPress theme for fitness coaches and personal trainers. Built with a clean design focusing on conversions and user experience.
 Author: Your Name
-Version: 3.2
+Version: 3.3
 */
 
 /* Base Styles */
@@ -1547,10 +1547,31 @@ body .footer-content a:active {
     padding: 0;
 }
 
+/* Override container padding for content rows */
+.content-rows-section .container {
+    padding: 0 1rem;
+    margin-top: 0;
+}
+
 .content-row {
     padding: 4rem 0;
     transition: all 0.3s ease;
 }
+
+/* Padding Control Classes */
+.content-row.padding-top-none { padding-top: 0; }
+.content-row.padding-top-small { padding-top: 2rem; }
+.content-row.padding-top-medium { padding-top: 3rem; }
+.content-row.padding-top-default { padding-top: 4rem; }
+.content-row.padding-top-large { padding-top: 5rem; }
+.content-row.padding-top-extra_large { padding-top: 6rem; }
+
+.content-row.padding-bottom-none { padding-bottom: 0; }
+.content-row.padding-bottom-small { padding-bottom: 2rem; }
+.content-row.padding-bottom-medium { padding-bottom: 3rem; }
+.content-row.padding-bottom-default { padding-bottom: 4rem; }
+.content-row.padding-bottom-large { padding-bottom: 5rem; }
+.content-row.padding-bottom-extra_large { padding-bottom: 6rem; }
 
 .content-row.bg-white {
     background-color: #ffffff;
@@ -1764,7 +1785,47 @@ body .footer-content a:active {
     box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
 }
 
-/* Responsive Design for Image and Text Rows */
+/* Tablet Responsive Design (768px to 1200px) */
+@media (min-width: 769px) and (max-width: 1200px) {
+    .row-layout-text_left {
+        grid-template-columns: 60% 40%;
+    }
+    
+    .row-layout-text_right {
+        grid-template-columns: 40% 60%;
+    }
+    
+    .row-content {
+        gap: 2rem;
+    }
+    
+    .text-content h1, .text-content h2 {
+        font-size: 1.75rem;
+    }
+    
+    .text-content h3 {
+        font-size: 1.375rem;
+    }
+    
+    .text-content p {
+        font-size: 1rem;
+    }
+    
+    /* Tablet padding adjustments */
+    .content-row.padding-top-small { padding-top: 1.75rem; }
+    .content-row.padding-top-medium { padding-top: 2.5rem; }
+    .content-row.padding-top-default { padding-top: 3.5rem; }
+    .content-row.padding-top-large { padding-top: 4.5rem; }
+    .content-row.padding-top-extra_large { padding-top: 5.5rem; }
+    
+    .content-row.padding-bottom-small { padding-bottom: 1.75rem; }
+    .content-row.padding-bottom-medium { padding-bottom: 2.5rem; }
+    .content-row.padding-bottom-default { padding-bottom: 3.5rem; }
+    .content-row.padding-bottom-large { padding-bottom: 4.5rem; }
+    .content-row.padding-bottom-extra_large { padding-bottom: 5.5rem; }
+}
+
+/* Mobile Responsive Design */
 @media (max-width: 768px) {
     .image-text-hero {
         padding: 3rem 0;
@@ -1781,6 +1842,21 @@ body .footer-content a:active {
     .content-row {
         padding: 3rem 0;
     }
+    
+    /* Mobile padding adjustments */
+    .content-row.padding-top-none { padding-top: 0; }
+    .content-row.padding-top-small { padding-top: 1.5rem; }
+    .content-row.padding-top-medium { padding-top: 2rem; }
+    .content-row.padding-top-default { padding-top: 3rem; }
+    .content-row.padding-top-large { padding-top: 4rem; }
+    .content-row.padding-top-extra_large { padding-top: 5rem; }
+    
+    .content-row.padding-bottom-none { padding-bottom: 0; }
+    .content-row.padding-bottom-small { padding-bottom: 1.5rem; }
+    .content-row.padding-bottom-medium { padding-bottom: 2rem; }
+    .content-row.padding-bottom-default { padding-bottom: 3rem; }
+    .content-row.padding-bottom-large { padding-bottom: 4rem; }
+    .content-row.padding-bottom-extra_large { padding-bottom: 5rem; }
     
     .row-content {
         grid-template-columns: 1fr !important;

@@ -181,15 +181,39 @@ if (function_exists('acf_add_local_field_group')) {
                         'default_value' => 'center',
                     ),
                     
-                    // Add Padding
+                    // Padding Controls
                     array(
-                        'key' => 'field_extra_padding',
-                        'label' => 'Extra Padding',
-                        'name' => 'extra_padding',
-                        'type' => 'true_false',
-                        'instructions' => 'Add extra padding to this row for more spacing',
-                        'default_value' => 0,
-                        'ui' => 1,
+                        'key' => 'field_padding_top',
+                        'label' => 'Top Padding',
+                        'name' => 'padding_top',
+                        'type' => 'select',
+                        'instructions' => 'Control the top padding of this row',
+                        'choices' => array(
+                            'default' => 'Default (4rem)',
+                            'none' => 'None (0)',
+                            'small' => 'Small (2rem)',
+                            'medium' => 'Medium (3rem)',
+                            'large' => 'Large (5rem)',
+                            'extra_large' => 'Extra Large (6rem)',
+                        ),
+                        'default_value' => 'default',
+                    ),
+                    
+                    array(
+                        'key' => 'field_padding_bottom',
+                        'label' => 'Bottom Padding',
+                        'name' => 'padding_bottom',
+                        'type' => 'select',
+                        'instructions' => 'Control the bottom padding of this row',
+                        'choices' => array(
+                            'default' => 'Default (4rem)',
+                            'none' => 'None (0)',
+                            'small' => 'Small (2rem)',
+                            'medium' => 'Medium (3rem)',
+                            'large' => 'Large (5rem)',
+                            'extra_large' => 'Extra Large (6rem)',
+                        ),
+                        'default_value' => 'default',
                     ),
                     
                 ),

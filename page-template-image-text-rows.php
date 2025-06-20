@@ -41,6 +41,8 @@ get_header(); ?>
                     $text_content = $row['text_content'] ?? '';
                     $image = $row['row_image'] ?? null;
                     $background = $row['row_background'] ?? 'white';
+                    $padding_top = $row['padding_top'] ?? 'default';
+                    $padding_bottom = $row['padding_bottom'] ?? 'default';
                     
                     // Generate background class
                     $bg_class = '';
@@ -55,9 +57,12 @@ get_header(); ?>
                             $bg_class = 'bg-white';
                     }
                     
+                    // Generate padding classes
+                    $padding_class = 'padding-top-' . $padding_top . ' padding-bottom-' . $padding_bottom;
+                    
                     $row_number = $index + 1;
             ?>
-                <div class="content-row <?php echo esc_attr($bg_class); ?>" data-row="<?php echo $row_number; ?>">
+                <div class="content-row <?php echo esc_attr($bg_class . ' ' . $padding_class); ?>" data-row="<?php echo $row_number; ?>">
                     <div class="container">
                         <div class="row-content row-layout-<?php echo esc_attr($layout); ?>">
                             
