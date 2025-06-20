@@ -2,7 +2,7 @@
 Theme Name: Fitness Coach Pro
 Description: A modern, responsive WordPress theme for fitness coaches and personal trainers. Built with a clean design focusing on conversions and user experience.
 Author: Your Name
-Version: 2.6
+Version: 2.7
 */
 
 /* Base Styles */
@@ -1168,4 +1168,344 @@ body .footer-content a:active {
 /* Ensure all elements use border-box sizing */
 *, *::before, *::after {
     box-sizing: border-box;
+}
+
+/* How It Works Page Styles */
+.how-it-works-page {
+    padding-top: 70px;
+}
+
+.how-it-works-hero {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.how-it-works-hero .page-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: #6c757d;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+/* Process Steps */
+.process-steps {
+    padding: 5rem 0;
+    background: white;
+}
+
+.steps-grid {
+    display: grid;
+    gap: 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.step-item {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    padding: 2rem;
+    background: #f8f9fa;
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.step-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.step-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #007cba, #00a0d2);
+}
+
+.step-number {
+    background: linear-gradient(135deg, #007cba, #00a0d2);
+    color: white;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    box-shadow: 0 10px 30px rgba(0, 124, 186, 0.3);
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-icon {
+    color: #007cba;
+    margin-bottom: 1.5rem;
+}
+
+.step-content h3 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+}
+
+.step-content p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    color: #4a5568;
+}
+
+.step-features {
+    list-style: none;
+    padding: 0;
+}
+
+.step-features li {
+    padding: 0.5rem 0;
+    position: relative;
+    padding-left: 1.5rem;
+    color: #2d3748;
+}
+
+.step-features li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #00a0d2;
+    font-weight: bold;
+}
+
+/* Timeline Section */
+.process-timeline {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #f1f3f4 0%, #e8eaed 100%);
+}
+
+.process-timeline .section-title {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-size: 2.5rem;
+}
+
+.timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, #007cba, #00a0d2);
+    border-radius: 2px;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 3rem;
+    width: 50%;
+}
+
+.timeline-item:nth-child(odd) {
+    left: 0;
+    padding-right: 3rem;
+}
+
+.timeline-item:nth-child(even) {
+    left: 50%;
+    padding-left: 3rem;
+}
+
+.timeline-marker {
+    position: absolute;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    background: #007cba;
+    border-radius: 50%;
+    border: 4px solid white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.timeline-item:nth-child(odd) .timeline-marker {
+    right: -10px;
+}
+
+.timeline-item:nth-child(even) .timeline-marker {
+    left: -10px;
+}
+
+.timeline-content {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.timeline-content h4 {
+    color: #007cba;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.timeline-content p {
+    color: #4a5568;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* FAQ Section */
+.how-it-works-faq {
+    padding: 5rem 0;
+    background: white;
+}
+
+.how-it-works-faq .section-title {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-size: 2.5rem;
+}
+
+.faq-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 10px;
+    border-left: 4px solid #007cba;
+}
+
+.faq-item h4 {
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+.faq-item p {
+    color: #4a5568;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* CTA Section */
+.how-it-works-cta {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #007cba 0%, #00a0d2 100%);
+    color: white;
+    text-align: center;
+}
+
+.how-it-works-cta h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.how-it-works-cta p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.how-it-works-cta .primary-button {
+    background: white;
+    color: #007cba;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 50px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.how-it-works-cta .primary-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    color: #007cba;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .how-it-works-hero .page-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .step-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .step-number {
+        width: 60px;
+        height: 60px;
+        font-size: 1.25rem;
+        margin: 0 auto;
+    }
+    
+    .timeline::before {
+        left: 20px;
+    }
+    
+    .timeline-item {
+        width: 100%;
+        left: 0 !important;
+        padding-left: 3rem !important;
+        padding-right: 0 !important;
+    }
+    
+    .timeline-marker {
+        left: 10px !important;
+        right: auto !important;
+    }
+    
+    .faq-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .how-it-works-cta h2 {
+        font-size: 2rem;
+    }
 } 
