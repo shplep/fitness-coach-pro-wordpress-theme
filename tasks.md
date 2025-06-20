@@ -126,6 +126,9 @@
 - [x] Apply consistent mobile ordering for both text-left and text-right layouts
 - [x] Update CSS flex order properties for proper mobile stacking
 - [x] Update theme version to 3.5
+- [x] Fix admin bar margin interference with image-text-hero containers
+- [x] Add admin bar overrides for both desktop and mobile admin bars
+- [x] Update theme version to 3.6
 
 ## Current Status: ✅ COMPLETED - All Phases Complete!
 
