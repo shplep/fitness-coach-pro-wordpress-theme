@@ -210,71 +210,77 @@ function fitness_coach_save_testimonial_meta($post_id) {
 add_action('save_post', 'fitness_coach_save_testimonial_meta');
 
 /**
- * Custom Range Control with Value Display
+ * Load Custom Range Control Class
  */
-class Fitness_Coach_Range_Control extends WP_Customize_Control {
-    public $type = 'range_with_value';
-    public $suffix = '';
+function fitness_coach_load_customize_controls() {
+    /**
+     * Custom Range Control with Value Display
+     */
+    class Fitness_Coach_Range_Control extends WP_Customize_Control {
+        public $type = 'range_with_value';
+        public $suffix = '';
 
-    public function render_content() {
-        $value = $this->value();
-        if (empty($value)) {
-            $value = $this->setting->default;
+        public function render_content() {
+            $value = $this->value();
+            if (empty($value)) {
+                $value = $this->setting->default;
+            }
+            ?>
+            <label>
+                <?php if (!empty($this->label)) : ?>
+                    <span class="customize-control-title"><?php echo esc_html($this->label); ?></span>
+                <?php endif; ?>
+                <?php if (!empty($this->description)) : ?>
+                    <span class="description customize-control-description"><?php echo $this->description; ?></span>
+                <?php endif; ?>
+                <div class="range-slider-container">
+                    <input type="range" 
+                           <?php $this->input_attrs(); ?> 
+                           value="<?php echo esc_attr($value); ?>" 
+                           <?php $this->link(); ?>
+                           id="<?php echo esc_attr($this->id); ?>"
+                           class="range-slider" />
+                    <span class="range-value" id="<?php echo esc_attr($this->id); ?>-value">
+                        <?php echo esc_html($value . $this->suffix); ?>
+                    </span>
+                </div>
+            </label>
+            <script>
+            (function($) {
+                var slider = $('#<?php echo esc_js($this->id); ?>');
+                var valueDisplay = $('#<?php echo esc_js($this->id); ?>-value');
+                var suffix = '<?php echo esc_js($this->suffix); ?>';
+                
+                slider.on('input', function() {
+                    valueDisplay.text(this.value + suffix);
+                });
+            })(jQuery);
+            </script>
+            <style>
+            .range-slider-container {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-top: 5px;
+            }
+            .range-slider {
+                flex: 1;
+            }
+            .range-value {
+                background: #f1f1f1;
+                padding: 4px 8px;
+                border-radius: 3px;
+                font-weight: 600;
+                min-width: 45px;
+                text-align: center;
+                font-size: 12px;
+            }
+            </style>
+            <?php
         }
-        ?>
-        <label>
-            <?php if (!empty($this->label)) : ?>
-                <span class="customize-control-title"><?php echo esc_html($this->label); ?></span>
-            <?php endif; ?>
-            <?php if (!empty($this->description)) : ?>
-                <span class="description customize-control-description"><?php echo $this->description; ?></span>
-            <?php endif; ?>
-            <div class="range-slider-container">
-                <input type="range" 
-                       <?php $this->input_attrs(); ?> 
-                       value="<?php echo esc_attr($value); ?>" 
-                       <?php $this->link(); ?>
-                       id="<?php echo esc_attr($this->id); ?>"
-                       class="range-slider" />
-                <span class="range-value" id="<?php echo esc_attr($this->id); ?>-value">
-                    <?php echo esc_html($value . $this->suffix); ?>
-                </span>
-            </div>
-        </label>
-        <script>
-        (function($) {
-            var slider = $('#<?php echo esc_js($this->id); ?>');
-            var valueDisplay = $('#<?php echo esc_js($this->id); ?>-value');
-            var suffix = '<?php echo esc_js($this->suffix); ?>';
-            
-            slider.on('input', function() {
-                valueDisplay.text(this.value + suffix);
-            });
-        })(jQuery);
-        </script>
-        <style>
-        .range-slider-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 5px;
-        }
-        .range-slider {
-            flex: 1;
-        }
-        .range-value {
-            background: #f1f1f1;
-            padding: 4px 8px;
-            border-radius: 3px;
-            font-weight: 600;
-            min-width: 45px;
-            text-align: center;
-            font-size: 12px;
-        }
-        </style>
-        <?php
     }
 }
+add_action('customize_register', 'fitness_coach_load_customize_controls', 1);
 
 /**
  * Customizer Settings
