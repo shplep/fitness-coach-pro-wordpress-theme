@@ -679,6 +679,7 @@ add_action('customize_preview_init', 'fitness_coach_customize_preview_js');
 // Register page templates
 function fitness_coach_page_templates($templates) {
     $templates['page-template-how-it-works.php'] = 'How It Works';
+    $templates['page-template-image-text-rows.php'] = 'Image and Text Rows';
     return $templates;
 }
 add_filter('theme_page_templates', 'fitness_coach_page_templates');
@@ -692,6 +693,8 @@ function fitness_coach_load_page_template($template) {
         
         if ($page_template == 'page-template-how-it-works.php') {
             $template = get_template_directory() . '/page-template-how-it-works.php';
+        } elseif ($page_template == 'page-template-image-text-rows.php') {
+            $template = get_template_directory() . '/page-template-image-text-rows.php';
         }
     }
     
@@ -882,6 +885,10 @@ if (file_exists(get_template_directory() . '/acf-about-fields.php')) {
 
 if (file_exists(get_template_directory() . '/acf-how-it-works-fields.php')) {
     include_once get_template_directory() . '/acf-how-it-works-fields.php';
+}
+
+if (file_exists(get_template_directory() . '/acf-image-text-rows-fields.php')) {
+    include_once get_template_directory() . '/acf-image-text-rows-fields.php';
 }
 
 /**

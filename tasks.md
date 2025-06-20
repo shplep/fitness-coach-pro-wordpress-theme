@@ -100,6 +100,21 @@
 - [x] Clean up duplicate template registrations and files
 - [x] Update theme version to 3.0
 
+## Phase 13: Image and Text Rows Template ✅
+- [x] Create new "Image and Text Rows" page template for flexible content layouts
+- [x] Add ACF fields configuration for alternating image and text sections
+- [x] Implement row repeater with layout options (text left/right, image left/right)
+- [x] Add rich text editor for content sections with full formatting support
+- [x] Create image upload fields with alt text for accessibility
+- [x] Add background style options (white, light gray, primary color)
+- [x] Include hero section with optional subtitle and description
+- [x] Add call-to-action section with customizable button and link
+- [x] Style responsive grid layout with 65/35% text-to-image ratio
+- [x] Implement mobile-responsive stacking with proper image ordering
+- [x] Add hover effects and smooth transitions for visual appeal
+- [x] Include template registration and loading functions
+- [x] Update theme version to 3.1
+
 ## Current Status: ✅ COMPLETED - All Phases Complete!
 
 ## Installation Instructions

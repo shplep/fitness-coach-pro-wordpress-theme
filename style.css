@@ -2,7 +2,7 @@
 Theme Name: Fitness Coach Pro
 Description: A modern, responsive WordPress theme for fitness coaches and personal trainers. Built with a clean design focusing on conversions and user experience.
 Author: Your Name
-Version: 3.0
+Version: 3.1
 */
 
 /* Base Styles */
@@ -1507,5 +1507,329 @@ body .footer-content a:active {
     
     .how-it-works-cta h2 {
         font-size: 2rem;
+    }
+}
+
+/* Image and Text Rows Template Styles */
+.image-text-rows-page {
+    margin-top: 70px; /* Account for fixed header */
+}
+
+.image-text-hero {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.image-text-hero .page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+}
+
+.image-text-hero .hero-subtitle {
+    font-size: 1.25rem;
+    color: #4b5563;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.image-text-hero .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+    color: #374151;
+}
+
+.content-rows-section {
+    padding: 0;
+}
+
+.content-row {
+    padding: 4rem 0;
+    transition: all 0.3s ease;
+}
+
+.content-row.bg-white {
+    background-color: #ffffff;
+}
+
+.content-row.bg-light-gray {
+    background-color: #f8fafc;
+}
+
+.content-row.bg-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+}
+
+.content-row.bg-primary h1, 
+.content-row.bg-primary h2, 
+.content-row.bg-primary h3, 
+.content-row.bg-primary h4, 
+.content-row.bg-primary h5, 
+.content-row.bg-primary h6 {
+    color: white;
+}
+
+.row-content {
+    display: grid;
+    gap: 3rem;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.row-layout-text_left {
+    grid-template-columns: 65% 35%;
+}
+
+.row-layout-text_right {
+    grid-template-columns: 35% 65%;
+}
+
+.text-section {
+    display: flex;
+    align-items: center;
+}
+
+.text-content {
+    width: 100%;
+}
+
+.text-content h1, .text-content h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.text-content h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+}
+
+.text-content h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+.text-content p {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    color: #374151;
+}
+
+.content-row.bg-primary .text-content p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.text-content ul, .text-content ol {
+    margin-bottom: 1.5rem;
+    padding-left: 2rem;
+}
+
+.text-content li {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+    color: #374151;
+}
+
+.content-row.bg-primary .text-content li {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.text-content blockquote {
+    border-left: 4px solid #3b82f6;
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    font-size: 1.25rem;
+    color: #4b5563;
+}
+
+.content-row.bg-primary .text-content blockquote {
+    border-left-color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.image-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-container {
+    width: 100%;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.image-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+.image-placeholder {
+    width: 100%;
+    min-height: 300px;
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    border: 2px dashed #cbd5e1;
+    border-radius: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.image-placeholder:hover {
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+    border-color: #94a3b8;
+}
+
+.image-placeholder span {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.6;
+}
+
+.image-placeholder p {
+    font-size: 1.125rem;
+    color: #64748b;
+    margin: 0;
+    font-weight: 500;
+}
+
+.image-text-cta {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: white;
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.image-text-cta .cta-content h2 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: white;
+}
+
+.image-text-cta .btn {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 1.125rem;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.image-text-cta .btn:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+}
+
+/* Responsive Design for Image and Text Rows */
+@media (max-width: 768px) {
+    .image-text-hero {
+        padding: 3rem 0;
+    }
+    
+    .image-text-hero .page-title {
+        font-size: 2rem;
+    }
+    
+    .image-text-hero .hero-subtitle {
+        font-size: 1.125rem;
+    }
+    
+    .content-row {
+        padding: 3rem 0;
+    }
+    
+    .row-content {
+        grid-template-columns: 1fr !important;
+        gap: 2rem;
+        text-align: center;
+    }
+    
+    .row-layout-text_right .image-section {
+        order: -1;
+    }
+    
+    .text-content h1, .text-content h2 {
+        font-size: 1.75rem;
+    }
+    
+    .text-content h3 {
+        font-size: 1.375rem;
+    }
+    
+    .text-content p {
+        font-size: 1rem;
+    }
+    
+    .image-placeholder {
+        min-height: 250px;
+    }
+    
+    .image-text-cta .cta-content h2 {
+        font-size: 1.875rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .image-text-hero .page-title {
+        font-size: 1.75rem;
+    }
+    
+    .content-row {
+        padding: 2rem 0;
+    }
+    
+    .row-content {
+        gap: 1.5rem;
+    }
+    
+    .text-content h1, .text-content h2 {
+        font-size: 1.5rem;
+    }
+    
+    .image-placeholder {
+        min-height: 200px;
+    }
+    
+    .image-text-cta .cta-content h2 {
+        font-size: 1.5rem;
+    }
+    
+    .image-text-cta .btn {
+        padding: 0.875rem 1.5rem;
+        font-size: 1rem;
     }
 } 
