@@ -293,8 +293,273 @@ function fitness_coach_customize_register($wp_customize) {
         'section'     => 'fitness_coach_social_media',
         'type'        => 'url',
     ));
+
+    // Add Section for Typography Settings
+    $wp_customize->add_section('fitness_coach_typography', array(
+        'title'    => __('Typography Settings', 'fitness-coach'),
+        'priority' => 40,
+        'description' => __('Customize fonts and typography for your website.', 'fitness-coach'),
+    ));
+
+    // Primary Font (Headings)
+    $wp_customize->add_setting('fitness_coach_heading_font', array(
+        'default'           => 'Inter',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+
+    $wp_customize->add_control('fitness_coach_heading_font', array(
+        'label'       => __('Heading Font', 'fitness-coach'),
+        'description' => __('Enter a Google Font name for headings (e.g., "Roboto", "Open Sans", "Montserrat")', 'fitness-coach'),
+        'section'     => 'fitness_coach_typography',
+        'type'        => 'text',
+    ));
+
+    // Body Font
+    $wp_customize->add_setting('fitness_coach_body_font', array(
+        'default'           => 'Inter',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+
+    $wp_customize->add_control('fitness_coach_body_font', array(
+        'label'       => __('Body Font', 'fitness-coach'),
+        'description' => __('Enter a Google Font name for body text (e.g., "Open Sans", "Lato", "Source Sans Pro")', 'fitness-coach'),
+        'section'     => 'fitness_coach_typography',
+        'type'        => 'text',
+    ));
+
+    // Font Size Scale
+    $wp_customize->add_setting('fitness_coach_font_size_scale', array(
+        'default'           => '100',
+        'sanitize_callback' => 'absint',
+    ));
+
+    $wp_customize->add_control('fitness_coach_font_size_scale', array(
+        'label'       => __('Font Size Scale (%)', 'fitness-coach'),
+        'description' => __('Adjust the overall font size (80-150%). Default is 100%.', 'fitness-coach'),
+        'section'     => 'fitness_coach_typography',
+        'type'        => 'range',
+        'input_attrs' => array(
+            'min'  => 80,
+            'max'  => 150,
+            'step' => 5,
+        ),
+    ));
+
+    // Heading Font Weight
+    $wp_customize->add_setting('fitness_coach_heading_weight', array(
+        'default'           => '600',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+
+    $wp_customize->add_control('fitness_coach_heading_weight', array(
+        'label'   => __('Heading Font Weight', 'fitness-coach'),
+        'section' => 'fitness_coach_typography',
+        'type'    => 'select',
+        'choices' => array(
+            '300' => __('Light (300)', 'fitness-coach'),
+            '400' => __('Normal (400)', 'fitness-coach'),
+            '500' => __('Medium (500)', 'fitness-coach'),
+            '600' => __('Semi-Bold (600)', 'fitness-coach'),
+            '700' => __('Bold (700)', 'fitness-coach'),
+            '800' => __('Extra Bold (800)', 'fitness-coach'),
+        ),
+    ));
+
+    // Body Font Weight
+    $wp_customize->add_setting('fitness_coach_body_weight', array(
+        'default'           => '400',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+
+    $wp_customize->add_control('fitness_coach_body_weight', array(
+        'label'   => __('Body Font Weight', 'fitness-coach'),
+        'section' => 'fitness_coach_typography',
+        'type'    => 'select',
+        'choices' => array(
+            '300' => __('Light (300)', 'fitness-coach'),
+            '400' => __('Normal (400)', 'fitness-coach'),
+            '500' => __('Medium (500)', 'fitness-coach'),
+            '600' => __('Semi-Bold (600)', 'fitness-coach'),
+        ),
+    ));
 }
 add_action('customize_register', 'fitness_coach_customize_register');
+
+// Enqueue Google Fonts
+function fitness_coach_google_fonts() {
+    $heading_font = get_theme_mod('fitness_coach_heading_font', 'Inter');
+    $body_font = get_theme_mod('fitness_coach_body_font', 'Inter');
+    $heading_weight = get_theme_mod('fitness_coach_heading_weight', '600');
+    $body_weight = get_theme_mod('fitness_coach_body_weight', '400');
+    
+    $fonts = array();
+    $subsets = 'latin,latin-ext';
+    
+    // Add heading font with weights
+    if ($heading_font) {
+        $heading_weights = array($heading_weight);
+        // Add additional common weights for headings
+        if (!in_array('400', $heading_weights)) $heading_weights[] = '400';
+        if (!in_array('700', $heading_weights)) $heading_weights[] = '700';
+        $fonts[] = $heading_font . ':' . implode(',', array_unique($heading_weights));
+    }
+    
+    // Add body font with weights (if different from heading font)
+    if ($body_font && $body_font !== $heading_font) {
+        $body_weights = array($body_weight);
+        // Add additional common weights for body text
+        if (!in_array('400', $body_weights)) $body_weights[] = '400';
+        if (!in_array('700', $body_weights)) $body_weights[] = '700';
+        $fonts[] = $body_font . ':' . implode(',', array_unique($body_weights));
+    } elseif ($body_font === $heading_font && $body_weight !== $heading_weight) {
+        // Same font but different weight, combine weights
+        $all_weights = array($heading_weight, $body_weight, '400', '700');
+        $fonts = array($body_font . ':' . implode(',', array_unique($all_weights)));
+    }
+    
+    if (!empty($fonts)) {
+        $fonts_url = add_query_arg(array(
+            'family' => urlencode(implode('|', $fonts)),
+            'subset' => urlencode($subsets),
+            'display' => 'swap',
+        ), 'https://fonts.googleapis.com/css2');
+        
+        wp_enqueue_style('fitness-coach-google-fonts', $fonts_url, array(), null);
+    }
+}
+add_action('wp_enqueue_scripts', 'fitness_coach_google_fonts');
+
+// Generate custom typography CSS
+function fitness_coach_typography_css() {
+    $heading_font = get_theme_mod('fitness_coach_heading_font', 'Inter');
+    $body_font = get_theme_mod('fitness_coach_body_font', 'Inter');
+    $heading_weight = get_theme_mod('fitness_coach_heading_weight', '600');
+    $body_weight = get_theme_mod('fitness_coach_body_weight', '400');
+    $font_scale = get_theme_mod('fitness_coach_font_size_scale', 100);
+    
+    $scale_factor = $font_scale / 100;
+    
+    $css = "
+    :root {
+        --font-scale: {$scale_factor};
+    }
+    
+    body {
+        font-family: '{$body_font}', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: {$body_weight};
+        font-size: calc(1rem * var(--font-scale));
+        line-height: calc(1.6 * var(--font-scale));
+    }
+    
+    h1, h2, h3, h4, h5, h6, .site-title {
+        font-family: '{$heading_font}', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: {$heading_weight};
+    }
+    
+    h1 {
+        font-size: calc(2.5rem * var(--font-scale));
+        line-height: calc(1.2 * var(--font-scale));
+    }
+    
+    h2 {
+        font-size: calc(2rem * var(--font-scale));
+        line-height: calc(1.3 * var(--font-scale));
+    }
+    
+    h3 {
+        font-size: calc(1.75rem * var(--font-scale));
+        line-height: calc(1.4 * var(--font-scale));
+    }
+    
+    h4 {
+        font-size: calc(1.5rem * var(--font-scale));
+        line-height: calc(1.4 * var(--font-scale));
+    }
+    
+    h5 {
+        font-size: calc(1.25rem * var(--font-scale));
+        line-height: calc(1.5 * var(--font-scale));
+    }
+    
+    h6 {
+        font-size: calc(1.125rem * var(--font-scale));
+        line-height: calc(1.5 * var(--font-scale));
+    }
+    
+    .hero h1 {
+        font-size: calc(3rem * var(--font-scale));
+    }
+    
+    .btn {
+        font-family: '{$heading_font}', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: {$heading_weight};
+        font-size: calc(1rem * var(--font-scale));
+    }
+    
+    .nav-link {
+        font-family: '{$heading_font}', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: {$heading_weight};
+        font-size: calc(0.95rem * var(--font-scale));
+    }
+    
+    .feature-card h3 {
+        font-size: calc(1.5rem * var(--font-scale));
+    }
+    
+    .testimonial-text {
+        font-size: calc(1.1rem * var(--font-scale));
+        line-height: calc(1.6 * var(--font-scale));
+    }
+    
+    .testimonial-author {
+        font-weight: {$heading_weight};
+        font-size: calc(1rem * var(--font-scale));
+    }
+    
+    .section-title {
+        font-size: calc(2.5rem * var(--font-scale));
+    }
+    
+    @media (max-width: 768px) {
+        h1 {
+            font-size: calc(2rem * var(--font-scale));
+        }
+        
+        h2 {
+            font-size: calc(1.75rem * var(--font-scale));
+        }
+        
+        .hero h1 {
+            font-size: calc(2.5rem * var(--font-scale));
+        }
+        
+        .section-title {
+            font-size: calc(2rem * var(--font-scale));
+        }
+    }
+    ";
+    
+    return $css;
+}
+
+// Output custom typography CSS
+function fitness_coach_typography_styles() {
+    $css = fitness_coach_typography_css();
+    echo '<style type="text/css" id="fitness-coach-typography">' . $css . '</style>';
+}
+add_action('wp_head', 'fitness_coach_typography_styles');
+
+// Add live preview support for customizer
+function fitness_coach_customize_preview_js() {
+    wp_enqueue_script(
+        'fitness-coach-customizer-preview',
+        get_template_directory_uri() . '/js/customizer-preview.js',
+        array('customize-preview'),
+        wp_get_theme()->get('Version'),
+        true
+    );
+}
+add_action('customize_preview_init', 'fitness_coach_customize_preview_js');
 
 /**
  * Get Testimonials
