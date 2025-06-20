@@ -100,6 +100,7 @@ if (function_exists('acf_add_local_field_group')) {
                         'choices' => array(
                             'text_left' => 'Text Left (65%) + Image Right (35%)',
                             'text_right' => 'Image Left (35%) + Text Right (65%)',
+                            'text_only' => 'Text Only (100% width)',
                         ),
                         'default_value' => 'text_left',
                     ),
@@ -123,11 +124,20 @@ if (function_exists('acf_add_local_field_group')) {
                         'label' => 'Image',
                         'name' => 'row_image',
                         'type' => 'image',
-                        'instructions' => 'Upload an image for this row',
-                        'required' => 1,
+                        'instructions' => 'Upload an image for this row (not required for Text Only layout)',
+                        'required' => 0,
                         'return_format' => 'array',
                         'preview_size' => 'medium',
                         'library' => 'all',
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field' => 'field_row_layout',
+                                    'operator' => '!=',
+                                    'value' => 'text_only',
+                                ),
+                            ),
+                        ),
                     ),
                     
                     // Image Alt Text (for accessibility)

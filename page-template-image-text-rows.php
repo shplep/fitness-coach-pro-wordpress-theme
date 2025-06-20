@@ -9,30 +9,26 @@ get_header(); ?>
 <div class="image-text-rows-page">
     <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
         
-        <?php 
-        $show_hero = get_field('show_hero');
-        if ($show_hero !== false) : // Show by default if not set
-        ?>
         <!-- Hero Section -->
         <section class="image-text-hero">
             <div class="container">
                 <h1 class="page-title"><?php the_title(); ?></h1>
                 <?php 
+                $show_hero = get_field('show_hero');
                 $hero_subtitle = get_field('hero_subtitle');
-                if ($hero_subtitle) : ?>
+                if (($show_hero !== false) && $hero_subtitle) : ?>
                     <div class="hero-subtitle">
                         <p><?php echo esc_html($hero_subtitle); ?></p>
                     </div>
                 <?php endif; ?>
                 
-                <?php if (get_the_content()) : ?>
+                <?php if (($show_hero !== false) && get_the_content()) : ?>
                     <div class="hero-content">
                         <?php the_content(); ?>
                     </div>
                 <?php endif; ?>
             </div>
         </section>
-        <?php endif; ?>
 
         <!-- Content Rows Section -->
         <section class="content-rows-section">
@@ -65,7 +61,15 @@ get_header(); ?>
                     <div class="container">
                         <div class="row-content row-layout-<?php echo esc_attr($layout); ?>">
                             
-                            <?php if ($layout === 'text_left') : ?>
+                            <?php if ($layout === 'text_only') : ?>
+                                <!-- Text Only Layout -->
+                                <div class="text-only-section">
+                                    <div class="text-content">
+                                        <?php echo wp_kses_post($text_content); ?>
+                                    </div>
+                                </div>
+                                
+                            <?php elseif ($layout === 'text_left') : ?>
                                 <!-- Text Left, Image Right Layout -->
                                 <div class="text-section">
                                     <div class="text-content">
@@ -120,18 +124,17 @@ get_header(); ?>
             ?>
                 <div class="content-row bg-white">
                     <div class="container">
-                        <div class="row-content row-layout-text_left">
-                            <div class="text-section">
+                        <div class="row-content row-layout-text_only">
+                            <div class="text-only-section">
                                 <div class="text-content">
-                                    <h2>Welcome to Our Service</h2>
-                                    <p>This is a flexible layout template that allows you to create engaging content with alternating text and image sections. You can customize each row through the WordPress admin panel.</p>
-                                    <p>Add as many rows as you need, choosing between "Text Left + Image Right" or "Image Left + Text Right" layouts for each section.</p>
-                                </div>
-                            </div>
-                            <div class="image-section">
-                                <div class="image-placeholder">
-                                    <span>📷</span>
-                                    <p>Add your first image</p>
+                                    <h2>Welcome to Our Flexible Layout Template</h2>
+                                    <p>This is a versatile layout template that allows you to create engaging content with three different layout options:</p>
+                                    <ul>
+                                        <li><strong>Text Left + Image Right</strong> - 65% text, 35% image</li>
+                                        <li><strong>Image Left + Text Right</strong> - 35% image, 65% text</li>
+                                        <li><strong>Text Only</strong> - 100% width text for content-focused sections</li>
+                                    </ul>
+                                    <p>Add as many rows as you need and mix different layouts to create the perfect page for your content. Each row can have its own background style and content.</p>
                                 </div>
                             </div>
                         </div>
