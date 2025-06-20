@@ -86,6 +86,20 @@
 - [x] Update menu fallback to encourage users to create custom menus
 - [x] Organize fallback function in functions.php instead of header.php
 
+## Phase 12: Typography Settings & ACF How It Works Template ✅
+- [x] Add theme customizer typography settings with Google Fonts integration
+- [x] Create How It Works page template with custom artistry and animations
+- [x] Convert How It Works template to use ACF fields for content management
+- [x] Add ACF field groups for hero section, process steps, timeline, FAQ, and CTA
+- [x] Implement step icons selection with multiple icon options
+- [x] Create repeater fields for customizable process steps with features
+- [x] Add timeline section with flexible milestones
+- [x] Include FAQ section with question/answer pairs
+- [x] Add call-to-action section with link field integration
+- [x] Provide default content fallbacks when ACF fields are empty
+- [x] Clean up duplicate template registrations and files
+- [x] Update theme version to 3.0
+
 ## Current Status: ✅ COMPLETED - All Phases Complete!
 
 ## Installation Instructions

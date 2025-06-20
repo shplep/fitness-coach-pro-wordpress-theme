@@ -678,20 +678,20 @@ add_action('customize_preview_init', 'fitness_coach_customize_preview_js');
 
 // Register page templates
 function fitness_coach_page_templates($templates) {
-    $templates['page-how-it-works.php'] = 'How It Works';
+    $templates['page-template-how-it-works.php'] = 'How It Works';
     return $templates;
 }
 add_filter('theme_page_templates', 'fitness_coach_page_templates');
 
-// Load page templates
+// Load page templates  
 function fitness_coach_load_page_template($template) {
     global $post;
     
     if ($post) {
         $page_template = get_post_meta($post->ID, '_wp_page_template', true);
         
-        if ($page_template == 'page-how-it-works.php') {
-            $template = get_template_directory() . '/page-how-it-works.php';
+        if ($page_template == 'page-template-how-it-works.php') {
+            $template = get_template_directory() . '/page-template-how-it-works.php';
         }
     }
     
@@ -878,5 +878,29 @@ if (file_exists(get_template_directory() . '/acf-homepage-fields.php')) {
 
 if (file_exists(get_template_directory() . '/acf-about-fields.php')) {
     include_once get_template_directory() . '/acf-about-fields.php';
+}
+
+if (file_exists(get_template_directory() . '/acf-how-it-works-fields.php')) {
+    include_once get_template_directory() . '/acf-how-it-works-fields.php';
+}
+
+/**
+ * Get Step Icon SVG
+ */
+function fitness_coach_get_step_icon($icon_type) {
+    $icons = array(
+        'consultation' => '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
+        'planning' => '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14,2 14,8 20,8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10,9 9,9 8,9"></polyline></svg>',
+        'training' => '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>',
+        'tracking' => '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"></path><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"></path></svg>',
+        'success' => '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9 12l2 2 4-4"></path></svg>',
+        'heart' => '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>',
+        'star' => '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon></svg>',
+        'trophy' => '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-2.34"></path><path d="M2 14h20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2z"></path></svg>',
+        'calendar' => '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>',
+        'clock' => '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12,6 12,12 16,14"></polyline></svg>',
+    );
+    
+    return isset($icons[$icon_type]) ? $icons[$icon_type] : $icons['consultation'];
 }
 ?> 
