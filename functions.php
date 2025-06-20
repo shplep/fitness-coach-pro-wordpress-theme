@@ -676,6 +676,29 @@ function fitness_coach_customize_preview_js() {
 }
 add_action('customize_preview_init', 'fitness_coach_customize_preview_js');
 
+// Register page templates
+function fitness_coach_page_templates($templates) {
+    $templates['page-how-it-works.php'] = 'How It Works';
+    return $templates;
+}
+add_filter('theme_page_templates', 'fitness_coach_page_templates');
+
+// Load page templates
+function fitness_coach_load_page_template($template) {
+    global $post;
+    
+    if ($post) {
+        $page_template = get_post_meta($post->ID, '_wp_page_template', true);
+        
+        if ($page_template == 'page-how-it-works.php') {
+            $template = get_template_directory() . '/page-how-it-works.php';
+        }
+    }
+    
+    return $template;
+}
+add_filter('page_template', 'fitness_coach_load_page_template');
+
 /**
  * Get Testimonials
  */
