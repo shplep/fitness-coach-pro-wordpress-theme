@@ -114,6 +114,18 @@
 - [x] Add hover effects and smooth transitions for visual appeal
 - [x] Include template registration and loading functions
 - [x] Update theme version to 3.1
+- [x] Add "Text Only (100% width)" layout option for content-only rows
+- [x] Always display page title regardless of hero section toggle
+- [x] Add granular padding controls (top/bottom with six options each)
+- [x] Fix responsive design for tablet breakpoint (768px-1200px)
+- [x] Resolve admin bar margin interference with content rows
+- [x] Update theme version to 3.4
+
+## Phase 14: Mobile Layout Enhancement ✅
+- [x] Ensure text sections always appear above images on mobile devices
+- [x] Apply consistent mobile ordering for both text-left and text-right layouts
+- [x] Update CSS flex order properties for proper mobile stacking
+- [x] Update theme version to 3.5
 
 ## Current Status: ✅ COMPLETED - All Phases Complete!
 
