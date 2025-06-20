@@ -134,6 +134,12 @@ function fitness_coach_testimonial_meta_box_callback($post) {
     
     $author_name = get_post_meta($post->ID, '_testimonial_author', true);
     $rating = get_post_meta($post->ID, '_testimonial_rating', true);
+    $show_rating = get_post_meta($post->ID, '_testimonial_show_rating', true);
+    
+    // Default to showing rating if not set
+    if ($show_rating === '') {
+        $show_rating = '1';
+    }
     
     echo '<table class="form-table">';
     echo '<tr>';
@@ -141,14 +147,34 @@ function fitness_coach_testimonial_meta_box_callback($post) {
     echo '<td><input type="text" id="testimonial_author" name="testimonial_author" value="' . esc_attr($author_name) . '" size="50" /></td>';
     echo '</tr>';
     echo '<tr>';
+    echo '<th><label for="testimonial_show_rating">Show Rating</label></th>';
+    echo '<td>';
+    echo '<input type="checkbox" id="testimonial_show_rating" name="testimonial_show_rating" value="1"' . checked($show_rating, '1', false) . ' />';
+    echo '<label for="testimonial_show_rating"> Display star rating for this testimonial</label>';
+    echo '</td>';
+    echo '</tr>';
+    echo '<tr id="rating_row" style="' . ($show_rating !== '1' ? 'display:none;' : '') . '">';
     echo '<th><label for="testimonial_rating">Rating (1-5)</label></th>';
     echo '<td><select id="testimonial_rating" name="testimonial_rating">';
+    echo '<option value="">No Rating</option>';
     for ($i = 1; $i <= 5; $i++) {
         echo '<option value="' . $i . '"' . selected($rating, $i, false) . '>' . $i . ' Star' . ($i > 1 ? 's' : '') . '</option>';
     }
     echo '</select></td>';
     echo '</tr>';
     echo '</table>';
+    
+    // Add JavaScript to show/hide rating field
+    echo '<script>
+        document.getElementById("testimonial_show_rating").addEventListener("change", function() {
+            var ratingRow = document.getElementById("rating_row");
+            if (this.checked) {
+                ratingRow.style.display = "table-row";
+            } else {
+                ratingRow.style.display = "none";
+            }
+        });
+    </script>';
 }
 
 function fitness_coach_save_testimonial_meta($post_id) {
@@ -166,6 +192,13 @@ function fitness_coach_save_testimonial_meta($post_id) {
 
     if (isset($_POST['testimonial_author'])) {
         update_post_meta($post_id, '_testimonial_author', sanitize_text_field($_POST['testimonial_author']));
+    }
+
+    // Save show rating preference
+    if (isset($_POST['testimonial_show_rating'])) {
+        update_post_meta($post_id, '_testimonial_show_rating', '1');
+    } else {
+        update_post_meta($post_id, '_testimonial_show_rating', '0');
     }
 
     if (isset($_POST['testimonial_rating'])) {
@@ -217,7 +250,12 @@ function fitness_coach_get_testimonials($limit = -1) {
 /**
  * Display Star Rating
  */
-function fitness_coach_display_rating($rating) {
+function fitness_coach_display_rating($rating, $show_rating = true) {
+    // Return empty string if rating should not be shown or rating is empty/invalid
+    if (!$show_rating || empty($rating) || $rating < 1 || $rating > 5) {
+        return '';
+    }
+    
     $output = '<div class="rating">';
     for ($i = 1; $i <= 5; $i++) {
         if ($i <= $rating) {

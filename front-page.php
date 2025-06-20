@@ -163,6 +163,7 @@ get_header(); ?>
                     $testimonial_text = get_sub_field('testimonial_text');
                     $author_name = get_sub_field('author_name');
                     $rating = get_sub_field('rating');
+                    $show_rating = get_sub_field('show_rating');
                 ?>
                     <div class="testimonial">
                         <div class="quote-icon">"</div>
@@ -173,8 +174,8 @@ get_header(); ?>
                             <?php if ($author_name) : ?>
                                 <p class="author-name"><?php echo esc_html($author_name); ?></p>
                             <?php endif; ?>
-                            <?php if ($rating) : ?>
-                                <?php echo fitness_coach_display_rating(intval($rating)); ?>
+                            <?php if ($show_rating && $rating) : ?>
+                                <?php echo fitness_coach_display_rating(intval($rating), true); ?>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -188,13 +189,14 @@ get_header(); ?>
                     foreach ($testimonials as $testimonial) :
                         $author_name = get_post_meta($testimonial->ID, '_testimonial_author', true);
                         $rating = get_post_meta($testimonial->ID, '_testimonial_rating', true);
+                        $show_rating = get_post_meta($testimonial->ID, '_testimonial_show_rating', true);
                 ?>
                         <div class="testimonial">
                             <div class="quote-icon">"</div>
                             <p class="testimonial-text"><?php echo wp_kses_post($testimonial->post_content); ?></p>
                             <div class="testimonial-author">
                                 <p class="author-name"><?php echo esc_html($author_name); ?></p>
-                                <?php echo fitness_coach_display_rating(intval($rating)); ?>
+                                <?php echo fitness_coach_display_rating(intval($rating), $show_rating === '1'); ?>
                             </div>
                         </div>
                 <?php

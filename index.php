@@ -54,13 +54,14 @@
                 foreach ($testimonials as $testimonial) :
                     $author_name = get_post_meta($testimonial->ID, '_testimonial_author', true);
                     $rating = get_post_meta($testimonial->ID, '_testimonial_rating', true);
+                    $show_rating = get_post_meta($testimonial->ID, '_testimonial_show_rating', true);
             ?>
                     <div class="testimonial">
                         <div class="quote-icon">"</div>
                         <p class="testimonial-text"><?php echo wp_kses_post($testimonial->post_content); ?></p>
                         <div class="testimonial-author">
                             <p class="author-name"><?php echo esc_html($author_name); ?></p>
-                            <?php echo fitness_coach_display_rating(intval($rating)); ?>
+                            <?php echo fitness_coach_display_rating(intval($rating), $show_rating === '1'); ?>
                         </div>
                     </div>
             <?php

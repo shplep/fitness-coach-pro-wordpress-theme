@@ -297,7 +297,19 @@ acf_add_local_field_group(array(
                     'name' => 'author_name',
                     'type' => 'text',
                     'wrapper' => array(
-                        'width' => '70',
+                        'width' => '50',
+                    ),
+                ),
+                array(
+                    'key' => 'field_testimonial_show_rating',
+                    'label' => 'Show Rating',
+                    'name' => 'show_rating',
+                    'type' => 'true_false',
+                    'instructions' => 'Display star rating for this testimonial',
+                    'default_value' => 1,
+                    'ui' => 1,
+                    'wrapper' => array(
+                        'width' => '25',
                     ),
                 ),
                 array(
@@ -305,7 +317,9 @@ acf_add_local_field_group(array(
                     'label' => 'Rating',
                     'name' => 'rating',
                     'type' => 'select',
+                    'instructions' => 'Select star rating (only shown if "Show Rating" is enabled)',
                     'choices' => array(
+                        '' => 'No Rating',
                         '5' => '5 Stars',
                         '4' => '4 Stars',
                         '3' => '3 Stars',
@@ -313,8 +327,17 @@ acf_add_local_field_group(array(
                         '1' => '1 Star',
                     ),
                     'default_value' => '5',
+                    'conditional_logic' => array(
+                        array(
+                            array(
+                                'field' => 'field_testimonial_show_rating',
+                                'operator' => '==',
+                                'value' => '1',
+                            ),
+                        ),
+                    ),
                     'wrapper' => array(
-                        'width' => '30',
+                        'width' => '25',
                     ),
                 ),
             ),
