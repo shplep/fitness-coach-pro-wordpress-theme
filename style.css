@@ -2,7 +2,7 @@
 Theme Name: Fitness Coach Pro
 Description: A modern, responsive WordPress theme for fitness coaches and personal trainers. Built with a clean design focusing on conversions and user experience.
 Author: Your Name
-Version: 3.3
+Version: 3.4
 */
 
 /* Base Styles */
@@ -1090,6 +1090,11 @@ body .footer-content a:active {
     .admin-bar .page-content {
         margin-top: 46px !important; /* Account for mobile admin bar */
     }
+    
+    /* Override admin bar margin for content rows containers on mobile */
+    .admin-bar .content-rows-section .container {
+        margin-top: 0 !important;
+    }
 }
 
 /* Social Media Icons */
@@ -1551,6 +1556,11 @@ body .footer-content a:active {
 .content-rows-section .container {
     padding: 0 1rem;
     margin-top: 0;
+}
+
+/* Override admin bar margin for content rows containers */
+.admin-bar .content-rows-section .container {
+    margin-top: 0 !important;
 }
 
 .content-row {
