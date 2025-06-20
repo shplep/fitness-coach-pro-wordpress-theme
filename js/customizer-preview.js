@@ -36,9 +36,11 @@
             }
             
             if (fonts.length > 0) {
-                const fontsUrl = 'https://fonts.googleapis.com/css2?family=' + 
-                    encodeURIComponent(fonts.join('|')) + 
-                    '&subset=latin,latin-ext&display=swap';
+                // Use Google Fonts API v2 format
+                const familyParams = fonts.map(font => 'family=' + font.replace(/ /g, '+'));
+                const fontsUrl = 'https://fonts.googleapis.com/css2?' + 
+                    familyParams.join('&') + 
+                    '&display=swap';
                 
                 $('<link>')
                     .attr({

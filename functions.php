@@ -418,16 +418,28 @@ function fitness_coach_google_fonts() {
     }
     
     if (!empty($fonts)) {
-        $fonts_url = add_query_arg(array(
-            'family' => urlencode(implode('|', $fonts)),
-            'subset' => urlencode($subsets),
-            'display' => 'swap',
-        ), 'https://fonts.googleapis.com/css2');
+        // Use Google Fonts API v2 format
+        $family_params = array();
+        foreach ($fonts as $font) {
+            $family_params[] = 'family=' . str_replace(' ', '+', $font);
+        }
+        
+        $fonts_url = 'https://fonts.googleapis.com/css2?' . 
+                    implode('&', $family_params) . 
+                    '&display=swap';
         
         wp_enqueue_style('fitness-coach-google-fonts', $fonts_url, array(), null);
+        
+        // Debug: Add comment to HTML to show what fonts are being loaded
+        add_action('wp_head', function() use ($fonts_url, $fonts) {
+            echo "\n<!-- Fitness Coach Pro Typography Debug -->\n";
+            echo "<!-- Google Fonts URL: " . esc_html($fonts_url) . " -->\n";
+            echo "<!-- Font families: " . esc_html(implode(', ', $fonts)) . " -->\n";
+            echo "<!-- End Typography Debug -->\n\n";
+        });
     }
 }
-add_action('wp_enqueue_scripts', 'fitness_coach_google_fonts');
+add_action('wp_enqueue_scripts', 'fitness_coach_google_fonts', 5); // Higher priority
 
 // Generate custom typography CSS
 function fitness_coach_typography_css() {
@@ -444,11 +456,19 @@ function fitness_coach_typography_css() {
         --font-scale: {$scale_factor};
     }
     
+    body.fitness-coach-typography {
+        font-family: '{$body_font}', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        font-weight: {$body_weight} !important;
+        font-size: calc(1rem * var(--font-scale)) !important;
+        line-height: calc(1.6 * var(--font-scale)) !important;
+    }
+    
+    /* Also target body without the class for broader compatibility */
     body {
-        font-family: '{$body_font}', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        font-weight: {$body_weight};
-        font-size: calc(1rem * var(--font-scale));
-        line-height: calc(1.6 * var(--font-scale));
+        font-family: '{$body_font}', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        font-weight: {$body_weight} !important;
+        font-size: calc(1rem * var(--font-scale)) !important;
+        line-height: calc(1.6 * var(--font-scale)) !important;
     }
     
     h1, h2, h3, h4, h5, h6, .site-title {
@@ -545,9 +565,28 @@ function fitness_coach_typography_css() {
 // Output custom typography CSS
 function fitness_coach_typography_styles() {
     $css = fitness_coach_typography_css();
+    
+    // Add debug info
+    $heading_font = get_theme_mod('fitness_coach_heading_font', 'Inter');
+    $body_font = get_theme_mod('fitness_coach_body_font', 'Inter');
+    $font_scale = get_theme_mod('fitness_coach_font_size_scale', 100);
+    
+    echo "\n<!-- Typography Settings Debug -->\n";
+    echo "<!-- Heading Font: " . esc_html($heading_font) . " -->\n";
+    echo "<!-- Body Font: " . esc_html($body_font) . " -->\n";
+    echo "<!-- Font Scale: " . esc_html($font_scale) . "% -->\n";
+    echo "<!-- End Typography Debug -->\n";
+    
     echo '<style type="text/css" id="fitness-coach-typography">' . $css . '</style>';
 }
 add_action('wp_head', 'fitness_coach_typography_styles');
+
+// Add body class for typography
+function fitness_coach_body_classes($classes) {
+    $classes[] = 'fitness-coach-typography';
+    return $classes;
+}
+add_filter('body_class', 'fitness_coach_body_classes');
 
 // Add live preview support for customizer
 function fitness_coach_customize_preview_js() {
