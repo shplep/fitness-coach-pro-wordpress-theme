@@ -7,6 +7,9 @@
                     </div>
                 <?php endif; ?>
                 
+                <!-- Social Media Icons -->
+                <?php fitness_coach_social_media_icons(); ?>
+                
                 <!-- Footer Links -->
                 <div class="footer-links">
                     <a href="<?php echo esc_url(get_privacy_policy_url()); ?>">Privacy Policy</a>
