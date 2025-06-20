@@ -47,9 +47,6 @@ add_action('after_setup_theme', 'fitness_coach_theme_setup');
  * Enqueue Styles and Scripts
  */
 function fitness_coach_scripts() {
-    // Enqueue Google Fonts
-    wp_enqueue_style('fitness-coach-fonts', 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap', array(), null);
-    
     // Enqueue theme stylesheet with cache-busting
     $theme_version = wp_get_theme()->get('Version');
     $stylesheet_path = get_stylesheet_directory() . '/style.css';
@@ -395,13 +392,19 @@ function fitness_coach_google_fonts() {
     $fonts = array();
     $subsets = 'latin,latin-ext';
     
+    // Collect all fonts with proper Google Fonts API v2 format
+    $font_families = array();
+    
     // Add heading font with weights
     if ($heading_font) {
         $heading_weights = array($heading_weight);
         // Add additional common weights for headings
         if (!in_array('400', $heading_weights)) $heading_weights[] = '400';
         if (!in_array('700', $heading_weights)) $heading_weights[] = '700';
-        $fonts[] = $heading_font . ':' . implode(',', array_unique($heading_weights));
+        sort($heading_weights);
+        
+        $font_name = str_replace(' ', '+', $heading_font);
+        $font_families[] = $font_name . ':wght@' . implode(';', array_unique($heading_weights));
     }
     
     // Add body font with weights (if different from heading font)
@@ -410,31 +413,31 @@ function fitness_coach_google_fonts() {
         // Add additional common weights for body text
         if (!in_array('400', $body_weights)) $body_weights[] = '400';
         if (!in_array('700', $body_weights)) $body_weights[] = '700';
-        $fonts[] = $body_font . ':' . implode(',', array_unique($body_weights));
+        sort($body_weights);
+        
+        $font_name = str_replace(' ', '+', $body_font);
+        $font_families[] = $font_name . ':wght@' . implode(';', array_unique($body_weights));
     } elseif ($body_font === $heading_font && $body_weight !== $heading_weight) {
         // Same font but different weight, combine weights
         $all_weights = array($heading_weight, $body_weight, '400', '700');
-        $fonts = array($body_font . ':' . implode(',', array_unique($all_weights)));
+        sort($all_weights);
+        
+        $font_name = str_replace(' ', '+', $body_font);
+        $font_families = array($font_name . ':wght@' . implode(';', array_unique($all_weights)));
     }
     
-    if (!empty($fonts)) {
-        // Use Google Fonts API v2 format
-        $family_params = array();
-        foreach ($fonts as $font) {
-            $family_params[] = 'family=' . str_replace(' ', '+', $font);
-        }
-        
-        $fonts_url = 'https://fonts.googleapis.com/css2?' . 
-                    implode('&', $family_params) . 
+    if (!empty($font_families)) {
+        $fonts_url = 'https://fonts.googleapis.com/css2?family=' . 
+                    implode('&family=', $font_families) . 
                     '&display=swap';
         
         wp_enqueue_style('fitness-coach-google-fonts', $fonts_url, array(), null);
         
         // Debug: Add comment to HTML to show what fonts are being loaded
-        add_action('wp_head', function() use ($fonts_url, $fonts) {
+        add_action('wp_head', function() use ($fonts_url, $font_families) {
             echo "\n<!-- Fitness Coach Pro Typography Debug -->\n";
             echo "<!-- Google Fonts URL: " . esc_html($fonts_url) . " -->\n";
-            echo "<!-- Font families: " . esc_html(implode(', ', $fonts)) . " -->\n";
+            echo "<!-- Font families: " . esc_html(implode(', ', $font_families)) . " -->\n";
             echo "<!-- End Typography Debug -->\n\n";
         });
     }

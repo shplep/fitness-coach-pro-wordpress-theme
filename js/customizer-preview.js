@@ -17,29 +17,30 @@
         $('#fitness-coach-google-fonts-css').remove();
         
         if (headingFont || bodyFont) {
-            const fonts = [];
+            const fontFamilies = [];
             
             // Add heading font with weights
             if (headingFont) {
-                const headingWeights = [headingWeight, '400', '700'].filter((v, i, a) => a.indexOf(v) === i);
-                fonts.push(headingFont + ':' + headingWeights.join(','));
+                const headingWeights = [headingWeight, '400', '700'].filter((v, i, a) => a.indexOf(v) === i).sort();
+                const fontName = headingFont.replace(/ /g, '+');
+                fontFamilies.push(fontName + ':wght@' + headingWeights.join(';'));
             }
             
             // Add body font with weights (if different from heading font)
             if (bodyFont && bodyFont !== headingFont) {
-                const bodyWeights = [bodyWeight, '400', '700'].filter((v, i, a) => a.indexOf(v) === i);
-                fonts.push(bodyFont + ':' + bodyWeights.join(','));
+                const bodyWeights = [bodyWeight, '400', '700'].filter((v, i, a) => a.indexOf(v) === i).sort();
+                const fontName = bodyFont.replace(/ /g, '+');
+                fontFamilies.push(fontName + ':wght@' + bodyWeights.join(';'));
             } else if (bodyFont === headingFont && bodyWeight !== headingWeight) {
                 // Same font but different weight, combine weights
-                const allWeights = [headingWeight, bodyWeight, '400', '700'].filter((v, i, a) => a.indexOf(v) === i);
-                fonts.splice(0, 1, bodyFont + ':' + allWeights.join(','));
+                const allWeights = [headingWeight, bodyWeight, '400', '700'].filter((v, i, a) => a.indexOf(v) === i).sort();
+                const fontName = bodyFont.replace(/ /g, '+');
+                fontFamilies.splice(0, 1, fontName + ':wght@' + allWeights.join(';'));
             }
             
-            if (fonts.length > 0) {
-                // Use Google Fonts API v2 format
-                const familyParams = fonts.map(font => 'family=' + font.replace(/ /g, '+'));
-                const fontsUrl = 'https://fonts.googleapis.com/css2?' + 
-                    familyParams.join('&') + 
+            if (fontFamilies.length > 0) {
+                const fontsUrl = 'https://fonts.googleapis.com/css2?family=' + 
+                    fontFamilies.join('&family=') + 
                     '&display=swap';
                 
                 $('<link>')
