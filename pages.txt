@@ -1,0 +1,46 @@
+✅ 1. Landing/Home Page (First Impression)
+Purpose: Build trust and interest within 5 seconds.
+Include:
+•	A clear, confident headline (e.g., “Get Stronger, Healthier, and Consistent — Coaching for High-Achievers Ready to Level Up”)
+•	One strong photo of you (ideally looking athletic + approachable)
+•	Brief mission or value statement (1–2 sentences max)
+•	1–2 transformation images with short captions
+•	Call to Action Button: "Book Your Free Call" (links to Calendly)
+ 
+✅ 2. Coaching Page / How It Works
+Purpose: Build clarity and show your coaching offer.
+Include:
+•	Bullet points on what your coaching includes:
+o	Custom workout + nutrition plans
+o	Weekly check-ins
+o	24/7 messaging
+o	Form critiques, habit tracking, etc.
+•	Explain who it’s for (your niche — e.g., "For students, busy professionals, or high-performers who are tired of half-effort plans and ready to transform.")
+•	Testimonials (even one is enough to start)
+•	Second Call to Action button here
+ 
+✅ 3. Application Page (Lead Capture)
+Purpose: Pre-qualify leads and funnel them into a Zoom call.
+Include:
+•	Simple form with questions like:
+o	Name, age, fitness goals
+o	Current struggles
+o	Why now?
+o	Instagram/Discord handle (optional)
+•	Once submitted → redirect to Calendly or send an email with the booking link
+ 
+✅ 4. About You Page (Optional but Helpful)
+Purpose: Build connection and authority.
+Include:
+•	Short story of your transformation, challenges, and values
+•	Why you're doing this
+•	A casual but inspiring tone
+ 
+✅ 5. Integrations & Back-End
+Make sure:
+•	Calendly is synced and functional
+•	Mobile version is smooth
+•	Contact email or Discord handle is visible
+•	SEO basics (title, description, keywords) are filled in
+•	Optional: install a basic analytics tracker (like Plausible or Google Analytics)
+
