@@ -50,11 +50,16 @@ function fitness_coach_scripts() {
     // Enqueue Google Fonts
     wp_enqueue_style('fitness-coach-fonts', 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap', array(), null);
     
-    // Enqueue theme stylesheet
-    wp_enqueue_style('fitness-coach-style', get_stylesheet_uri(), array(), wp_get_theme()->get('Version'));
+    // Enqueue theme stylesheet with cache-busting
+    $theme_version = wp_get_theme()->get('Version');
+    $stylesheet_path = get_stylesheet_directory() . '/style.css';
+    $cache_buster = $theme_version . '.' . filemtime($stylesheet_path);
+    wp_enqueue_style('fitness-coach-style', get_stylesheet_uri(), array(), $cache_buster);
     
-    // Enqueue theme JavaScript
-    wp_enqueue_script('fitness-coach-scripts', get_template_directory_uri() . '/js/theme.js', array(), wp_get_theme()->get('Version'), true);
+    // Enqueue theme JavaScript with cache-busting
+    $js_path = get_template_directory() . '/js/theme.js';
+    $js_cache_buster = $theme_version . '.' . filemtime($js_path);
+    wp_enqueue_script('fitness-coach-scripts', get_template_directory_uri() . '/js/theme.js', array(), $js_cache_buster, true);
 }
 add_action('wp_enqueue_scripts', 'fitness_coach_scripts');
 
