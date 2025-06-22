@@ -150,12 +150,20 @@ get_header(); ?>
     $show_arrows = get_field('testimonials_show_arrows');
     $autoplay_speed = get_field('testimonials_autoplay');
     $testimonials_per_slide = get_field('testimonials_per_slide');
+    $text_italic = get_field('testimonials_text_italic');
+    $show_quotes = get_field('testimonials_show_quotes');
+    $text_size = get_field('testimonials_text_size');
+    $text_weight = get_field('testimonials_text_weight');
     
     // Set defaults if not set
     $show_dots = ($show_dots !== null) ? $show_dots : true;
     $show_arrows = ($show_arrows !== null) ? $show_arrows : true;
     $autoplay_speed = ($autoplay_speed !== null) ? $autoplay_speed : 6;
     $testimonials_per_slide = ($testimonials_per_slide !== null) ? $testimonials_per_slide : 2;
+    $text_italic = ($text_italic !== null) ? $text_italic : true;
+    $show_quotes = ($show_quotes !== null) ? $show_quotes : true;
+    $text_size = $text_size ?: 'medium';
+    $text_weight = $text_weight ?: 'normal';
     ?>
     
     <!-- Testimonials Section - Using Working Debug Carousel Structure -->
@@ -318,7 +326,7 @@ get_header(); ?>
             const dotsContainer = document.querySelector('.working-dots');
             let slides, dots, prevBtn, nextBtn;
             
-            // Get all individual testimonials data
+            // Get all individual testimonials data and styling options
             const testimonialsData = [
                 <?php foreach ($carousel_testimonials as $index => $testimonial) : ?>
                 {
@@ -330,14 +338,40 @@ get_header(); ?>
                 <?php endforeach; ?>
             ];
             
+            // Styling options
+            const stylingOptions = {
+                textItalic: <?php echo $text_italic ? 'true' : 'false'; ?>,
+                showQuotes: <?php echo $show_quotes ? 'true' : 'false'; ?>,
+                textSize: '<?php echo esc_js($text_size); ?>',
+                textWeight: '<?php echo esc_js($text_weight); ?>'
+            };
+            
             function createTestimonialHTML(testimonial) {
-                const quoteFontSize = isMobile ? '2.5rem' : (currentTestimonialsPerSlide == 3 ? '2rem' : (currentTestimonialsPerSlide == 2 ? '2.5rem' : '3rem'));
-                const textFontSize = isMobile ? '1rem' : (currentTestimonialsPerSlide == 3 ? '0.9rem' : (currentTestimonialsPerSlide == 2 ? '1rem' : '1.125rem'));
+                // Base font sizes based on layout
+                const baseQuoteFontSize = isMobile ? '2.5rem' : (currentTestimonialsPerSlide == 3 ? '2rem' : (currentTestimonialsPerSlide == 2 ? '2.5rem' : '3rem'));
+                const baseTextFontSize = isMobile ? '1rem' : (currentTestimonialsPerSlide == 3 ? '0.9rem' : (currentTestimonialsPerSlide == 2 ? '1rem' : '1.125rem'));
+                
+                // Apply text size multipliers
+                let textSizeMultiplier = 1;
+                if (stylingOptions.textSize === 'small') textSizeMultiplier = 0.85;
+                else if (stylingOptions.textSize === 'large') textSizeMultiplier = 1.15;
+                
+                const quoteFontSize = stylingOptions.showQuotes ? baseQuoteFontSize : '0px';
+                const textFontSize = parseFloat(baseTextFontSize) * textSizeMultiplier + 'rem';
                 const authorFontSize = isMobile ? '0.9rem' : (currentTestimonialsPerSlide == 3 ? '0.8rem' : '0.9rem');
                 const starFontSize = isMobile ? '1rem' : (currentTestimonialsPerSlide == 3 ? '0.9rem' : '1rem');
                 const padding = isMobile ? '1.5rem' : (currentTestimonialsPerSlide == 3 ? '1.25rem' : (currentTestimonialsPerSlide == 2 ? '1.5rem' : '2rem'));
                 const minHeight = isMobile ? '280px' : (currentTestimonialsPerSlide == 3 ? '300px' : '280px');
                 const flexBasis = isMobile ? '100%' : 'flex: 1';
+                
+                // Text styling
+                const fontStyle = stylingOptions.textItalic ? 'italic' : 'normal';
+                let fontWeight = '400'; // normal
+                if (stylingOptions.textWeight === 'medium') fontWeight = '500';
+                else if (stylingOptions.textWeight === 'bold') fontWeight = '600';
+                
+                // Quote mark margin adjustment
+                const quoteMarginBottom = stylingOptions.showQuotes ? '0.75rem' : '0rem';
                 
                 let starsHTML = '';
                 if (testimonial.showRating && testimonial.rating > 0) {
@@ -351,8 +385,8 @@ get_header(); ?>
                 return `
                     <div style="${flexBasis}; background: #f9f9f9; border-radius: 10px; padding: ${padding}; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; min-height: ${minHeight};">
                         <div>
-                            <div style="font-size: ${quoteFontSize}; color: #e5e5e5; font-family: Georgia, serif; line-height: 0.8; margin-bottom: 0.75rem;">"</div>
-                            <p style="font-size: ${textFontSize}; line-height: 1.5; margin-bottom: 1rem; font-style: italic; color: #333;">
+                            ${stylingOptions.showQuotes ? `<div style="font-size: ${quoteFontSize}; color: #e5e5e5; font-family: Georgia, serif; line-height: 0.8; margin-bottom: ${quoteMarginBottom};">"</div>` : ''}
+                            <p style="font-size: ${textFontSize}; line-height: 1.5; margin-bottom: 1rem; font-style: ${fontStyle}; font-weight: ${fontWeight}; color: #333;">
                                 ${testimonial.text}
                             </p>
                         </div>

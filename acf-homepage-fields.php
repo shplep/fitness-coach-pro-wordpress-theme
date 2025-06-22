@@ -407,6 +407,70 @@ acf_add_local_field_group(array(
             'ajax' => 0,
             'placeholder' => '',
         ),
+        array(
+            'key' => 'field_testimonials_text_italic',
+            'label' => 'Italic Text Style',
+            'name' => 'testimonials_text_italic',
+            'type' => 'true_false',
+            'instructions' => 'Display testimonial text in italics',
+            'default_value' => 1,
+            'ui' => 1,
+            'wrapper' => array(
+                'width' => '25',
+            ),
+        ),
+        array(
+            'key' => 'field_testimonials_show_quotes',
+            'label' => 'Show Quote Marks',
+            'name' => 'testimonials_show_quotes',
+            'type' => 'true_false',
+            'instructions' => 'Display large quotation marks',
+            'default_value' => 1,
+            'ui' => 1,
+            'wrapper' => array(
+                'width' => '25',
+            ),
+        ),
+        array(
+            'key' => 'field_testimonials_text_size',
+            'label' => 'Text Size',
+            'name' => 'testimonials_text_size',
+            'type' => 'select',
+            'instructions' => 'Choose the size of testimonial text',
+            'choices' => array(
+                'small' => 'Small',
+                'medium' => 'Medium (Default)',
+                'large' => 'Large',
+            ),
+            'default_value' => 'medium',
+            'allow_null' => 0,
+            'multiple' => 0,
+            'ui' => 0,
+            'return_format' => 'value',
+            'wrapper' => array(
+                'width' => '25',
+            ),
+        ),
+        array(
+            'key' => 'field_testimonials_text_weight',
+            'label' => 'Text Weight',
+            'name' => 'testimonials_text_weight',
+            'type' => 'select',
+            'instructions' => 'Choose the weight of testimonial text',
+            'choices' => array(
+                'normal' => 'Normal (Default)',
+                'medium' => 'Medium',
+                'bold' => 'Bold',
+            ),
+            'default_value' => 'normal',
+            'allow_null' => 0,
+            'multiple' => 0,
+            'ui' => 0,
+            'return_format' => 'value',
+            'wrapper' => array(
+                'width' => '25',
+            ),
+        ),
         
         // Contact Section Tab
         array(
