@@ -370,10 +370,20 @@ get_header(); ?>
                 // Clear existing slides
                 carousel.innerHTML = '';
                 
-                // Group testimonials based on current setting
+                // Group testimonials based on current setting with looping
                 const groups = [];
                 for (let i = 0; i < testimonialsData.length; i += currentTestimonialsPerSlide) {
-                    groups.push(testimonialsData.slice(i, i + currentTestimonialsPerSlide));
+                    const group = [];
+                    for (let j = 0; j < currentTestimonialsPerSlide; j++) {
+                        const testimonialIndex = (i + j) % testimonialsData.length;
+                        group.push(testimonialsData[testimonialIndex]);
+                    }
+                    groups.push(group);
+                    
+                    // Stop if we've covered all testimonials at least once
+                    if (i + currentTestimonialsPerSlide >= testimonialsData.length) {
+                        break;
+                    }
                 }
                 
                 // Create new slides
@@ -390,17 +400,10 @@ get_header(); ?>
                         transform: translateX(${slideIndex * 100}%);
                     `;
                     
-                    // Add testimonials to slide
+                    // Add testimonials to slide (always full with looping)
                     group.forEach(testimonial => {
                         slideDiv.innerHTML += createTestimonialHTML(testimonial);
                     });
-                    
-                    // Add empty spaces if needed
-                    if (currentTestimonialsPerSlide > 1 && group.length < currentTestimonialsPerSlide) {
-                        for (let i = group.length; i < currentTestimonialsPerSlide; i++) {
-                            slideDiv.innerHTML += '<div style="flex: 1;"></div>';
-                        }
-                    }
                     
                     carousel.appendChild(slideDiv);
                 });
