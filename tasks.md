@@ -140,6 +140,9 @@
 - [x] Add responsive breakpoints for mobile display (3 > 2 > 1 testimonials)
 - [x] Create JavaScript carousel class with touch/hover support
 - [x] Update theme version to 3.7
+- [x] Add backend option to choose 1, 2, or 3 testimonials per slide
+- [x] Implement dynamic carousel layout with responsive styling
+- [x] Add testimonials per slide ACF field with default value of 2
 
 ## Current Status: ✅ COMPLETED - All Phases Complete!
 

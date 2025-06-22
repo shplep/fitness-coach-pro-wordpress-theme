@@ -388,6 +388,25 @@ acf_add_local_field_group(array(
                 'width' => '34',
             ),
         ),
+        array(
+            'key' => 'field_testimonials_per_slide',
+            'label' => 'Testimonials Per Slide',
+            'name' => 'testimonials_per_slide',
+            'type' => 'select',
+            'instructions' => 'Choose how many testimonials to display per slide',
+            'choices' => array(
+                1 => '1 Testimonial per slide',
+                2 => '2 Testimonials per slide',
+                3 => '3 Testimonials per slide',
+            ),
+            'default_value' => 2,
+            'allow_null' => 0,
+            'multiple' => 0,
+            'ui' => 0,
+            'return_format' => 'value',
+            'ajax' => 0,
+            'placeholder' => '',
+        ),
         
         // Contact Section Tab
         array(

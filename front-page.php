@@ -149,11 +149,13 @@ get_header(); ?>
     $show_dots = get_field('testimonials_show_dots');
     $show_arrows = get_field('testimonials_show_arrows');
     $autoplay_speed = get_field('testimonials_autoplay');
+    $testimonials_per_slide = get_field('testimonials_per_slide');
     
     // Set defaults if not set
     $show_dots = ($show_dots !== null) ? $show_dots : true;
     $show_arrows = ($show_arrows !== null) ? $show_arrows : true;
     $autoplay_speed = ($autoplay_speed !== null) ? $autoplay_speed : 6;
+    $testimonials_per_slide = ($testimonials_per_slide !== null) ? $testimonials_per_slide : 2;
     ?>
     
     <!-- Testimonials Section - Using Working Debug Carousel Structure -->
@@ -222,10 +224,18 @@ get_header(); ?>
         }
         
         $total_testimonials = count($carousel_testimonials);
+        $total_slides = ceil($total_testimonials / $testimonials_per_slide);
+        
+        // Dynamic styling based on testimonials per slide
+        $max_width = $testimonials_per_slide == 1 ? '800px' : ($testimonials_per_slide == 2 ? '1200px' : '1400px');
+        $carousel_height = $testimonials_per_slide == 3 ? '350px' : '320px';
+        $quote_size = $testimonials_per_slide == 3 ? '2rem' : ($testimonials_per_slide == 2 ? '2.5rem' : '3rem');
+        $font_size = $testimonials_per_slide == 3 ? '0.9rem' : ($testimonials_per_slide == 2 ? '1rem' : '1.125rem');
+        $padding = $testimonials_per_slide == 3 ? '1.25rem' : ($testimonials_per_slide == 2 ? '1.5rem' : '2rem');
         ?>
         
-        <div class="working-carousel-wrapper" style="position: relative; max-width: 1200px; margin: 0 auto; padding: 0 60px;">
-            <?php if ($show_arrows && $total_testimonials > 2) : ?>
+        <div class="working-carousel-wrapper" style="position: relative; max-width: <?php echo $max_width; ?>; margin: 0 auto; padding: 0 60px;">
+            <?php if ($show_arrows && $total_testimonials > $testimonials_per_slide) : ?>
                 <button class="working-prev" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.9); border: 2px solid #ddd; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; color: #333; transition: all 0.3s ease;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="15,18 9,12 15,6"></polyline>
@@ -233,29 +243,29 @@ get_header(); ?>
                 </button>
             <?php endif; ?>
             
-            <div class="working-carousel" style="overflow: hidden; position: relative; height: 320px;">
+            <div class="working-carousel" style="overflow: hidden; position: relative; height: <?php echo $carousel_height; ?>;">
                 <?php 
-                // Group testimonials into pairs for slides
-                $testimonial_pairs = array_chunk($carousel_testimonials, 2);
-                foreach ($testimonial_pairs as $slide_index => $pair) : 
+                // Group testimonials based on testimonials_per_slide setting
+                $testimonial_groups = array_chunk($carousel_testimonials, $testimonials_per_slide);
+                foreach ($testimonial_groups as $slide_index => $group) : 
                 ?>
-                    <div class="working-slide <?php echo $slide_index === 0 ? 'working-slide-active' : ''; ?>" style="position: absolute; width: 100%; height: 100%; display: flex; gap: 2rem; transition: transform 0.5s ease; transform: translateX(<?php echo $slide_index * 100; ?>%);">
-                        <?php foreach ($pair as $testimonial) : ?>
-                            <div style="flex: 1; background: #f9f9f9; border-radius: 10px; padding: 1.5rem; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; min-height: 280px;">
+                    <div class="working-slide <?php echo $slide_index === 0 ? 'working-slide-active' : ''; ?>" style="position: absolute; width: 100%; height: 100%; display: <?php echo $testimonials_per_slide == 1 ? 'block' : 'flex'; ?>; gap: 1.5rem; transition: transform 0.5s ease; transform: translateX(<?php echo $slide_index * 100; ?>%);">
+                        <?php foreach ($group as $testimonial) : ?>
+                            <div style="<?php echo $testimonials_per_slide == 1 ? 'width: 100%;' : 'flex: 1;'; ?> background: #f9f9f9; border-radius: 10px; padding: <?php echo $padding; ?>; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; min-height: <?php echo $testimonials_per_slide == 3 ? '300px' : '280px'; ?>;">
                                 <div>
-                                    <div style="font-size: 2.5rem; color: #e5e5e5; font-family: Georgia, serif; line-height: 0.8; margin-bottom: 0.75rem;">"</div>
-                                    <p style="font-size: 1rem; line-height: 1.5; margin-bottom: 1rem; font-style: italic; color: #333;">
+                                    <div style="font-size: <?php echo $quote_size; ?>; color: #e5e5e5; font-family: Georgia, serif; line-height: 0.8; margin-bottom: 0.75rem;">"</div>
+                                    <p style="font-size: <?php echo $font_size; ?>; line-height: 1.5; margin-bottom: 1rem; font-style: italic; color: #333;">
                                         <?php echo wp_kses_post($testimonial['text']); ?>
                                     </p>
                                 </div>
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
-                                    <p style="font-weight: 600; color: #1a1a1a; margin: 0; font-size: 0.9rem;">
+                                    <p style="font-weight: 600; color: #1a1a1a; margin: 0; font-size: <?php echo $testimonials_per_slide == 3 ? '0.8rem' : '0.9rem'; ?>;">
                                         <?php echo esc_html($testimonial['author']); ?>
                                     </p>
                                     <?php if ($testimonial['show_rating'] && $testimonial['rating']) : ?>
                                         <div style="color: #fbbf24; letter-spacing: 0.05rem;">
                                             <?php for ($i = 1; $i <= 5; $i++) : ?>
-                                                <span style="font-size: 1rem;"><?php echo $i <= $testimonial['rating'] ? '★' : '☆'; ?></span>
+                                                <span style="font-size: <?php echo $testimonials_per_slide == 3 ? '0.9rem' : '1rem'; ?>;"><?php echo $i <= $testimonial['rating'] ? '★' : '☆'; ?></span>
                                             <?php endfor; ?>
                                         </div>
                                     <?php endif; ?>
@@ -263,15 +273,17 @@ get_header(); ?>
                             </div>
                         <?php endforeach; ?>
                         
-                        <?php if (count($pair) === 1) : ?>
-                            <!-- Add empty space if odd number of testimonials -->
-                            <div style="flex: 1;"></div>
+                        <?php if ($testimonials_per_slide > 1 && count($group) < $testimonials_per_slide) : ?>
+                            <!-- Add empty spaces if not enough testimonials to fill the slide -->
+                            <?php for ($i = count($group); $i < $testimonials_per_slide; $i++) : ?>
+                                <div style="flex: 1;"></div>
+                            <?php endfor; ?>
                         <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
             </div>
             
-            <?php if ($show_arrows && $total_testimonials > 2) : ?>
+            <?php if ($show_arrows && $total_testimonials > $testimonials_per_slide) : ?>
                 <button class="working-next" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.9); border: 2px solid #ddd; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; color: #333; transition: all 0.3s ease;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="9,18 15,12 9,6"></polyline>
@@ -280,10 +292,7 @@ get_header(); ?>
             <?php endif; ?>
         </div>
         
-        <?php 
-        $total_slides = ceil($total_testimonials / 2);
-        if ($show_dots && $total_slides > 1) : 
-        ?>
+        <?php if ($show_dots && $total_slides > 1) : ?>
             <div class="working-dots" style="display: flex; justify-content: center; gap: 0.5rem; margin-top: 2rem;">
                 <?php for ($i = 0; $i < $total_slides; $i++) : ?>
                     <button class="working-dot <?php echo $i === 0 ? 'working-dot-active' : ''; ?>" data-slide="<?php echo $i; ?>" style="width: 12px; height: 12px; border-radius: 50%; border: none; background: <?php echo $i === 0 ? '#333' : '#ddd'; ?>; cursor: pointer; transition: all 0.3s ease;"></button>
@@ -292,10 +301,11 @@ get_header(); ?>
         <?php endif; ?>
         
         <script>
-        // Working carousel JavaScript for 2 testimonials per slide
+        // Working carousel JavaScript for dynamic testimonials per slide
         (function() {
             let currentSlide = 0;
-            const totalSlides = <?php echo ceil($total_testimonials / 2); ?>;
+            const totalSlides = <?php echo $total_slides; ?>;
+            const testimonialsPerSlide = <?php echo $testimonials_per_slide; ?>;
             const slides = document.querySelectorAll('.working-slide');
             const dots = document.querySelectorAll('.working-dot');
             const prevBtn = document.querySelector('.working-prev');
@@ -417,7 +427,7 @@ get_header(); ?>
             // Start autoplay
             startAutoplay();
             
-            console.log('Working testimonials carousel initialized with', totalSlides, 'slides (2 testimonials per slide), autoplay:', autoplaySpeed + 'ms');
+            console.log('Working testimonials carousel initialized with', totalSlides, 'slides (' + testimonialsPerSlide + ' testimonials per slide), autoplay:', autoplaySpeed + 'ms');
         })();
         </script>
     </div>
