@@ -327,9 +327,10 @@ body {
 .testimonials-section {
     width: 100%;
     max-width: 1200px;
-    margin: 4rem 0;
+    margin: 2rem 0; /* Reduced margin */
     position: relative;
     text-align: center;
+    min-height: 400px; /* Set minimum height to prevent layout shifts */
 }
 
 .section-title {
@@ -348,6 +349,7 @@ body {
 .testimonials-carousel {
     overflow: hidden;
     position: relative;
+    min-height: 320px; /* Ensure carousel has visible height */
 }
 
 .testimonials-container {
@@ -370,12 +372,21 @@ body {
     transition: transform 0.5s ease-in-out;
     opacity: 0;
     visibility: hidden;
+    min-height: 280px; /* Ensure slides have minimum height */
 }
 
 .carousel-slide.active {
     opacity: 1;
     visibility: visible;
     position: relative;
+}
+
+/* Debug: Make all testimonials visible initially until carousel loads */
+.testimonials-container .testimonial {
+    opacity: 1 !important;
+    visibility: visible !important;
+    position: relative !important;
+    display: block !important;
 }
 
 .testimonial {
