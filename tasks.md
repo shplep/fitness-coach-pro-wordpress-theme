@@ -130,6 +130,17 @@
 - [x] Add admin bar overrides for both desktop and mobile admin bars
 - [x] Update theme version to 3.6
 
+## Phase 15: Testimonials Carousel Enhancement ✅
+- [x] Add ACF fields for carousel settings (show dots, show arrows, autoplay timing)
+- [x] Convert testimonials container to carousel slider
+- [x] Implement 3 testimonials per view with equal heights
+- [x] Add navigation dots with enable/disable option
+- [x] Add previous/next arrows with enable/disable option  
+- [x] Add autoplay functionality with configurable timing
+- [x] Add responsive breakpoints for mobile display (3 > 2 > 1 testimonials)
+- [x] Create JavaScript carousel class with touch/hover support
+- [x] Update theme version to 3.7
+
 ## Current Status: ✅ COMPLETED - All Phases Complete!
 
 ## Installation Instructions

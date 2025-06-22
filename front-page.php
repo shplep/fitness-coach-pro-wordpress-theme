@@ -146,6 +146,14 @@ get_header(); ?>
     // Testimonials Section
     $testimonials_title = get_field('testimonials_title');
     $testimonials_source = get_field('testimonials_source'); // 'post_type' or 'custom'
+    $show_dots = get_field('testimonials_show_dots');
+    $show_arrows = get_field('testimonials_show_arrows');
+    $autoplay_speed = get_field('testimonials_autoplay');
+    
+    // Set defaults if not set
+    $show_dots = ($show_dots !== null) ? $show_dots : true;
+    $show_arrows = ($show_arrows !== null) ? $show_arrows : true;
+    $autoplay_speed = ($autoplay_speed !== null) ? $autoplay_speed : 6;
     ?>
     
     <!-- Testimonials Section -->
@@ -156,7 +164,20 @@ get_header(); ?>
             <h2 class="section-title">What My Clients Say</h2>
         <?php endif; ?>
         
-        <div class="testimonials-container">
+        <div class="testimonials-carousel-wrapper">
+            <?php if ($show_arrows) : ?>
+                <button class="carousel-arrow carousel-prev" aria-label="Previous testimonials">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15,18 9,12 15,6"></polyline>
+                    </svg>
+                </button>
+            <?php endif; ?>
+            
+            <div class="testimonials-carousel" 
+                 data-autoplay="<?php echo esc_attr($autoplay_speed); ?>"
+                 data-show-dots="<?php echo $show_dots ? 'true' : 'false'; ?>"
+                 data-show-arrows="<?php echo $show_arrows ? 'true' : 'false'; ?>">
+                <div class="testimonials-container">
             <?php if ($testimonials_source === 'custom' && have_rows('custom_testimonials')) : ?>
                 <!-- Custom Testimonials for Homepage -->
                 <?php while (have_rows('custom_testimonials')) : the_row();
@@ -250,7 +271,21 @@ get_header(); ?>
                     </div>
                 <?php endif; ?>
             <?php endif; ?>
+                </div>
+            </div>
+            
+            <?php if ($show_arrows) : ?>
+                <button class="carousel-arrow carousel-next" aria-label="Next testimonials">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9,18 15,12 9,6"></polyline>
+                    </svg>
+                </button>
+            <?php endif; ?>
         </div>
+        
+        <?php if ($show_dots) : ?>
+            <div class="carousel-dots"></div>
+        <?php endif; ?>
     </div>
 
     <?php

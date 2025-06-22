@@ -343,6 +343,52 @@ acf_add_local_field_group(array(
             ),
         ),
         
+        // Testimonials Carousel Settings Tab
+        array(
+            'key' => 'field_testimonials_carousel_tab',
+            'label' => 'Carousel Settings',
+            'name' => '',
+            'type' => 'tab',
+            'placement' => 'top',
+        ),
+        array(
+            'key' => 'field_testimonials_show_dots',
+            'label' => 'Show Navigation Dots',
+            'name' => 'testimonials_show_dots',
+            'type' => 'true_false',
+            'instructions' => 'Display indicator dots below testimonials',
+            'default_value' => 1,
+            'ui' => 1,
+            'wrapper' => array(
+                'width' => '33',
+            ),
+        ),
+        array(
+            'key' => 'field_testimonials_show_arrows',
+            'label' => 'Show Navigation Arrows',
+            'name' => 'testimonials_show_arrows',
+            'type' => 'true_false',
+            'instructions' => 'Display previous/next arrows',
+            'default_value' => 1,
+            'ui' => 1,
+            'wrapper' => array(
+                'width' => '33',
+            ),
+        ),
+        array(
+            'key' => 'field_testimonials_autoplay',
+            'label' => 'Autoplay Speed (seconds)',
+            'name' => 'testimonials_autoplay',
+            'type' => 'number',
+            'instructions' => 'Set to 0 to disable autoplay. Recommended: 5-8 seconds',
+            'default_value' => 6,
+            'min' => 0,
+            'max' => 30,
+            'wrapper' => array(
+                'width' => '34',
+            ),
+        ),
+        
         // Contact Section Tab
         array(
             'key' => 'field_contact_tab',

@@ -2,7 +2,7 @@
 Theme Name: Fitness Coach Pro
 Description: A modern, responsive WordPress theme for fitness coaches and personal trainers. Built with a clean design focusing on conversions and user experience.
 Author: Your Name
-Version: 3.6
+Version: 3.7
 */
 
 /* Base Styles */
@@ -326,8 +326,10 @@ body {
 /* Testimonials Section */
 .testimonials-section {
     width: 100%;
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 4rem 0;
+    position: relative;
+    text-align: center;
 }
 
 .section-title {
@@ -336,10 +338,44 @@ body {
     margin-bottom: 2rem;
 }
 
+/* Carousel Wrapper */
+.testimonials-carousel-wrapper {
+    position: relative;
+    width: 100%;
+    padding: 0 60px; /* Space for arrows */
+}
+
+.testimonials-carousel {
+    overflow: hidden;
+    position: relative;
+}
+
 .testimonials-container {
+    position: relative;
+}
+
+.carousel-slides {
+    position: relative;
+    width: 100%;
+}
+
+.carousel-slide {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: transform 0.5s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.carousel-slide.active {
+    opacity: 1;
+    visibility: visible;
+    position: relative;
 }
 
 .testimonial {
@@ -349,6 +385,11 @@ body {
     position: relative;
     text-align: left;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 300px;
 }
 
 .quote-icon {
@@ -367,12 +408,15 @@ body {
     position: relative;
     z-index: 1;
     padding-left: 0.5rem;
+    flex-grow: 1;
 }
 
 .testimonial-author {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: auto;
+    padding-top: 1rem;
 }
 
 .author-name {
@@ -387,6 +431,116 @@ body {
 
 .star {
     font-size: 1.25rem;
+}
+
+/* Navigation Arrows */
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+    color: #333;
+}
+
+.carousel-arrow:hover {
+    background: white;
+    border-color: #333;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-prev {
+    left: 10px;
+}
+
+.carousel-next {
+    right: 10px;
+}
+
+.carousel-arrow svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Navigation Dots */
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.carousel-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    background: #ddd;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.carousel-dot:hover {
+    background: #bbb;
+    transform: scale(1.2);
+}
+
+.carousel-dot.active {
+    background: #333;
+}
+
+/* Carousel Responsive Design */
+@media (max-width: 1024px) {
+    .carousel-slide {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .testimonials-carousel-wrapper {
+        padding: 0 50px;
+    }
+}
+
+@media (max-width: 768px) {
+    .carousel-slide {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .testimonials-carousel-wrapper {
+        padding: 0 40px;
+    }
+    
+    .carousel-arrow {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .carousel-arrow svg {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .carousel-prev {
+        left: 5px;
+    }
+    
+    .carousel-next {
+        right: 5px;
+    }
+    
+    .testimonial {
+        min-height: 240px;
+        padding: 1.5rem;
+    }
 }
 
 /* Contact Form */
@@ -637,8 +791,12 @@ body .footer-content {
         grid-template-columns: 1fr 1fr;
     }
     
-    .testimonials-container {
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    .carousel-slide {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .testimonials-carousel-wrapper {
+        padding: 0 50px;
     }
     
     .transformation-images {

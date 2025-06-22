@@ -57,6 +57,13 @@ function fitness_coach_scripts() {
     $js_path = get_template_directory() . '/js/theme.js';
     $js_cache_buster = $theme_version . '.' . filemtime($js_path);
     wp_enqueue_script('fitness-coach-scripts', get_template_directory_uri() . '/js/theme.js', array(), $js_cache_buster, true);
+    
+    // Add testimonials carousel JavaScript (only on front page)
+    if (is_front_page()) {
+        $carousel_js_path = get_template_directory() . '/js/testimonials-carousel.js';
+        $carousel_js_cache_buster = $theme_version . '.' . filemtime($carousel_js_path);
+        wp_enqueue_script('testimonials-carousel-js', get_template_directory_uri() . '/js/testimonials-carousel.js', array(), $carousel_js_cache_buster, true);
+    }
 }
 add_action('wp_enqueue_scripts', 'fitness_coach_scripts');
 
