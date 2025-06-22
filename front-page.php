@@ -156,7 +156,7 @@ get_header(); ?>
     $autoplay_speed = ($autoplay_speed !== null) ? $autoplay_speed : 6;
     ?>
     
-    <!-- Testimonials Section -->
+    <!-- Testimonials Section - Using Working Debug Carousel Structure -->
     <div class="testimonials-section">
         <?php if ($testimonials_title) : ?>
             <h2 class="section-title"><?php echo esc_html($testimonials_title); ?></h2>
@@ -164,128 +164,246 @@ get_header(); ?>
             <h2 class="section-title">What My Clients Say</h2>
         <?php endif; ?>
         
-        <div class="testimonials-carousel-wrapper">
-            <?php if ($show_arrows) : ?>
-                <button class="carousel-arrow carousel-prev" aria-label="Previous testimonials">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <?php 
+        // Collect all testimonials into an array for the carousel
+        $carousel_testimonials = array();
+        
+        if ($testimonials_source === 'custom' && have_rows('custom_testimonials')) {
+            // Custom Testimonials for Homepage
+            while (have_rows('custom_testimonials')) {
+                the_row();
+                $carousel_testimonials[] = array(
+                    'text' => get_sub_field('testimonial_text'),
+                    'author' => get_sub_field('author_name'),
+                    'rating' => get_sub_field('rating'),
+                    'show_rating' => get_sub_field('show_rating')
+                );
+            }
+        } else {
+            // Pull from Testimonials Post Type
+            $testimonials = fitness_coach_get_testimonials();
+            
+            if (!empty($testimonials)) {
+                foreach ($testimonials as $testimonial) {
+                    $author_name = get_post_meta($testimonial->ID, '_testimonial_author', true);
+                    $rating = get_post_meta($testimonial->ID, '_testimonial_rating', true);
+                    $show_rating = get_post_meta($testimonial->ID, '_testimonial_show_rating', true);
+                    
+                    $carousel_testimonials[] = array(
+                        'text' => $testimonial->post_content,
+                        'author' => $author_name,
+                        'rating' => $rating,
+                        'show_rating' => $show_rating === '1'
+                    );
+                }
+            } else {
+                // Fallback testimonials
+                $carousel_testimonials = array(
+                    array(
+                        'text' => 'Working with this coach completely transformed my approach to fitness. I\'ve lost 30 pounds and finally found a sustainable routine that works for me.',
+                        'author' => 'Sarah Johnson',
+                        'rating' => 5,
+                        'show_rating' => true
+                    ),
+                    array(
+                        'text' => 'I tried so many fitness programs before, but this is the first one that actually helped me build lasting habits. The personalized approach makes all the difference.',
+                        'author' => 'Michael Torres', 
+                        'rating' => 5,
+                        'show_rating' => true
+                    ),
+                    array(
+                        'text' => 'The coaching program helped me break through plateaus I\'d been stuck at for years. The accountability and expert guidance were exactly what I needed.',
+                        'author' => 'Jennifer Lee',
+                        'rating' => 5,
+                        'show_rating' => true
+                    )
+                );
+            }
+        }
+        
+        $total_testimonials = count($carousel_testimonials);
+        ?>
+        
+        <div class="working-carousel-wrapper" style="position: relative; max-width: 800px; margin: 0 auto; padding: 0 60px;">
+            <?php if ($show_arrows && $total_testimonials > 1) : ?>
+                <button class="working-prev" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.9); border: 2px solid #ddd; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; color: #333; transition: all 0.3s ease;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="15,18 9,12 15,6"></polyline>
                     </svg>
                 </button>
             <?php endif; ?>
             
-            <div class="testimonials-carousel" 
-                 data-autoplay="<?php echo esc_attr($autoplay_speed); ?>"
-                 data-show-dots="<?php echo $show_dots ? 'true' : 'false'; ?>"
-                 data-show-arrows="<?php echo $show_arrows ? 'true' : 'false'; ?>">
-                <div class="testimonials-container">
-            <?php if ($testimonials_source === 'custom' && have_rows('custom_testimonials')) : ?>
-                <!-- Custom Testimonials for Homepage -->
-                <?php while (have_rows('custom_testimonials')) : the_row();
-                    $testimonial_text = get_sub_field('testimonial_text');
-                    $author_name = get_sub_field('author_name');
-                    $rating = get_sub_field('rating');
-                    $show_rating = get_sub_field('show_rating');
-                ?>
-                    <div class="testimonial">
-                        <div class="quote-icon">"</div>
-                        <?php if ($testimonial_text) : ?>
-                            <p class="testimonial-text"><?php echo wp_kses_post($testimonial_text); ?></p>
-                        <?php endif; ?>
-                        <div class="testimonial-author">
-                            <?php if ($author_name) : ?>
-                                <p class="author-name"><?php echo esc_html($author_name); ?></p>
-                            <?php endif; ?>
-                            <?php if ($show_rating && $rating) : ?>
-                                <?php echo fitness_coach_display_rating(intval($rating), true); ?>
+            <div class="working-carousel" style="overflow: hidden; position: relative; height: 300px;">
+                <?php foreach ($carousel_testimonials as $index => $testimonial) : ?>
+                    <div class="working-slide <?php echo $index === 0 ? 'working-slide-active' : ''; ?>" style="position: absolute; width: 100%; height: 100%; background: #f9f9f9; border-radius: 10px; padding: 2rem; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.5s ease; transform: translateX(<?php echo $index * 100; ?>%);">
+                        <div>
+                            <div style="font-size: 3rem; color: #e5e5e5; font-family: Georgia, serif; line-height: 0.8; margin-bottom: 1rem;">"</div>
+                            <p style="font-size: 1.125rem; line-height: 1.6; margin-bottom: 1.5rem; font-style: italic; color: #333;">
+                                <?php echo wp_kses_post($testimonial['text']); ?>
+                            </p>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
+                            <p style="font-weight: 600; color: #1a1a1a; margin: 0;">
+                                <?php echo esc_html($testimonial['author']); ?>
+                            </p>
+                            <?php if ($testimonial['show_rating'] && $testimonial['rating']) : ?>
+                                <div style="color: #fbbf24; letter-spacing: 0.1rem;">
+                                    <?php for ($i = 1; $i <= 5; $i++) : ?>
+                                        <span style="font-size: 1.25rem;"><?php echo $i <= $testimonial['rating'] ? '★' : '☆'; ?></span>
+                                    <?php endfor; ?>
+                                </div>
                             <?php endif; ?>
                         </div>
                     </div>
-                <?php endwhile; ?>
-            <?php else : ?>
-                <!-- Pull from Testimonials Post Type -->
-                <?php
-                $testimonials = fitness_coach_get_testimonials();
-                
-                if (!empty($testimonials)) :
-                    foreach ($testimonials as $testimonial) :
-                        $author_name = get_post_meta($testimonial->ID, '_testimonial_author', true);
-                        $rating = get_post_meta($testimonial->ID, '_testimonial_rating', true);
-                        $show_rating = get_post_meta($testimonial->ID, '_testimonial_show_rating', true);
-                ?>
-                        <div class="testimonial">
-                            <div class="quote-icon">"</div>
-                            <p class="testimonial-text"><?php echo wp_kses_post($testimonial->post_content); ?></p>
-                            <div class="testimonial-author">
-                                <p class="author-name"><?php echo esc_html($author_name); ?></p>
-                                <?php echo fitness_coach_display_rating(intval($rating), $show_rating === '1'); ?>
-                            </div>
-                        </div>
-                <?php
-                    endforeach;
-                else :
-                    // Fallback testimonials
-                ?>
-                    <div class="testimonial">
-                        <div class="quote-icon">"</div>
-                        <p class="testimonial-text">Working with this coach completely transformed my approach to fitness. I've lost 30 pounds and finally found a sustainable routine that works for me.</p>
-                        <div class="testimonial-author">
-                            <p class="author-name">Sarah Johnson</p>
-                            <div class="rating">
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="testimonial">
-                        <div class="quote-icon">"</div>
-                        <p class="testimonial-text">I tried so many fitness programs before, but this is the first one that actually helped me build lasting habits. The personalized approach makes all the difference.</p>
-                        <div class="testimonial-author">
-                            <p class="author-name">Michael Torres</p>
-                            <div class="rating">
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="testimonial">
-                        <div class="quote-icon">"</div>
-                        <p class="testimonial-text">The coaching program helped me break through plateaus I'd been stuck at for years. The accountability and expert guidance were exactly what I needed.</p>
-                        <div class="testimonial-author">
-                            <p class="author-name">Jennifer Lee</p>
-                            <div class="rating">
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                            </div>
-                        </div>
-                    </div>
-                <?php endif; ?>
-            <?php endif; ?>
-                </div>
+                <?php endforeach; ?>
             </div>
             
-            <?php if ($show_arrows) : ?>
-                <button class="carousel-arrow carousel-next" aria-label="Next testimonials">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <?php if ($show_arrows && $total_testimonials > 1) : ?>
+                <button class="working-next" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.9); border: 2px solid #ddd; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; color: #333; transition: all 0.3s ease;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="9,18 15,12 9,6"></polyline>
                     </svg>
                 </button>
             <?php endif; ?>
         </div>
         
-        <?php if ($show_dots) : ?>
-            <div class="carousel-dots"></div>
+        <?php if ($show_dots && $total_testimonials > 1) : ?>
+            <div class="working-dots" style="display: flex; justify-content: center; gap: 0.5rem; margin-top: 2rem;">
+                <?php for ($i = 0; $i < $total_testimonials; $i++) : ?>
+                    <button class="working-dot <?php echo $i === 0 ? 'working-dot-active' : ''; ?>" data-slide="<?php echo $i; ?>" style="width: 12px; height: 12px; border-radius: 50%; border: none; background: <?php echo $i === 0 ? '#333' : '#ddd'; ?>; cursor: pointer; transition: all 0.3s ease;"></button>
+                <?php endfor; ?>
+            </div>
         <?php endif; ?>
+        
+        <script>
+        // Working carousel JavaScript (copied from successful debug carousel)
+        (function() {
+            let currentSlide = 0;
+            const totalSlides = <?php echo $total_testimonials; ?>;
+            const slides = document.querySelectorAll('.working-slide');
+            const dots = document.querySelectorAll('.working-dot');
+            const prevBtn = document.querySelector('.working-prev');
+            const nextBtn = document.querySelector('.working-next');
+            const autoplaySpeed = <?php echo $autoplay_speed * 1000; ?>; // Convert to milliseconds
+            let autoplayTimer = null;
+            
+            function updateCarousel() {
+                slides.forEach((slide, index) => {
+                    slide.style.transform = `translateX(${(index - currentSlide) * 100}%)`;
+                    slide.classList.toggle('working-slide-active', index === currentSlide);
+                });
+                
+                dots.forEach((dot, index) => {
+                    dot.style.background = index === currentSlide ? '#333' : '#ddd';
+                    dot.classList.toggle('working-dot-active', index === currentSlide);
+                });
+            }
+            
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateCarousel();
+            }
+            
+            function prevSlide() {
+                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                updateCarousel();
+            }
+            
+            function goToSlide(index) {
+                currentSlide = index;
+                updateCarousel();
+            }
+            
+            function startAutoplay() {
+                if (autoplaySpeed > 0 && totalSlides > 1) {
+                    autoplayTimer = setInterval(nextSlide, autoplaySpeed);
+                }
+            }
+            
+            function stopAutoplay() {
+                if (autoplayTimer) {
+                    clearInterval(autoplayTimer);
+                    autoplayTimer = null;
+                }
+            }
+            
+            // Event listeners
+            if (nextBtn) nextBtn.addEventListener('click', () => {
+                nextSlide();
+                stopAutoplay();
+                startAutoplay(); // Restart autoplay
+            });
+            
+            if (prevBtn) prevBtn.addEventListener('click', () => {
+                prevSlide();
+                stopAutoplay();
+                startAutoplay(); // Restart autoplay
+            });
+            
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    goToSlide(index);
+                    stopAutoplay();
+                    startAutoplay(); // Restart autoplay
+                });
+            });
+            
+            // Hover effects
+            const wrapper = document.querySelector('.working-carousel-wrapper');
+            if (wrapper) {
+                wrapper.addEventListener('mouseenter', stopAutoplay);
+                wrapper.addEventListener('mouseleave', startAutoplay);
+            }
+            
+            // Hover effects for arrows
+            if (prevBtn) {
+                prevBtn.addEventListener('mouseenter', function() {
+                    this.style.background = 'white';
+                    this.style.borderColor = '#333';
+                    this.style.transform = 'translateY(-50%) scale(1.1)';
+                });
+                prevBtn.addEventListener('mouseleave', function() {
+                    this.style.background = 'rgba(255, 255, 255, 0.9)';
+                    this.style.borderColor = '#ddd';
+                    this.style.transform = 'translateY(-50%) scale(1)';
+                });
+            }
+            
+            if (nextBtn) {
+                nextBtn.addEventListener('mouseenter', function() {
+                    this.style.background = 'white';
+                    this.style.borderColor = '#333';
+                    this.style.transform = 'translateY(-50%) scale(1.1)';
+                });
+                nextBtn.addEventListener('mouseleave', function() {
+                    this.style.background = 'rgba(255, 255, 255, 0.9)';
+                    this.style.borderColor = '#ddd';
+                    this.style.transform = 'translateY(-50%) scale(1)';
+                });
+            }
+            
+            // Dot hover effects
+            dots.forEach((dot) => {
+                dot.addEventListener('mouseenter', function() {
+                    if (!this.classList.contains('working-dot-active')) {
+                        this.style.background = '#bbb';
+                        this.style.transform = 'scale(1.2)';
+                    }
+                });
+                dot.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('working-dot-active')) {
+                        this.style.background = '#ddd';
+                        this.style.transform = 'scale(1)';
+                    }
+                });
+            });
+            
+            // Start autoplay
+            startAutoplay();
+            
+            console.log('Working testimonials carousel initialized with', totalSlides, 'slides, autoplay:', autoplaySpeed + 'ms');
+        })();
+        </script>
     </div>
 
     <!-- TEMPORARY DEBUG CAROUSEL - Simple 5-slide test -->
