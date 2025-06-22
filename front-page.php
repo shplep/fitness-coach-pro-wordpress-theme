@@ -301,17 +301,166 @@ get_header(); ?>
         <?php endif; ?>
         
         <script>
-        // Working carousel JavaScript for dynamic testimonials per slide
+        // Working carousel JavaScript for dynamic testimonials per slide with mobile responsiveness
         (function() {
             let currentSlide = 0;
-            const totalSlides = <?php echo $total_slides; ?>;
-            const testimonialsPerSlide = <?php echo $testimonials_per_slide; ?>;
-            const slides = document.querySelectorAll('.working-slide');
-            const dots = document.querySelectorAll('.working-dot');
-            const prevBtn = document.querySelector('.working-prev');
-            const nextBtn = document.querySelector('.working-next');
+            const totalTestimonials = <?php echo $total_testimonials; ?>;
+            const desktopTestimonialsPerSlide = <?php echo $testimonials_per_slide; ?>;
             const autoplaySpeed = <?php echo $autoplay_speed * 1000; ?>; // Convert to milliseconds
             let autoplayTimer = null;
+            let isMobile = window.innerWidth <= 768;
+            let currentTestimonialsPerSlide = isMobile ? 1 : desktopTestimonialsPerSlide;
+            let totalSlides = Math.ceil(totalTestimonials / currentTestimonialsPerSlide);
+            
+            // Get elements
+            const carousel = document.querySelector('.working-carousel');
+            const wrapper = document.querySelector('.working-carousel-wrapper');
+            const dotsContainer = document.querySelector('.working-dots');
+            let slides, dots, prevBtn, nextBtn;
+            
+            // Get all individual testimonials data
+            const testimonialsData = [
+                <?php foreach ($carousel_testimonials as $index => $testimonial) : ?>
+                {
+                    text: <?php echo json_encode(wp_kses_post($testimonial['text'])); ?>,
+                    author: <?php echo json_encode(esc_html($testimonial['author'])); ?>,
+                    rating: <?php echo intval($testimonial['rating']); ?>,
+                    showRating: <?php echo $testimonial['show_rating'] ? 'true' : 'false'; ?>
+                }<?php echo $index < count($carousel_testimonials) - 1 ? ',' : ''; ?>
+                <?php endforeach; ?>
+            ];
+            
+            function createTestimonialHTML(testimonial) {
+                const quoteFontSize = isMobile ? '2.5rem' : (currentTestimonialsPerSlide == 3 ? '2rem' : (currentTestimonialsPerSlide == 2 ? '2.5rem' : '3rem'));
+                const textFontSize = isMobile ? '1rem' : (currentTestimonialsPerSlide == 3 ? '0.9rem' : (currentTestimonialsPerSlide == 2 ? '1rem' : '1.125rem'));
+                const authorFontSize = isMobile ? '0.9rem' : (currentTestimonialsPerSlide == 3 ? '0.8rem' : '0.9rem');
+                const starFontSize = isMobile ? '1rem' : (currentTestimonialsPerSlide == 3 ? '0.9rem' : '1rem');
+                const padding = isMobile ? '1.5rem' : (currentTestimonialsPerSlide == 3 ? '1.25rem' : (currentTestimonialsPerSlide == 2 ? '1.5rem' : '2rem'));
+                const minHeight = isMobile ? '280px' : (currentTestimonialsPerSlide == 3 ? '300px' : '280px');
+                const flexBasis = isMobile ? '100%' : 'flex: 1';
+                
+                let starsHTML = '';
+                if (testimonial.showRating && testimonial.rating > 0) {
+                    starsHTML = '<div style="color: #fbbf24; letter-spacing: 0.05rem;">';
+                    for (let i = 1; i <= 5; i++) {
+                        starsHTML += `<span style="font-size: ${starFontSize};">${i <= testimonial.rating ? '★' : '☆'}</span>`;
+                    }
+                    starsHTML += '</div>';
+                }
+                
+                return `
+                    <div style="${flexBasis}; background: #f9f9f9; border-radius: 10px; padding: ${padding}; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; min-height: ${minHeight};">
+                        <div>
+                            <div style="font-size: ${quoteFontSize}; color: #e5e5e5; font-family: Georgia, serif; line-height: 0.8; margin-bottom: 0.75rem;">"</div>
+                            <p style="font-size: ${textFontSize}; line-height: 1.5; margin-bottom: 1rem; font-style: italic; color: #333;">
+                                ${testimonial.text}
+                            </p>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
+                            <p style="font-weight: 600; color: #1a1a1a; margin: 0; font-size: ${authorFontSize};">
+                                ${testimonial.author}
+                            </p>
+                            ${starsHTML}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            function rebuildCarousel() {
+                // Clear existing slides
+                carousel.innerHTML = '';
+                
+                // Group testimonials based on current setting
+                const groups = [];
+                for (let i = 0; i < testimonialsData.length; i += currentTestimonialsPerSlide) {
+                    groups.push(testimonialsData.slice(i, i + currentTestimonialsPerSlide));
+                }
+                
+                // Create new slides
+                groups.forEach((group, slideIndex) => {
+                    const slideDiv = document.createElement('div');
+                    slideDiv.className = `working-slide ${slideIndex === 0 ? 'working-slide-active' : ''}`;
+                    slideDiv.style.cssText = `
+                        position: absolute; 
+                        width: 100%; 
+                        height: 100%; 
+                        display: ${currentTestimonialsPerSlide == 1 ? 'block' : 'flex'}; 
+                        gap: 1.5rem; 
+                        transition: transform 0.5s ease; 
+                        transform: translateX(${slideIndex * 100}%);
+                    `;
+                    
+                    // Add testimonials to slide
+                    group.forEach(testimonial => {
+                        slideDiv.innerHTML += createTestimonialHTML(testimonial);
+                    });
+                    
+                    // Add empty spaces if needed
+                    if (currentTestimonialsPerSlide > 1 && group.length < currentTestimonialsPerSlide) {
+                        for (let i = group.length; i < currentTestimonialsPerSlide; i++) {
+                            slideDiv.innerHTML += '<div style="flex: 1;"></div>';
+                        }
+                    }
+                    
+                    carousel.appendChild(slideDiv);
+                });
+                
+                // Update total slides
+                totalSlides = groups.length;
+                currentSlide = Math.min(currentSlide, totalSlides - 1);
+                
+                // Rebuild dots
+                if (dotsContainer) {
+                    dotsContainer.innerHTML = '';
+                    if (totalSlides > 1) {
+                        for (let i = 0; i < totalSlides; i++) {
+                            const dot = document.createElement('button');
+                            dot.className = `working-dot ${i === currentSlide ? 'working-dot-active' : ''}`;
+                            dot.setAttribute('data-slide', i);
+                            dot.style.cssText = `
+                                width: 12px; 
+                                height: 12px; 
+                                border-radius: 50%; 
+                                border: none; 
+                                background: ${i === currentSlide ? '#333' : '#ddd'}; 
+                                cursor: pointer; 
+                                transition: all 0.3s ease;
+                            `;
+                            dotsContainer.appendChild(dot);
+                        }
+                    }
+                }
+                
+                // Update navigation visibility
+                updateNavigationVisibility();
+                
+                // Re-get elements and add event listeners
+                refreshElements();
+                addEventListeners();
+            }
+            
+            function updateNavigationVisibility() {
+                const showNavigation = totalTestimonials > currentTestimonialsPerSlide && totalSlides > 1;
+                
+                // Update arrows
+                prevBtn = wrapper.querySelector('.working-prev');
+                nextBtn = wrapper.querySelector('.working-next');
+                
+                if (prevBtn) prevBtn.style.display = showNavigation ? 'flex' : 'none';
+                if (nextBtn) nextBtn.style.display = showNavigation ? 'flex' : 'none';
+                
+                // Update dots container
+                if (dotsContainer) {
+                    dotsContainer.style.display = (totalSlides > 1) ? 'flex' : 'none';
+                }
+            }
+            
+            function refreshElements() {
+                slides = document.querySelectorAll('.working-slide');
+                dots = document.querySelectorAll('.working-dot');
+                prevBtn = document.querySelector('.working-prev');
+                nextBtn = document.querySelector('.working-next');
+            }
             
             function updateCarousel() {
                 slides.forEach((slide, index) => {
@@ -353,81 +502,103 @@ get_header(); ?>
                 }
             }
             
-            // Event listeners
-            if (nextBtn) nextBtn.addEventListener('click', () => {
-                nextSlide();
-                stopAutoplay();
-                startAutoplay(); // Restart autoplay
-            });
-            
-            if (prevBtn) prevBtn.addEventListener('click', () => {
-                prevSlide();
-                stopAutoplay();
-                startAutoplay(); // Restart autoplay
-            });
-            
-            dots.forEach((dot, index) => {
-                dot.addEventListener('click', () => {
-                    goToSlide(index);
+            function addEventListeners() {
+                // Arrow click events
+                if (nextBtn) nextBtn.addEventListener('click', () => {
+                    nextSlide();
                     stopAutoplay();
-                    startAutoplay(); // Restart autoplay
+                    startAutoplay();
                 });
-            });
-            
-            // Hover effects
-            const wrapper = document.querySelector('.working-carousel-wrapper');
-            if (wrapper) {
-                wrapper.addEventListener('mouseenter', stopAutoplay);
-                wrapper.addEventListener('mouseleave', startAutoplay);
+                
+                if (prevBtn) prevBtn.addEventListener('click', () => {
+                    prevSlide();
+                    stopAutoplay();
+                    startAutoplay();
+                });
+                
+                // Dot click events
+                dots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => {
+                        goToSlide(index);
+                        stopAutoplay();
+                        startAutoplay();
+                    });
+                });
+                
+                // Hover effects for wrapper
+                if (wrapper) {
+                    wrapper.addEventListener('mouseenter', stopAutoplay);
+                    wrapper.addEventListener('mouseleave', startAutoplay);
+                }
+                
+                // Arrow hover effects
+                if (prevBtn) {
+                    prevBtn.addEventListener('mouseenter', function() {
+                        this.style.background = 'white';
+                        this.style.borderColor = '#333';
+                        this.style.transform = 'translateY(-50%) scale(1.1)';
+                    });
+                    prevBtn.addEventListener('mouseleave', function() {
+                        this.style.background = 'rgba(255, 255, 255, 0.9)';
+                        this.style.borderColor = '#ddd';
+                        this.style.transform = 'translateY(-50%) scale(1)';
+                    });
+                }
+                
+                if (nextBtn) {
+                    nextBtn.addEventListener('mouseenter', function() {
+                        this.style.background = 'white';
+                        this.style.borderColor = '#333';
+                        this.style.transform = 'translateY(-50%) scale(1.1)';
+                    });
+                    nextBtn.addEventListener('mouseleave', function() {
+                        this.style.background = 'rgba(255, 255, 255, 0.9)';
+                        this.style.borderColor = '#ddd';
+                        this.style.transform = 'translateY(-50%) scale(1)';
+                    });
+                }
+                
+                // Dot hover effects
+                dots.forEach((dot) => {
+                    dot.addEventListener('mouseenter', function() {
+                        if (!this.classList.contains('working-dot-active')) {
+                            this.style.background = '#bbb';
+                            this.style.transform = 'scale(1.2)';
+                        }
+                    });
+                    dot.addEventListener('mouseleave', function() {
+                        if (!this.classList.contains('working-dot-active')) {
+                            this.style.background = '#ddd';
+                            this.style.transform = 'scale(1)';
+                        }
+                    });
+                });
             }
             
-            // Hover effects for arrows
-            if (prevBtn) {
-                prevBtn.addEventListener('mouseenter', function() {
-                    this.style.background = 'white';
-                    this.style.borderColor = '#333';
-                    this.style.transform = 'translateY(-50%) scale(1.1)';
-                });
-                prevBtn.addEventListener('mouseleave', function() {
-                    this.style.background = 'rgba(255, 255, 255, 0.9)';
-                    this.style.borderColor = '#ddd';
-                    this.style.transform = 'translateY(-50%) scale(1)';
-                });
+            // Handle window resize
+            function handleResize() {
+                const wasIsMobile = isMobile;
+                isMobile = window.innerWidth <= 768;
+                const newTestimonialsPerSlide = isMobile ? 1 : desktopTestimonialsPerSlide;
+                
+                if (newTestimonialsPerSlide !== currentTestimonialsPerSlide) {
+                    stopAutoplay();
+                    currentTestimonialsPerSlide = newTestimonialsPerSlide;
+                    rebuildCarousel();
+                    updateCarousel();
+                    startAutoplay();
+                }
             }
             
-            if (nextBtn) {
-                nextBtn.addEventListener('mouseenter', function() {
-                    this.style.background = 'white';
-                    this.style.borderColor = '#333';
-                    this.style.transform = 'translateY(-50%) scale(1.1)';
-                });
-                nextBtn.addEventListener('mouseleave', function() {
-                    this.style.background = 'rgba(255, 255, 255, 0.9)';
-                    this.style.borderColor = '#ddd';
-                    this.style.transform = 'translateY(-50%) scale(1)';
-                });
-            }
-            
-            // Dot hover effects
-            dots.forEach((dot) => {
-                dot.addEventListener('mouseenter', function() {
-                    if (!this.classList.contains('working-dot-active')) {
-                        this.style.background = '#bbb';
-                        this.style.transform = 'scale(1.2)';
-                    }
-                });
-                dot.addEventListener('mouseleave', function() {
-                    if (!this.classList.contains('working-dot-active')) {
-                        this.style.background = '#ddd';
-                        this.style.transform = 'scale(1)';
-                    }
-                });
-            });
-            
-            // Start autoplay
+            // Initialize
+            rebuildCarousel();
+            updateCarousel();
             startAutoplay();
             
-            console.log('Working testimonials carousel initialized with', totalSlides, 'slides (' + testimonialsPerSlide + ' testimonials per slide), autoplay:', autoplaySpeed + 'ms');
+            // Add resize listener
+            window.addEventListener('resize', handleResize);
+            
+            console.log('Responsive testimonials carousel initialized with', totalSlides, 'slides (' + currentTestimonialsPerSlide + ' testimonials per slide), autoplay:', autoplaySpeed + 'ms');
         })();
         </script>
     </div>
