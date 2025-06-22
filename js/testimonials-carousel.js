@@ -40,29 +40,26 @@ class TestimonialsCarousel {
     }
     
     setupCarousel() {
-        // Create slides wrapper
-        const slidesWrapper = document.createElement('div');
-        slidesWrapper.className = 'carousel-slides';
+        // Much simpler approach - just work with existing testimonials
+        this.slides = this.testimonials;
+        this.totalSlides = this.testimonials.length;
         
-        // Group testimonials into slides of 3
-        for (let i = 0; i < this.testimonials.length; i += this.slidesToShow) {
-            const slide = document.createElement('div');
-            slide.className = 'carousel-slide';
-            
-            const slideTestimonials = this.testimonials.slice(i, i + this.slidesToShow);
-            slideTestimonials.forEach(testimonial => {
-                slide.appendChild(testimonial.cloneNode(true));
-            });
-            
-            slidesWrapper.appendChild(slide);
-        }
+        // Set initial positions for all testimonials
+        this.testimonials.forEach((testimonial, index) => {
+            testimonial.style.position = 'absolute';
+            testimonial.style.width = '100%';
+            testimonial.style.left = '0';
+            testimonial.style.top = '0';
+            testimonial.style.transform = `translateX(${index * 100}%)`;
+            testimonial.style.transition = 'transform 0.5s ease-in-out';
+            testimonial.style.opacity = '1';
+            testimonial.style.visibility = 'visible';
+        });
         
-        // Replace container content
-        this.container.innerHTML = '';
-        this.container.appendChild(slidesWrapper);
-        
-        this.slides = Array.from(this.container.querySelectorAll('.carousel-slide'));
-        this.totalSlides = this.slides.length;
+        // Set container to relative positioning
+        this.container.style.position = 'relative';
+        this.container.style.height = '300px';
+        this.container.style.overflow = 'hidden';
         
         // Set initial position
         this.updateCarousel();
@@ -98,28 +95,9 @@ class TestimonialsCarousel {
     }
     
     setupResponsive() {
-        // Update slides to show based on screen size
-        const updateSlidesToShow = () => {
-            const width = window.innerWidth;
-            if (width < 768) {
-                this.slidesToShow = 1;
-            } else if (width < 1024) {
-                this.slidesToShow = 2;
-            } else {
-                this.slidesToShow = 3;
-            }
-        };
-        
-        updateSlidesToShow();
-        
-        // Rebuild carousel if slides to show changed
-        const originalSlidesToShow = this.slidesToShow;
-        updateSlidesToShow();
-        
-        if (originalSlidesToShow !== this.slidesToShow) {
-            this.setupCarousel();
-            this.setupDots();
-        }
+        // Simplified responsive - just one testimonial per slide for now
+        // We can enhance this later once basic functionality works
+        this.slidesToShow = 1;
     }
     
     handleResize() {
@@ -153,15 +131,16 @@ class TestimonialsCarousel {
         
         this.isAnimating = true;
         
-        this.slides.forEach((slide, index) => {
-            slide.style.transform = `translateX(${(index - this.currentSlide) * 100}%)`;
-            slide.classList.toggle('active', index === this.currentSlide);
+        // Simple slide positioning - each testimonial moves as one slide
+        this.testimonials.forEach((testimonial, index) => {
+            testimonial.style.transform = `translateX(${(index - this.currentSlide) * 100}%)`;
+            testimonial.classList.toggle('active', index === this.currentSlide);
         });
         
         // Reset animation flag after transition
         setTimeout(() => {
             this.isAnimating = false;
-        }, 300);
+        }, 500);
     }
     
     updateDots() {

@@ -361,32 +361,18 @@ body {
     width: 100%;
 }
 
-.carousel-slide {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    transition: transform 0.5s ease-in-out;
-    opacity: 0;
-    visibility: hidden;
-    min-height: 280px; /* Ensure slides have minimum height */
-}
-
-.carousel-slide.active {
-    opacity: 1;
-    visibility: visible;
-    position: relative;
-}
-
-/* Debug: Make all testimonials visible initially until carousel loads */
-.testimonials-container .testimonial {
+/* Simplified carousel - each testimonial is a slide */
+.testimonials-carousel .testimonial {
+    position: absolute !important;
+    width: 100% !important;
+    left: 0 !important;
+    top: 0 !important;
     opacity: 1 !important;
     visibility: visible !important;
-    position: relative !important;
     display: block !important;
+    transition: transform 0.5s ease-in-out !important;
+    max-width: 800px !important;
+    margin: 0 auto !important;
 }
 
 .testimonial {
@@ -509,23 +495,8 @@ body {
     background: #333;
 }
 
-/* Carousel Responsive Design */
-@media (max-width: 1024px) {
-    .carousel-slide {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .testimonials-carousel-wrapper {
-        padding: 0 50px;
-    }
-}
-
+/* Simplified Carousel Responsive Design */
 @media (max-width: 768px) {
-    .carousel-slide {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    
     .testimonials-carousel-wrapper {
         padding: 0 40px;
     }
@@ -548,9 +519,9 @@ body {
         right: 5px;
     }
     
-    .testimonial {
-        min-height: 240px;
-        padding: 1.5rem;
+    .testimonials-carousel .testimonial {
+        padding: 1.5rem !important;
+        max-width: 100% !important;
     }
 }
 
