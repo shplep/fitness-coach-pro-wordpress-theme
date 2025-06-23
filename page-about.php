@@ -41,15 +41,46 @@ get_header(); ?>
     <div class="about-main-content">
         
         <!-- Profile Images Section -->
-        <?php if (have_rows('profile_images')) : ?>
+        <?php 
+        // Debug the repeater field itself
+        if (current_user_can('edit_posts')) {
+            echo "<!-- DEBUG: Checking profile_images field -->";
+            $all_fields = get_fields();
+            echo "<!-- DEBUG: All fields on page: " . print_r(array_keys($all_fields ?: []), true) . " -->";
+            
+            $profile_images_raw = get_field('profile_images');
+            echo "<!-- DEBUG: profile_images raw data: " . print_r($profile_images_raw, true) . " -->";
+            echo "<!-- DEBUG: have_rows check: " . (have_rows('profile_images') ? 'true' : 'false') . " -->";
+        }
+        
+        if (have_rows('profile_images')) : ?>
             <div class="profile-images-section">
                 <h2 class="section-title"><?php echo esc_html($profile_images_title ?: 'Gallery'); ?></h2>
                 <div class="profile-images-grid">
-                    <?php while (have_rows('profile_images')) : the_row();
-                        // Try multiple ways to get the image data
+                    <?php 
+                    $row_count = 0;
+                    while (have_rows('profile_images')) : the_row();
+                        $row_count++;
+                        if (current_user_can('edit_posts')) {
+                            echo "<!-- DEBUG: Processing row " . $row_count . " -->";
+                            $all_sub_fields = get_row();
+                            echo "<!-- DEBUG: All sub-fields in row " . $row_count . ": " . print_r($all_sub_fields, true) . " -->";
+                        }
+                                                 // Try multiple ways to get the image data
                         $image = get_sub_field('image');
                         $caption = get_sub_field('caption');
                         $size = get_sub_field('image_size');
+                        
+                        // Try alternative field access methods if first attempt fails
+                        if (empty($image)) {
+                            $image = get_sub_field('profile_image'); // Try the actual field key
+                        }
+                        if (empty($caption)) {
+                            $caption = get_sub_field('profile_image_caption');
+                        }
+                        if (empty($size)) {
+                            $size = get_sub_field('profile_image_size');
+                        }
                         
                         // Enhanced debugging
                         if (current_user_can('edit_posts')) {
