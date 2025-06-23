@@ -844,27 +844,7 @@ body .footer-content {
         font-size: 3rem;
     }
     
-    /* Enhanced Profile Images Grid */
-    .profile-images-grid {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 2.5rem;
-        justify-items: center;
-    }
-    
-    /* Large images take full width */
-    .profile-image-item.size-large {
-        grid-column: 1 / -1;
-        max-width: 700px;
-    }
-    
-    /* Medium and small images can be side by side */
-    .profile-image-item.size-medium {
-        max-width: 450px;
-    }
-    
-    .profile-image-item.size-small {
-        max-width: 300px;
-    }
+
     
     .credentials-grid {
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -945,97 +925,7 @@ body .footer-content {
     line-height: 1.7;
 }
 
-/* Profile Images Section */
-.profile-images-section {
-    margin-bottom: 4rem;
-}
 
-.profile-images-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    align-items: start;
-}
-
-.profile-image-item {
-    text-align: center;
-    max-width: 100%;
-}
-
-.profile-image-item img {
-    width: 100%;
-    height: auto;
-    border-radius: 0.5rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    object-fit: cover;
-}
-
-/* Profile Image Size Classes */
-.profile-image-item.size-large {
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.profile-image-item.size-large img {
-    max-height: 500px;
-}
-
-.profile-image-item.size-medium {
-    max-width: 400px;
-    margin: 0 auto;
-}
-
-.profile-image-item.size-medium img {
-    max-height: 350px;
-}
-
-.profile-image-item.size-small {
-    max-width: 250px;
-    margin: 0 auto;
-}
-
-.profile-image-item.size-small img {
-    max-height: 200px;
-}
-
-.image-placeholder {
-    width: 100%;
-    height: 300px;
-    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-    border-radius: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    color: #6b7280;
-    border: 2px dashed #d1d5db;
-}
-
-.image-placeholder span {
-    font-size: 1.125rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-}
-
-.image-caption {
-    margin-top: 1rem;
-    font-size: 0.875rem;
-    color: #6b7280;
-    font-style: italic;
-}
-
-/* Profile Image Sizes */
-.profile-image-item.size-large .image-placeholder {
-    height: 400px;
-}
-
-.profile-image-item.size-medium .image-placeholder {
-    height: 300px;
-}
-
-.profile-image-item.size-small .image-placeholder {
-    height: 200px;
-}
 
 /* Video Introduction Section */
 .video-introduction-section {

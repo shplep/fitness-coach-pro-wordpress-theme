@@ -174,7 +174,7 @@ get_header(); ?>
             <h2 class="section-title">What My Clients Say</h2>
         <?php endif; ?>
         
-        <?php 
+                <?php
         // Collect all testimonials into an array for the carousel
         $carousel_testimonials = array();
         
@@ -191,13 +191,13 @@ get_header(); ?>
             }
         } else {
             // Pull from Testimonials Post Type
-            $testimonials = fitness_coach_get_testimonials();
-            
+                $testimonials = fitness_coach_get_testimonials();
+                
             if (!empty($testimonials)) {
                 foreach ($testimonials as $testimonial) {
-                    $author_name = get_post_meta($testimonial->ID, '_testimonial_author', true);
-                    $rating = get_post_meta($testimonial->ID, '_testimonial_rating', true);
-                    $show_rating = get_post_meta($testimonial->ID, '_testimonial_show_rating', true);
+                        $author_name = get_post_meta($testimonial->ID, '_testimonial_author', true);
+                        $rating = get_post_meta($testimonial->ID, '_testimonial_rating', true);
+                        $show_rating = get_post_meta($testimonial->ID, '_testimonial_show_rating', true);
                     
                     $carousel_testimonials[] = array(
                         'text' => $testimonial->post_content,
@@ -275,9 +275,9 @@ get_header(); ?>
                                             <?php for ($i = 1; $i <= 5; $i++) : ?>
                                                 <span style="font-size: <?php echo $testimonials_per_slide == 3 ? '0.9rem' : '1rem'; ?>;"><?php echo $i <= $testimonial['rating'] ? '★' : '☆'; ?></span>
                                             <?php endfor; ?>
-                                        </div>
+                            </div>
                                     <?php endif; ?>
-                                </div>
+                        </div>
                             </div>
                         <?php endforeach; ?>
                         
@@ -298,14 +298,14 @@ get_header(); ?>
                     </svg>
                 </button>
             <?php endif; ?>
-        </div>
-        
+                    </div>
+
         <?php if ($show_dots && $total_slides > 1) : ?>
             <div class="working-dots" style="display: flex; justify-content: center; gap: 0.5rem; margin-top: 2rem;">
                 <?php for ($i = 0; $i < $total_slides; $i++) : ?>
                     <button class="working-dot <?php echo $i === 0 ? 'working-dot-active' : ''; ?>" data-slide="<?php echo $i; ?>" style="width: 12px; height: 12px; border-radius: 50%; border: none; background: <?php echo $i === 0 ? '#333' : '#ddd'; ?>; cursor: pointer; transition: all 0.3s ease;"></button>
                 <?php endfor; ?>
-            </div>
+                            </div>
         <?php endif; ?>
         
         <script>
