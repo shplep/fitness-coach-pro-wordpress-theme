@@ -49,17 +49,48 @@ get_header(); ?>
                         $image = get_sub_field('image');
                         $caption = get_sub_field('caption');
                         $size = get_sub_field('image_size'); // 'large', 'medium', 'small'
+                        
+                        // Debug output for admins
+                        if (current_user_can('edit_posts')) {
+                            echo "<!-- DEBUG: Image data: " . print_r($image, true) . " -->";
+                        }
+                        
+                        // If image is returned as ID instead of array, convert it
+                        if ($image && is_numeric($image)) {
+                            $image_id = $image;
+                            $image_data = wp_get_attachment_image_src($image_id, 'full');
+                            if ($image_data) {
+                                $image = array(
+                                    'url' => $image_data[0],
+                                    'width' => $image_data[1],
+                                    'height' => $image_data[2],
+                                    'alt' => get_post_meta($image_id, '_wp_attachment_image_alt', true)
+                                );
+                            }
+                        }
                     ?>
                         <div class="profile-image-item <?php echo esc_attr($size ? 'size-' . $size : 'size-medium'); ?>">
                             <?php if ($image && isset($image['url'])) : ?>
                                 <img src="<?php echo esc_url($image['url']); ?>" 
                                      alt="<?php echo esc_attr($image['alt'] ? $image['alt'] : ($caption ? $caption : 'Profile image')); ?>"
                                      loading="lazy">
+                            <?php elseif ($image) : ?>
+                                <!-- Debug: Image exists but no URL -->
+                                <div class="image-placeholder">
+                                    <span>🔍</span>
+                                    <p><strong>Debug:</strong> Image found but no URL. Type: <?php echo gettype($image); ?></p>
+                                    <?php if (current_user_can('edit_posts')) : ?>
+                                        <small>Image ID: <?php echo is_numeric($image) ? $image : 'Not numeric'; ?></small>
+                                    <?php endif; ?>
+                                </div>
                             <?php else : ?>
                                 <!-- Placeholder for missing image -->
                                 <div class="image-placeholder">
                                     <span>📷</span>
                                     <p>Image not found</p>
+                                    <?php if (current_user_can('edit_posts')) : ?>
+                                        <small>No image data returned</small>
+                                    <?php endif; ?>
                                 </div>
                             <?php endif; ?>
                             <?php if ($caption) : ?>
