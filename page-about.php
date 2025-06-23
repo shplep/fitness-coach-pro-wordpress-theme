@@ -39,16 +39,14 @@ get_header(); ?>
     <div class="about-main-content">
         
         <!-- Profile Images Section -->
-        <?php 
-        $profile_images = get_field('profile_images');
-        if ($profile_images && is_array($profile_images) && count($profile_images) > 0) : ?>
+        <?php if (have_rows('profile_images')) : ?>
             <div class="profile-images-section">
                 <h2 class="section-title">Gallery</h2>
                 <div class="profile-images-grid">
-                    <?php foreach ($profile_images as $profile_image) :
-                        $image = $profile_image['image'];
-                        $caption = $profile_image['caption'];
-                        $size = $profile_image['image_size']; // 'large', 'medium', 'small'
+                    <?php while (have_rows('profile_images')) : the_row();
+                        $image = get_sub_field('image');
+                        $caption = get_sub_field('caption');
+                        $size = get_sub_field('image_size'); // 'large', 'medium', 'small'
                     ?>
                         <div class="profile-image-item <?php echo esc_attr($size ? 'size-' . $size : 'size-medium'); ?>">
                             <?php if ($image && isset($image['url'])) : ?>
@@ -66,7 +64,7 @@ get_header(); ?>
                                 <p class="image-caption"><?php echo esc_html($caption); ?></p>
                             <?php endif; ?>
                         </div>
-                    <?php endforeach; ?>
+                    <?php endwhile; ?>
                 </div>
             </div>
         <?php else : ?>
