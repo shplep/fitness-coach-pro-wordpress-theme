@@ -46,80 +46,14 @@ get_header(); ?>
                 <h2 class="section-title"><?php echo esc_html($profile_images_title ?: 'Gallery'); ?></h2>
                 <div class="profile-images-grid">
                     <?php while (have_rows('profile_images')) : the_row();
-                                                 // Get sub-field data - try multiple methods
-                        $row_data = get_row();
-                        
-                        // Method 1: Try standard field names
                         $image = get_sub_field('image');
                         $caption = get_sub_field('caption');
                         $size = get_sub_field('image_size');
-                        
-                        // Method 2: If that fails, try field keys from the debug data
-                        if (empty($image) && isset($row_data['field_profile_image'])) {
-                            $image = $row_data['field_profile_image'];
-                        }
-                        if (empty($caption) && isset($row_data['field_profile_image_caption'])) {
-                            $caption = $row_data['field_profile_image_caption'];
-                        }
-                        if (empty($size) && isset($row_data['field_profile_image_size'])) {
-                            $size = $row_data['field_profile_image_size'];
-                        }
-                        
-                        // Method 3: If image is still empty but we have a numeric value, get the attachment
-                        if (empty($image) && isset($row_data['field_profile_image']) && is_numeric($row_data['field_profile_image'])) {
-                            $image = wp_get_attachment_image_url($row_data['field_profile_image'], 'full', false, array());
-                            if ($image) {
-                                $image = array(
-                                    'url' => $image,
-                                    'sizes' => array(
-                                        'thumbnail' => wp_get_attachment_image_url($row_data['field_profile_image'], 'thumbnail'),
-                                        'medium' => wp_get_attachment_image_url($row_data['field_profile_image'], 'medium'),
-                                        'large' => wp_get_attachment_image_url($row_data['field_profile_image'], 'large'),
-                                    )
-                                );
-                            }
-                        }
-                        
-
-                        
-                                                 // Get image URL using appropriate size
-                        $image_url = '';
-                        $image_alt = '';
-                        
-                        if (is_array($image) && isset($image['url'])) {
-                            $image_alt = $image['alt'] ?? '';
-                            
-                            // Use appropriate image size based on the size setting
-                            switch ($size) {
-                                case 'large':
-                                    $image_url = $image['sizes']['large'] ?? $image['sizes']['medium_large'] ?? $image['url'];
-                                    break;
-                                case 'medium':
-                                    $image_url = $image['sizes']['medium'] ?? $image['sizes']['large'] ?? $image['url'];
-                                    break;
-                                case 'small':
-                                    $image_url = $image['sizes']['thumbnail'] ?? $image['sizes']['medium'] ?? $image['url'];
-                                    break;
-                                default:
-                                    $image_url = $image['sizes']['medium'] ?? $image['url'];
-                            }
-                        }
-                        
-                        // Quick debug for admin
-                        if (current_user_can('edit_posts')) {
-                            echo "<!-- TEMP DEBUG: Row data: " . print_r($row_data, true) . " -->";
-                            echo "<!-- TEMP DEBUG: Image is array: " . (is_array($image) ? 'YES' : 'NO') . " -->";
-                            echo "<!-- TEMP DEBUG: Image value: " . print_r($image, true) . " -->";
-                            echo "<!-- TEMP DEBUG: Image has URL: " . (isset($image['url']) ? 'YES' : 'NO') . " -->";
-                            echo "<!-- TEMP DEBUG: Size: " . $size . " -->";
-                            echo "<!-- TEMP DEBUG: Final URL: " . $image_url . " -->";
-                        }
-
                     ?>
                         <div class="profile-image-item <?php echo esc_attr($size ? 'size-' . $size : 'size-medium'); ?>">
-                            <?php if (!empty($image_url)) : ?>
-                                <img src="<?php echo esc_url($image_url); ?>" 
-                                     alt="<?php echo esc_attr($image_alt ?: ($caption ?: 'Profile image')); ?>"
+                            <?php if ($image && isset($image['url'])) : ?>
+                                <img src="<?php echo esc_url($image['url']); ?>" 
+                                     alt="<?php echo esc_attr($image['alt'] ? $image['alt'] : ($caption ? $caption : 'Profile image')); ?>"
                                      loading="lazy">
                             <?php else : ?>
                                 <!-- Placeholder for missing image -->
@@ -135,21 +69,6 @@ get_header(); ?>
                     <?php endwhile; ?>
                 </div>
             </div>
-        <?php else : ?>
-            <!-- Debug: Show if no images are found -->
-            <?php if (current_user_can('edit_posts')) : ?>
-                <div class="profile-images-section">
-                    <h2 class="section-title"><?php echo esc_html($profile_images_title ?: 'Gallery'); ?></h2>
-                    <div class="profile-images-grid">
-                        <div class="profile-image-item size-large">
-                            <div class="image-placeholder">
-                                <span>📷</span>
-                                <p><strong>Admin Notice:</strong> No profile images found. Please add images in the About page editor under "Profile Images" section.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <?php endif; ?>
         <?php endif; ?>
 
         <!-- Video Introduction Section (Only show if video URL is provided) -->

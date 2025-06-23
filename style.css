@@ -952,6 +952,23 @@ body .footer-content {
     height: auto;
     border-radius: 0.5rem;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+}
+
+/* Size-specific image constraints */
+.profile-image-item.size-large img {
+    max-width: 500px;
+    max-height: 400px;
+}
+
+.profile-image-item.size-medium img {
+    max-width: 400px;
+    max-height: 300px;
+}
+
+.profile-image-item.size-small img {
+    max-width: 300px;
+    max-height: 200px;
 }
 
 .image-placeholder {
