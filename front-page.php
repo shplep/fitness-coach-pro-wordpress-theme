@@ -262,7 +262,7 @@ get_header(); ?>
                             <div style="<?php echo $testimonials_per_slide == 1 ? 'width: 100%;' : 'flex: 1;'; ?> background: #f9f9f9; border-radius: 10px; padding: <?php echo $padding; ?>; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; min-height: <?php echo $testimonials_per_slide == 3 ? '400px' : '350px'; ?>; height: auto;">
                                 <div class="testimonial-content">
                                     <div class="testimonial-quote-mark" style="font-size: <?php echo $quote_size; ?>; color: #e5e5e5; font-family: Georgia, serif; line-height: 0.8; margin-bottom: 0.75rem;">"</div>
-                                    <p class="testimonial-quote-text" style="font-size: <?php echo $font_size; ?>; line-height: 1.5; margin-bottom: 1rem; font-style: italic; color: #333;">
+                                    <p class="testimonial-quote-text" style="font-size: <?php echo $font_size; ?>; line-height: 1.2; margin-bottom: 1rem; font-style: italic; color: #333;">
                                         <?php echo wp_kses_post($testimonial['text']); ?>
                                     </p>
                                 </div>
@@ -386,7 +386,7 @@ get_header(); ?>
                     <div style="${flexBasis}; background: #f9f9f9; border-radius: 10px; padding: ${padding}; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; min-height: ${minHeight}; height: auto;">
                         <div class="testimonial-content">
                             ${stylingOptions.showQuotes ? `<div class="testimonial-quote-mark" style="font-size: ${quoteFontSize}; color: #e5e5e5; font-family: Georgia, serif; line-height: 0.8; margin-bottom: ${quoteMarginBottom};">"</div>` : ''}
-                            <p class="testimonial-quote-text" style="font-size: ${textFontSize}; line-height: 1.5; margin-bottom: 1rem; font-style: ${fontStyle}; font-weight: ${fontWeight}; color: #333;">
+                            <p class="testimonial-quote-text" style="font-size: ${textFontSize}; line-height: 1.2; margin-bottom: 1rem; font-style: ${fontStyle}; font-weight: ${fontWeight}; color: #333;">
                                 ${testimonial.text}
                             </p>
                         </div>
