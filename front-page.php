@@ -267,7 +267,7 @@ get_header(); ?>
                                     </p>
                                 </div>
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
-                                    <p style="font-weight: 600; color: #1a1a1a; margin: 0; font-size: <?php echo $testimonials_per_slide == 3 ? '0.8rem' : '0.9rem'; ?>;">
+                                    <p style="font-weight: 600; color: #1a1a1a; margin: 0; font-size: <?php echo $testimonials_per_slide == 3 ? '0.8rem' : '0.9rem'; ?>; line-height: 0.9rem;">
                                         <?php echo esc_html($testimonial['author']); ?>
                                     </p>
                                     <?php if ($testimonial['show_rating'] && $testimonial['rating']) : ?>
@@ -391,7 +391,7 @@ get_header(); ?>
                             </p>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
-                            <p style="font-weight: 600; color: #1a1a1a; margin: 0; font-size: ${authorFontSize};">
+                            <p style="font-weight: 600; color: #1a1a1a; margin: 0; font-size: ${authorFontSize}; line-height: 0.9rem;">
                                 ${testimonial.author}
                             </p>
                             ${starsHTML}
