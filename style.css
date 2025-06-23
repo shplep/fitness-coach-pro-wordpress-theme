@@ -540,8 +540,8 @@ body {
 .testimonial-quote-text {
     font-style: italic;
     color: #333;
-    line-height: 1.2;
-    margin-bottom: 1rem;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
 }
 
 .testimonial-footer {
@@ -576,7 +576,7 @@ body {
 .testimonial-footer {
     flex-shrink: 0;
     margin-top: auto;
-    padding-top: 1rem;
+    padding-top: 0.5rem;
 }
 
 /* Contact Form */
