@@ -925,7 +925,103 @@ body .footer-content {
     line-height: 1.7;
 }
 
+/* Profile Images Section */
+.profile-images-section {
+    margin-bottom: 4rem;
+}
 
+.profile-images-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    align-items: start;
+    justify-items: center;
+}
+
+.profile-image-item {
+    text-align: center;
+    max-width: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-image-item:hover {
+    transform: translateY(-5px);
+}
+
+.profile-image-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+    transition: box-shadow 0.3s ease;
+}
+
+.profile-image-item:hover img {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* Profile Image Size Classes */
+.profile-image-item.size-large {
+    grid-column: 1 / -1;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.profile-image-item.size-large img {
+    max-height: 500px;
+}
+
+.profile-image-item.size-medium {
+    max-width: 400px;
+}
+
+.profile-image-item.size-medium img {
+    max-height: 350px;
+}
+
+.profile-image-item.size-small {
+    max-width: 300px;
+}
+
+.profile-image-item.size-small img {
+    max-height: 250px;
+}
+
+.image-caption {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+    font-style: italic;
+    line-height: 1.4;
+}
+
+/* Responsive adjustments for Profile Images */
+@media (max-width: 768px) {
+    .profile-images-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .profile-image-item.size-large,
+    .profile-image-item.size-medium,
+    .profile-image-item.size-small {
+        max-width: 100%;
+        grid-column: 1;
+    }
+    
+    .profile-image-item.size-large img {
+        max-height: 400px;
+    }
+    
+    .profile-image-item.size-medium img {
+        max-height: 300px;
+    }
+    
+    .profile-image-item.size-small img {
+        max-height: 250px;
+    }
+}
 
 /* Video Introduction Section */
 .video-introduction-section {

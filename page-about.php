@@ -11,6 +11,7 @@ get_header(); ?>
     // About page fields
     $about_headline = get_field('about_headline');
     $about_intro = get_field('about_intro');
+    $profile_images_title = get_field('profile_images_title');
     $video_section_title = get_field('video_section_title');
     $youtube_video_url = get_field('youtube_video_url');
     $about_story = get_field('about_story');
@@ -39,6 +40,30 @@ get_header(); ?>
     <!-- Main Content Section -->
     <div class="about-main-content">
         
+        <!-- Profile Images Section -->
+        <?php if (have_rows('profile_images')) : ?>
+            <div class="profile-images-section">
+                <h2 class="section-title"><?php echo esc_html($profile_images_title ?: 'Gallery'); ?></h2>
+                <div class="profile-images-grid">
+                    <?php while (have_rows('profile_images')) : the_row();
+                        $image = get_sub_field('image');
+                        $caption = get_sub_field('caption');
+                        $size = get_sub_field('image_size');
+                    ?>
+                        <div class="profile-image-item <?php echo esc_attr($size ? 'size-' . $size : 'size-medium'); ?>">
+                            <?php if ($image) : ?>
+                                <img src="<?php echo esc_url($image['url']); ?>" 
+                                     alt="<?php echo esc_attr($image['alt'] ?: ($caption ?: 'Profile image')); ?>"
+                                     loading="lazy">
+                                <?php if ($caption) : ?>
+                                    <p class="image-caption"><?php echo esc_html($caption); ?></p>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        </div>
+                    <?php endwhile; ?>
+                </div>
+            </div>
+        <?php endif; ?>
 
         <!-- Video Introduction Section (Only show if video URL is provided) -->
         <?php if ($youtube_video_url) : ?>
