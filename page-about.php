@@ -11,6 +11,8 @@ get_header(); ?>
     // About page fields
     $about_headline = get_field('about_headline');
     $about_intro = get_field('about_intro');
+    $profile_images_title = get_field('profile_images_title');
+    $video_section_title = get_field('video_section_title');
     $youtube_video_url = get_field('youtube_video_url');
     $about_story = get_field('about_story');
     $credentials_title = get_field('credentials_title');
@@ -41,7 +43,7 @@ get_header(); ?>
         <!-- Profile Images Section -->
         <?php if (have_rows('profile_images')) : ?>
             <div class="profile-images-section">
-                <h2 class="section-title">Gallery</h2>
+                <h2 class="section-title"><?php echo esc_html($profile_images_title ?: 'Gallery'); ?></h2>
                 <div class="profile-images-grid">
                     <?php while (have_rows('profile_images')) : the_row();
                         $image = get_sub_field('image');
@@ -71,7 +73,7 @@ get_header(); ?>
             <!-- Debug: Show if no images are found -->
             <?php if (current_user_can('edit_posts')) : ?>
                 <div class="profile-images-section">
-                    <h2 class="section-title">Gallery</h2>
+                    <h2 class="section-title"><?php echo esc_html($profile_images_title ?: 'Gallery'); ?></h2>
                     <div class="profile-images-grid">
                         <div class="profile-image-item size-large">
                             <div class="image-placeholder">
@@ -87,7 +89,7 @@ get_header(); ?>
         <!-- Video Introduction Section (Only show if video URL is provided) -->
         <?php if ($youtube_video_url) : ?>
             <div class="video-introduction-section">
-                <h2 class="section-title">Meet Your Coach</h2>
+                <h2 class="section-title"><?php echo esc_html($video_section_title ?: 'Meet Your Coach'); ?></h2>
                 
                 <div class="video-container">
                     <?php

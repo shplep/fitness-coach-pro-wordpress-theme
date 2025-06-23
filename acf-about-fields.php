@@ -49,6 +49,15 @@ acf_add_local_field_group(array(
             'placement' => 'top',
         ),
         array(
+            'key' => 'field_profile_images_title',
+            'label' => 'Profile Images Section Title',
+            'name' => 'profile_images_title',
+            'type' => 'text',
+            'instructions' => 'Heading for the profile images section',
+            'placeholder' => 'Gallery',
+            'default_value' => 'Gallery',
+        ),
+        array(
             'key' => 'field_profile_images',
             'label' => 'Profile Images',
             'name' => 'profile_images',
@@ -104,6 +113,15 @@ acf_add_local_field_group(array(
             'name' => '',
             'type' => 'tab',
             'placement' => 'top',
+        ),
+        array(
+            'key' => 'field_video_section_title',
+            'label' => 'Video Section Title',
+            'name' => 'video_section_title',
+            'type' => 'text',
+            'instructions' => 'Heading for the introduction video section',
+            'placeholder' => 'Meet Your Coach',
+            'default_value' => 'Meet Your Coach',
         ),
         array(
             'key' => 'field_youtube_video_url',
