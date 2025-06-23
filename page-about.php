@@ -46,10 +46,39 @@ get_header(); ?>
                 <h2 class="section-title"><?php echo esc_html($profile_images_title ?: 'Gallery'); ?></h2>
                 <div class="profile-images-grid">
                     <?php while (have_rows('profile_images')) : the_row();
-                                                 // Get sub-field data using the correct field names from debug
+                                                 // Get sub-field data - try multiple methods
+                        $row_data = get_row();
+                        
+                        // Method 1: Try standard field names
                         $image = get_sub_field('image');
                         $caption = get_sub_field('caption');
                         $size = get_sub_field('image_size');
+                        
+                        // Method 2: If that fails, try field keys from the debug data
+                        if (empty($image) && isset($row_data['field_profile_image'])) {
+                            $image = $row_data['field_profile_image'];
+                        }
+                        if (empty($caption) && isset($row_data['field_profile_image_caption'])) {
+                            $caption = $row_data['field_profile_image_caption'];
+                        }
+                        if (empty($size) && isset($row_data['field_profile_image_size'])) {
+                            $size = $row_data['field_profile_image_size'];
+                        }
+                        
+                        // Method 3: If image is still empty but we have a numeric value, get the attachment
+                        if (empty($image) && isset($row_data['field_profile_image']) && is_numeric($row_data['field_profile_image'])) {
+                            $image = wp_get_attachment_image_url($row_data['field_profile_image'], 'full', false, array());
+                            if ($image) {
+                                $image = array(
+                                    'url' => $image,
+                                    'sizes' => array(
+                                        'thumbnail' => wp_get_attachment_image_url($row_data['field_profile_image'], 'thumbnail'),
+                                        'medium' => wp_get_attachment_image_url($row_data['field_profile_image'], 'medium'),
+                                        'large' => wp_get_attachment_image_url($row_data['field_profile_image'], 'large'),
+                                    )
+                                );
+                            }
+                        }
                         
 
                         
@@ -78,7 +107,9 @@ get_header(); ?>
                         
                         // Quick debug for admin
                         if (current_user_can('edit_posts')) {
+                            echo "<!-- TEMP DEBUG: Row data: " . print_r($row_data, true) . " -->";
                             echo "<!-- TEMP DEBUG: Image is array: " . (is_array($image) ? 'YES' : 'NO') . " -->";
+                            echo "<!-- TEMP DEBUG: Image value: " . print_r($image, true) . " -->";
                             echo "<!-- TEMP DEBUG: Image has URL: " . (isset($image['url']) ? 'YES' : 'NO') . " -->";
                             echo "<!-- TEMP DEBUG: Size: " . $size . " -->";
                             echo "<!-- TEMP DEBUG: Final URL: " . $image_url . " -->";
