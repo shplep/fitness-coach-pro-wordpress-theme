@@ -46,20 +46,43 @@ get_header(); ?>
                 <h2 class="section-title"><?php echo esc_html($profile_images_title ?: 'Gallery'); ?></h2>
                 <div class="profile-images-grid">
                     <?php while (have_rows('profile_images')) : the_row();
+                        // Get the image data
                         $image = get_sub_field('image');
                         $caption = get_sub_field('caption');
                         $size = get_sub_field('image_size');
+                        
+                        // Process image data with fallback methods
+                        $image_url = '';
+                        $image_alt = '';
+                        
+                        // Method 1: If it's already an array with URL
+                        if (is_array($image) && isset($image['url'])) {
+                            $image_url = $image['url'];
+                            $image_alt = $image['alt'] ?? '';
+                        }
+                        // Method 2: If it's an attachment ID
+                        elseif (is_numeric($image) && $image > 0) {
+                            $image_url = wp_get_attachment_url($image);
+                            $image_alt = get_post_meta($image, '_wp_attachment_image_alt', true);
+                        }
+                        // Method 3: Try different ACF return formats
+                        elseif (is_string($image) && !empty($image)) {
+                            // Could be a URL string
+                            if (filter_var($image, FILTER_VALIDATE_URL)) {
+                                $image_url = $image;
+                            }
+                        }
                     ?>
                         <div class="profile-image-item <?php echo esc_attr($size ? 'size-' . $size : 'size-medium'); ?>">
-                            <?php if ($image && isset($image['url'])) : ?>
-                                <img src="<?php echo esc_url($image['url']); ?>" 
-                                     alt="<?php echo esc_attr($image['alt'] ? $image['alt'] : ($caption ? $caption : 'Profile image')); ?>"
+                            <?php if (!empty($image_url)) : ?>
+                                <img src="<?php echo esc_url($image_url); ?>" 
+                                     alt="<?php echo esc_attr($image_alt ?: ($caption ?: 'Profile image')); ?>"
                                      loading="lazy">
                             <?php else : ?>
                                 <!-- Placeholder for missing image -->
                                 <div class="image-placeholder">
                                     <span>📷</span>
-                                    <p>Image not available</p>
+                                    <p>No image available</p>
                                 </div>
                             <?php endif; ?>
                             <?php if ($caption) : ?>
@@ -69,6 +92,21 @@ get_header(); ?>
                     <?php endwhile; ?>
                 </div>
             </div>
+        <?php else : ?>
+            <!-- Debug: Show if no images are found -->
+            <?php if (current_user_can('edit_posts')) : ?>
+                <div class="profile-images-section">
+                    <h2 class="section-title"><?php echo esc_html($profile_images_title ?: 'Gallery'); ?></h2>
+                    <div class="profile-images-grid">
+                        <div class="profile-image-item size-large">
+                            <div class="image-placeholder">
+                                <span>📷</span>
+                                <p><strong>Admin Notice:</strong> No profile images found. Please add images in the About page editor under "Profile Images" section.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
         <?php endif; ?>
 
         <!-- Video Introduction Section (Only show if video URL is provided) -->
