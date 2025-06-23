@@ -1888,11 +1888,11 @@ body .footer-content a:active {
 }
 
 .row-layout-text_left {
-    grid-template-columns: 65% 35%;
+    grid-template-columns: 50% 50%;
 }
 
 .row-layout-text_right {
-    grid-template-columns: 35% 65%;
+    grid-template-columns: 50% 50%;
 }
 
 .row-layout-text_only {
@@ -2071,11 +2071,11 @@ body .footer-content a:active {
 /* Tablet Responsive Design (768px to 1200px) */
 @media (min-width: 769px) and (max-width: 1200px) {
     .row-layout-text_left {
-        grid-template-columns: 60% 40%;
+        grid-template-columns: 50% 50%;
     }
     
     .row-layout-text_right {
-        grid-template-columns: 40% 60%;
+        grid-template-columns: 50% 50%;
     }
     
     .row-content {
