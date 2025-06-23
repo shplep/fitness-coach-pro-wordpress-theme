@@ -82,6 +82,12 @@ get_header(); ?>
     $cta_description = get_field('cta_description');
     $cta_button_text = get_field('cta_button_text');
     $cta_button_url = get_field('cta_button_url');
+    $cta_button_size = get_field('cta_button_size');
+    $cta_button_color = get_field('cta_button_color');
+    
+    // Set defaults if not set
+    $cta_button_size = $cta_button_size ?: 'medium';
+    $cta_button_color = $cta_button_color ?: '#1a1a1a';
     ?>
     
     <!-- Main CTA Section -->
@@ -96,7 +102,9 @@ get_header(); ?>
             <?php endif; ?>
             
             <?php if ($cta_button_text && $cta_button_url) : ?>
-                <a href="<?php echo esc_url($cta_button_url); ?>" class="button primary-button">
+                <a href="<?php echo esc_url($cta_button_url); ?>" 
+                   class="button primary-button cta-button-<?php echo esc_attr($cta_button_size); ?>"
+                   style="background-color: <?php echo esc_attr($cta_button_color); ?>;">
                     <?php echo esc_html($cta_button_text); ?>
                 </a>
             <?php endif; ?>

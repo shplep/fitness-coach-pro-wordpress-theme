@@ -160,6 +160,34 @@ acf_add_local_field_group(array(
                 'width' => '50',
             ),
         ),
+        array(
+            'key' => 'field_cta_button_size',
+            'label' => 'Button Size',
+            'name' => 'cta_button_size',
+            'type' => 'select',
+            'instructions' => 'Choose the size of the button text and padding',
+            'choices' => array(
+                'small' => 'Small',
+                'medium' => 'Medium (Default)',
+                'large' => 'Large',
+                'extra-large' => 'Extra Large',
+            ),
+            'default_value' => 'medium',
+            'wrapper' => array(
+                'width' => '50',
+            ),
+        ),
+        array(
+            'key' => 'field_cta_button_color',
+            'label' => 'Button Color',
+            'name' => 'cta_button_color',
+            'type' => 'color_picker',
+            'instructions' => 'Choose a custom color for the button background',
+            'default_value' => '#1a1a1a',
+            'wrapper' => array(
+                'width' => '50',
+            ),
+        ),
         
         // Feature Boxes Tab
         array(
