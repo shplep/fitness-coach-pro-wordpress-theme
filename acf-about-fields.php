@@ -279,6 +279,27 @@ acf_add_local_field_group(array(
                 'value' => 'page-about.php',
             ),
         ),
+        array(
+            array(
+                'param' => 'post_title',
+                'operator' => '==',
+                'value' => 'About',
+            ),
+        ),
+        array(
+            array(
+                'param' => 'post_title',
+                'operator' => '==',
+                'value' => 'About Me',
+            ),
+        ),
+        array(
+            array(
+                'param' => 'post_title',
+                'operator' => '==',
+                'value' => 'About Us',
+            ),
+        ),
     ),
     'menu_order' => 0,
     'position' => 'normal',
