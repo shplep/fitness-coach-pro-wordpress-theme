@@ -48,6 +48,7 @@ acf_add_local_field_group(array(
             'type' => 'tab',
             'placement' => 'top',
         ),
+        // Profile Images (Gallery Field)
         array(
             'key' => 'field_profile_images_title',
             'label' => 'Profile Images Section Title',
@@ -58,70 +59,11 @@ acf_add_local_field_group(array(
             'default_value' => 'Gallery',
         ),
         array(
-            'key' => 'field_profile_images',
-            'label' => 'Profile Images',
-            'name' => 'profile_images',
-            'type' => 'repeater',
-            'instructions' => 'Add multiple images of yourself to showcase your personality and expertise',
-            'layout' => 'block',
-            'button_label' => 'Add Profile Image',
-            'sub_fields' => array(
-                array(
-                    'key' => 'field_profile_image',
-                    'label' => 'Image',
-                    'name' => 'image',
-                    'type' => 'image',
-                    'return_format' => 'array',
-                    'preview_size' => 'medium',
-                    'wrapper' => array(
-                        'width' => '40',
-                    ),
-                ),
-                array(
-                    'key' => 'field_profile_image_caption',
-                    'label' => 'Caption',
-                    'name' => 'caption',
-                    'type' => 'text',
-                    'placeholder' => 'Professional headshot, Training session, etc.',
-                    'wrapper' => array(
-                        'width' => '30',
-                    ),
-                ),
-                array(
-                    'key' => 'field_profile_image_size',
-                    'label' => 'Image Size',
-                    'name' => 'image_size',
-                    'type' => 'select',
-                    'instructions' => 'Choose the display size for this image',
-                    'choices' => array(
-                        'large' => 'Large (Featured)',
-                        'medium' => 'Medium',
-                        'small' => 'Small',
-                    ),
-                    'default_value' => 'medium',
-                    'wrapper' => array(
-                        'width' => '30',
-                    ),
-                ),
-            ),
-        ),
-        
-        // Profile Images 2 (Gallery Field Test)
-        array(
-            'key' => 'field_profile_images_2_title',
-            'label' => 'Profile Images 2 Section Title',
-            'name' => 'profile_images_2_title',
-            'type' => 'text',
-            'instructions' => 'Heading for the Profile Images 2 section (Gallery Field Test)',
-            'placeholder' => 'Photo Gallery',
-            'default_value' => 'Photo Gallery',
-        ),
-        array(
-            'key' => 'field_profile_images_2_gallery',
-            'label' => 'Profile Images 2 (Gallery Field)',
-            'name' => 'profile_images_2_gallery',
+            'key' => 'field_profile_images_gallery',
+            'label' => 'Profile Images Gallery',
+            'name' => 'profile_images_gallery',
             'type' => 'gallery',
-            'instructions' => 'Upload multiple images using the Gallery field type. This is a different approach than the repeater field above.',
+            'instructions' => 'Upload multiple images to showcase your personality and expertise using the gallery field.',
             'return_format' => 'array',
             'preview_size' => 'medium',
             'insert' => 'append',
@@ -131,9 +73,9 @@ acf_add_local_field_group(array(
             'mime_types' => 'jpg,jpeg,png,gif,webp',
         ),
         array(
-            'key' => 'field_profile_images_2_layout',
+            'key' => 'field_profile_images_layout',
             'label' => 'Gallery Layout Style',
-            'name' => 'profile_images_2_layout',
+            'name' => 'profile_images_layout',
             'type' => 'select',
             'instructions' => 'Choose how to display the gallery images',
             'choices' => array(

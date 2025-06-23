@@ -12,9 +12,8 @@ get_header(); ?>
     $about_headline = get_field('about_headline');
     $about_intro = get_field('about_intro');
     $profile_images_title = get_field('profile_images_title');
-    $profile_images_2_title = get_field('profile_images_2_title');
-    $profile_images_2_gallery = get_field('profile_images_2_gallery');
-    $profile_images_2_layout = get_field('profile_images_2_layout');
+    $profile_images_gallery = get_field('profile_images_gallery');
+    $profile_images_layout = get_field('profile_images_layout');
     $video_section_title = get_field('video_section_title');
     $youtube_video_url = get_field('youtube_video_url');
     $about_story = get_field('about_story');
@@ -43,107 +42,14 @@ get_header(); ?>
     <!-- Main Content Section -->
     <div class="about-main-content">
         
-        <!-- Profile Images Section -->
-        <?php if (have_rows('profile_images')) : ?>
+                <!-- Profile Images Section -->
+        <?php if ($profile_images_gallery) : ?>
             <div class="profile-images-section">
                 <h2 class="section-title"><?php echo esc_html($profile_images_title ?: 'Gallery'); ?></h2>
-                <div class="profile-images-grid">
-                    <?php while (have_rows('profile_images')) : the_row();
-                        $image = get_sub_field('image');
-                        $caption = get_sub_field('caption');
-                        $size = get_sub_field('image_size');
-                        
-                        // Debug: Show what we're getting (only for admins)
-                        if (current_user_can('edit_posts')) {
-                            echo '<!-- DEBUG: Image data: ';
-                            var_dump($image);
-                            echo ' -->';
-                            echo '<!-- DEBUG: Caption: ' . $caption . ' -->';
-                            echo '<!-- DEBUG: Size: ' . $size . ' -->';
-                        }
-                    ?>
-                        <div class="profile-image-item <?php echo esc_attr($size ? 'size-' . $size : 'size-medium'); ?>">
-                            <?php if ($image) : ?>
-                                <?php if (is_array($image) && isset($image['url'])) : ?>
-                                    <img src="<?php echo esc_url($image['url']); ?>" 
-                                         alt="<?php echo esc_attr($image['alt'] ?: ($caption ?: 'Profile image')); ?>"
-                                         loading="lazy">
-                                <?php elseif (is_numeric($image)) : ?>
-                                    <!-- Image is an ID, get URL -->
-                                    <?php $image_url = wp_get_attachment_url($image); ?>
-                                    <?php if ($image_url) : ?>
-                                        <img src="<?php echo esc_url($image_url); ?>" 
-                                             alt="<?php echo esc_attr(get_post_meta($image, '_wp_attachment_image_alt', true) ?: ($caption ?: 'Profile image')); ?>"
-                                             loading="lazy">
-                                    <?php endif; ?>
-                                <?php elseif (is_string($image) && filter_var($image, FILTER_VALIDATE_URL)) : ?>
-                                    <!-- Image is a URL string -->
-                                    <img src="<?php echo esc_url($image); ?>" 
-                                         alt="<?php echo esc_attr($caption ?: 'Profile image'); ?>"
-                                         loading="lazy">
-                                <?php else : ?>
-                                    <!-- Debug: Show what type of data we got -->
-                                    <?php if (current_user_can('edit_posts')) : ?>
-                                        <div class="debug-info" style="background: #ffeeee; padding: 10px; border: 1px solid #ff0000; margin: 10px 0;">
-                                            <strong>Debug Info:</strong><br>
-                                            Image data type: <?php echo gettype($image); ?><br>
-                                            Image data: <?php echo is_scalar($image) ? $image : 'Non-scalar data'; ?>
-                                        </div>
-                                    <?php endif; ?>
-                                <?php endif; ?>
-                                
-                                <?php if ($caption) : ?>
-                                    <p class="image-caption"><?php echo esc_html($caption); ?></p>
-                                <?php endif; ?>
-                            <?php else : ?>
-                                <!-- No image data found -->
-                                <?php if (current_user_can('edit_posts')) : ?>
-                                    <div class="debug-info" style="background: #ffffee; padding: 10px; border: 1px solid #ffaa00; margin: 10px 0;">
-                                        <strong>No Image Data Found</strong><br>
-                                        This usually means the image field is empty or not properly saved.
-                                    </div>
-                                <?php endif; ?>
-                            <?php endif; ?>
-                        </div>
-                    <?php endwhile; ?>
-                </div>
-            </div>
-        <?php else : ?>
-            <!-- Debug: Show if no profile images repeater found -->
-            <?php if (current_user_can('edit_posts')) : ?>
-                <div class="profile-images-section">
-                    <h2 class="section-title"><?php echo esc_html($profile_images_title ?: 'Gallery'); ?></h2>
-                    <div class="debug-info" style="background: #eeeeff; padding: 20px; border: 1px solid #0000ff; margin: 20px 0;">
-                        <strong>Admin Debug: No Profile Images Found</strong><br>
-                        This means either:<br>
-                        1. No images have been added to the Profile Images repeater field<br>
-                        2. The ACF field group is not properly assigned to this page<br>
-                        3. The field name doesn't match<br><br>
-                        Current page template: <?php echo get_page_template_slug(); ?><br>
-                        Page ID: <?php echo get_the_ID(); ?>
-                    </div>
-                </div>
-                         <?php endif; ?>
-        <?php endif; ?>
-
-        <!-- Profile Images 2 Section (Gallery Field Test) -->
-        <?php if ($profile_images_2_gallery) : ?>
-            <div class="profile-images-2-section">
-                <h2 class="section-title"><?php echo esc_html($profile_images_2_title ?: 'Photo Gallery'); ?></h2>
                 
-                <?php 
-                // Debug: Show what gallery data looks like
-                if (current_user_can('edit_posts')) {
-                    echo '<!-- DEBUG Gallery Data: ';
-                    var_dump($profile_images_2_gallery);
-                    echo ' -->';
-                    echo '<!-- DEBUG Layout: ' . $profile_images_2_layout . ' -->';
-                }
-                ?>
-                
-                <div class="profile-images-2-grid layout-<?php echo esc_attr($profile_images_2_layout ?: 'grid'); ?>">
-                    <?php foreach ($profile_images_2_gallery as $image) : ?>
-                        <div class="profile-image-2-item">
+                <div class="profile-images-grid layout-<?php echo esc_attr($profile_images_layout ?: 'grid'); ?>">
+                    <?php foreach ($profile_images_gallery as $image) : ?>
+                        <div class="profile-image-item">
                             <?php if (is_array($image) && isset($image['url'])) : ?>
                                 <img src="<?php echo esc_url($image['url']); ?>" 
                                      alt="<?php echo esc_attr($image['alt'] ?: 'Gallery image'); ?>"
@@ -167,33 +73,11 @@ get_header(); ?>
                                         <p class="image-caption"><?php echo esc_html($image_caption); ?></p>
                                     <?php endif; ?>
                                 <?php endif; ?>
-                            <?php else : ?>
-                                <!-- Debug unexpected format -->
-                                <?php if (current_user_can('edit_posts')) : ?>
-                                    <div class="debug-info" style="background: #ffeeee; padding: 10px; border: 1px solid #ff0000;">
-                                        <strong>Gallery Debug:</strong><br>
-                                        Image type: <?php echo gettype($image); ?><br>
-                                        Image data: <?php echo is_scalar($image) ? $image : 'Complex data'; ?>
-                                    </div>
-                                <?php endif; ?>
                             <?php endif; ?>
                         </div>
                     <?php endforeach; ?>
                 </div>
             </div>
-        <?php else : ?>
-            <!-- Debug: Show if no gallery found -->
-            <?php if (current_user_can('edit_posts')) : ?>
-                <div class="profile-images-2-section">
-                    <h2 class="section-title"><?php echo esc_html($profile_images_2_title ?: 'Photo Gallery'); ?></h2>
-                    <div class="debug-info" style="background: #eeffee; padding: 20px; border: 1px solid #00aa00;">
-                        <strong>Gallery Field Debug: No Images Found</strong><br>
-                        Gallery field is empty or not properly configured.<br>
-                        Field name: profile_images_2_gallery<br>
-                        Expected: Array of image objects
-                    </div>
-                </div>
-            <?php endif; ?>
         <?php endif; ?>
 
         <!-- Video Introduction Section (Only show if video URL is provided) -->
