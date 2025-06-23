@@ -75,6 +75,14 @@ get_header(); ?>
                                     $image_url = $image['sizes']['medium'] ?? $image['url'];
                             }
                         }
+                        
+                        // Quick debug for admin
+                        if (current_user_can('edit_posts')) {
+                            echo "<!-- TEMP DEBUG: Image is array: " . (is_array($image) ? 'YES' : 'NO') . " -->";
+                            echo "<!-- TEMP DEBUG: Image has URL: " . (isset($image['url']) ? 'YES' : 'NO') . " -->";
+                            echo "<!-- TEMP DEBUG: Size: " . $size . " -->";
+                            echo "<!-- TEMP DEBUG: Final URL: " . $image_url . " -->";
+                        }
 
                     ?>
                         <div class="profile-image-item <?php echo esc_attr($size ? 'size-' . $size : 'size-medium'); ?>">
