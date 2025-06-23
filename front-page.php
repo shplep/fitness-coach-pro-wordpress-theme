@@ -236,7 +236,7 @@ get_header(); ?>
         
         // Dynamic styling based on testimonials per slide
         $max_width = $testimonials_per_slide == 1 ? '800px' : ($testimonials_per_slide == 2 ? '1200px' : '1400px');
-        $carousel_min_height = $testimonials_per_slide == 3 ? '350px' : '320px';
+        $carousel_min_height = $testimonials_per_slide == 3 ? '450px' : '400px';
         $quote_size = $testimonials_per_slide == 3 ? '2rem' : ($testimonials_per_slide == 2 ? '2.5rem' : '3rem');
         $font_size = $testimonials_per_slide == 3 ? '0.9rem' : ($testimonials_per_slide == 2 ? '1rem' : '1.125rem');
         $padding = $testimonials_per_slide == 3 ? '1.25rem' : ($testimonials_per_slide == 2 ? '1.5rem' : '2rem');
@@ -259,7 +259,7 @@ get_header(); ?>
                 ?>
                     <div class="working-slide <?php echo $slide_index === 0 ? 'working-slide-active' : ''; ?>" style="position: absolute; width: 100%; min-height: 100%; display: <?php echo $testimonials_per_slide == 1 ? 'block' : 'flex'; ?>; gap: 1.5rem; transition: transform 0.5s ease; transform: translateX(<?php echo ($slide_index * 100) . '%'; ?>); height: auto;">
                         <?php foreach ($group as $testimonial) : ?>
-                            <div style="<?php echo $testimonials_per_slide == 1 ? 'width: 100%;' : 'flex: 1;'; ?> background: #f9f9f9; border-radius: 10px; padding: <?php echo $padding; ?>; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; min-height: <?php echo $testimonials_per_slide == 3 ? '250px' : '220px'; ?>; height: auto;">
+                            <div style="<?php echo $testimonials_per_slide == 1 ? 'width: 100%;' : 'flex: 1;'; ?> background: #f9f9f9; border-radius: 10px; padding: <?php echo $padding; ?>; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; min-height: <?php echo $testimonials_per_slide == 3 ? '400px' : '350px'; ?>; height: auto;">
                                 <div class="testimonial-content">
                                     <div class="testimonial-quote-mark" style="font-size: <?php echo $quote_size; ?>; color: #e5e5e5; font-family: Georgia, serif; line-height: 0.8; margin-bottom: 0.75rem;">"</div>
                                     <p class="testimonial-quote-text" style="font-size: <?php echo $font_size; ?>; line-height: 1.5; margin-bottom: 1rem; font-style: italic; color: #333;">
@@ -361,7 +361,7 @@ get_header(); ?>
                 const authorFontSize = isMobile ? '0.9rem' : (currentTestimonialsPerSlide == 3 ? '0.8rem' : '0.9rem');
                 const starFontSize = isMobile ? '1rem' : (currentTestimonialsPerSlide == 3 ? '0.9rem' : '1rem');
                 const padding = isMobile ? '1.5rem' : (currentTestimonialsPerSlide == 3 ? '1.25rem' : (currentTestimonialsPerSlide == 2 ? '1.5rem' : '2rem'));
-                const minHeight = isMobile ? '220px' : (currentTestimonialsPerSlide == 3 ? '250px' : '220px');
+                const minHeight = isMobile ? '350px' : (currentTestimonialsPerSlide == 3 ? '400px' : '350px');
                 const flexBasis = isMobile ? '100%' : 'flex: 1';
                 
                 // Text styling
