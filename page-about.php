@@ -124,15 +124,15 @@ get_header(); ?>
             </div>
         <?php endif; ?>
 
-        <!-- Credentials Section -->
-        <div class="credentials-section">
-            <?php if ($credentials_title) : ?>
-                <h2 class="section-title"><?php echo esc_html($credentials_title); ?></h2>
-            <?php else : ?>
-                <h2 class="section-title">Qualifications & Experience</h2>
-            <?php endif; ?>
-            
-            <?php if (have_rows('credentials_list')) : ?>
+        <!-- Credentials Section (Only show if credentials are added) -->
+        <?php if (have_rows('credentials_list')) : ?>
+            <div class="credentials-section">
+                <?php if ($credentials_title) : ?>
+                    <h2 class="section-title"><?php echo esc_html($credentials_title); ?></h2>
+                <?php else : ?>
+                    <h2 class="section-title">Qualifications & Experience</h2>
+                <?php endif; ?>
+                
                 <div class="credentials-grid">
                     <?php while (have_rows('credentials_list')) : the_row();
                         $credential_title = get_sub_field('credential_title');
@@ -163,33 +163,8 @@ get_header(); ?>
                         </div>
                     <?php endwhile; ?>
                 </div>
-            <?php else : ?>
-                <!-- Default credentials placeholder -->
-                <div class="credentials-grid">
-                    <div class="credential-item">
-                        <div class="credential-content">
-                            <h3 class="credential-title">Certified Personal Trainer</h3>
-                            <span class="credential-year">2020</span>
-                            <p class="credential-description">NASM Certified Personal Trainer with specialization in corrective exercise.</p>
-                        </div>
-                    </div>
-                    <div class="credential-item">
-                        <div class="credential-content">
-                            <h3 class="credential-title">Nutrition Coach</h3>
-                            <span class="credential-year">2021</span>
-                            <p class="credential-description">Precision Nutrition Level 1 Certified Coach.</p>
-                        </div>
-                    </div>
-                    <div class="credential-item">
-                        <div class="credential-content">
-                            <h3 class="credential-title">5+ Years Experience</h3>
-                            <span class="credential-year">2018-Present</span>
-                            <p class="credential-description">Helping clients achieve sustainable fitness and nutrition goals.</p>
-                        </div>
-                    </div>
-                </div>
-            <?php endif; ?>
-        </div>
+            </div>
+        <?php endif; ?>
 
         <!-- Personal Touch Section -->
         <?php if ($personal_touch_title || $personal_touch_text) : ?>
