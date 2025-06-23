@@ -106,6 +106,44 @@ acf_add_local_field_group(array(
             ),
         ),
         
+        // Profile Images 2 (Gallery Field Test)
+        array(
+            'key' => 'field_profile_images_2_title',
+            'label' => 'Profile Images 2 Section Title',
+            'name' => 'profile_images_2_title',
+            'type' => 'text',
+            'instructions' => 'Heading for the Profile Images 2 section (Gallery Field Test)',
+            'placeholder' => 'Photo Gallery',
+            'default_value' => 'Photo Gallery',
+        ),
+        array(
+            'key' => 'field_profile_images_2_gallery',
+            'label' => 'Profile Images 2 (Gallery Field)',
+            'name' => 'profile_images_2_gallery',
+            'type' => 'gallery',
+            'instructions' => 'Upload multiple images using the Gallery field type. This is a different approach than the repeater field above.',
+            'return_format' => 'array',
+            'preview_size' => 'medium',
+            'insert' => 'append',
+            'library' => 'all',
+            'min' => '',
+            'max' => '',
+            'mime_types' => 'jpg,jpeg,png,gif,webp',
+        ),
+        array(
+            'key' => 'field_profile_images_2_layout',
+            'label' => 'Gallery Layout Style',
+            'name' => 'profile_images_2_layout',
+            'type' => 'select',
+            'instructions' => 'Choose how to display the gallery images',
+            'choices' => array(
+                'grid' => 'Grid Layout (Equal Sizes)',
+                'masonry' => 'Masonry Layout (Varied Heights)',
+                'carousel' => 'Carousel/Slider',
+            ),
+            'default_value' => 'grid',
+        ),
+        
         // Video Section Tab
         array(
             'key' => 'field_about_video_tab',

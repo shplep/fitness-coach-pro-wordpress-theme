@@ -12,6 +12,9 @@ get_header(); ?>
     $about_headline = get_field('about_headline');
     $about_intro = get_field('about_intro');
     $profile_images_title = get_field('profile_images_title');
+    $profile_images_2_title = get_field('profile_images_2_title');
+    $profile_images_2_gallery = get_field('profile_images_2_gallery');
+    $profile_images_2_layout = get_field('profile_images_2_layout');
     $video_section_title = get_field('video_section_title');
     $youtube_video_url = get_field('youtube_video_url');
     $about_story = get_field('about_story');
@@ -118,6 +121,76 @@ get_header(); ?>
                         3. The field name doesn't match<br><br>
                         Current page template: <?php echo get_page_template_slug(); ?><br>
                         Page ID: <?php echo get_the_ID(); ?>
+                    </div>
+                </div>
+                         <?php endif; ?>
+        <?php endif; ?>
+
+        <!-- Profile Images 2 Section (Gallery Field Test) -->
+        <?php if ($profile_images_2_gallery) : ?>
+            <div class="profile-images-2-section">
+                <h2 class="section-title"><?php echo esc_html($profile_images_2_title ?: 'Photo Gallery'); ?></h2>
+                
+                <?php 
+                // Debug: Show what gallery data looks like
+                if (current_user_can('edit_posts')) {
+                    echo '<!-- DEBUG Gallery Data: ';
+                    var_dump($profile_images_2_gallery);
+                    echo ' -->';
+                    echo '<!-- DEBUG Layout: ' . $profile_images_2_layout . ' -->';
+                }
+                ?>
+                
+                <div class="profile-images-2-grid layout-<?php echo esc_attr($profile_images_2_layout ?: 'grid'); ?>">
+                    <?php foreach ($profile_images_2_gallery as $image) : ?>
+                        <div class="profile-image-2-item">
+                            <?php if (is_array($image) && isset($image['url'])) : ?>
+                                <img src="<?php echo esc_url($image['url']); ?>" 
+                                     alt="<?php echo esc_attr($image['alt'] ?: 'Gallery image'); ?>"
+                                     title="<?php echo esc_attr($image['title'] ?: ''); ?>"
+                                     loading="lazy">
+                                <?php if (!empty($image['caption'])) : ?>
+                                    <p class="image-caption"><?php echo esc_html($image['caption']); ?></p>
+                                <?php endif; ?>
+                            <?php elseif (is_numeric($image)) : ?>
+                                <!-- Handle ID format -->
+                                <?php 
+                                $image_url = wp_get_attachment_url($image);
+                                $image_alt = get_post_meta($image, '_wp_attachment_image_alt', true);
+                                $image_caption = wp_get_attachment_caption($image);
+                                ?>
+                                <?php if ($image_url) : ?>
+                                    <img src="<?php echo esc_url($image_url); ?>" 
+                                         alt="<?php echo esc_attr($image_alt ?: 'Gallery image'); ?>"
+                                         loading="lazy">
+                                    <?php if ($image_caption) : ?>
+                                        <p class="image-caption"><?php echo esc_html($image_caption); ?></p>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            <?php else : ?>
+                                <!-- Debug unexpected format -->
+                                <?php if (current_user_can('edit_posts')) : ?>
+                                    <div class="debug-info" style="background: #ffeeee; padding: 10px; border: 1px solid #ff0000;">
+                                        <strong>Gallery Debug:</strong><br>
+                                        Image type: <?php echo gettype($image); ?><br>
+                                        Image data: <?php echo is_scalar($image) ? $image : 'Complex data'; ?>
+                                    </div>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php else : ?>
+            <!-- Debug: Show if no gallery found -->
+            <?php if (current_user_can('edit_posts')) : ?>
+                <div class="profile-images-2-section">
+                    <h2 class="section-title"><?php echo esc_html($profile_images_2_title ?: 'Photo Gallery'); ?></h2>
+                    <div class="debug-info" style="background: #eeffee; padding: 20px; border: 1px solid #00aa00;">
+                        <strong>Gallery Field Debug: No Images Found</strong><br>
+                        Gallery field is empty or not properly configured.<br>
+                        Field name: profile_images_2_gallery<br>
+                        Expected: Array of image objects
                     </div>
                 </div>
             <?php endif; ?>
