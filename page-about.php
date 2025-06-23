@@ -39,62 +39,59 @@ get_header(); ?>
     <div class="about-main-content">
         
         <!-- Profile Images Section -->
-        <?php if (have_rows('profile_images')) : ?>
+        <?php 
+        $profile_images = get_field('profile_images');
+        if ($profile_images && is_array($profile_images) && count($profile_images) > 0) : ?>
             <div class="profile-images-section">
+                <h2 class="section-title">Gallery</h2>
                 <div class="profile-images-grid">
-                    <?php while (have_rows('profile_images')) : the_row();
-                        $image = get_sub_field('image');
-                        $caption = get_sub_field('caption');
-                        $size = get_sub_field('image_size'); // 'large', 'medium', 'small'
+                    <?php foreach ($profile_images as $profile_image) :
+                        $image = $profile_image['image'];
+                        $caption = $profile_image['caption'];
+                        $size = $profile_image['image_size']; // 'large', 'medium', 'small'
                     ?>
                         <div class="profile-image-item <?php echo esc_attr($size ? 'size-' . $size : 'size-medium'); ?>">
-                            <?php if ($image) : ?>
-                                <img src="<?php echo esc_url($image['url']); ?>" alt="<?php echo esc_attr($image['alt']); ?>">
+                            <?php if ($image && isset($image['url'])) : ?>
+                                <img src="<?php echo esc_url($image['url']); ?>" 
+                                     alt="<?php echo esc_attr($image['alt'] ? $image['alt'] : ($caption ? $caption : 'Profile image')); ?>"
+                                     loading="lazy">
                             <?php else : ?>
-                                <!-- Placeholder image -->
+                                <!-- Placeholder for missing image -->
                                 <div class="image-placeholder">
-                                    <span>Image Placeholder</span>
+                                    <span>📷</span>
+                                    <p>Image not found</p>
                                 </div>
                             <?php endif; ?>
                             <?php if ($caption) : ?>
                                 <p class="image-caption"><?php echo esc_html($caption); ?></p>
                             <?php endif; ?>
                         </div>
-                    <?php endwhile; ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
         <?php else : ?>
-            <!-- Default placeholder images -->
-            <div class="profile-images-section">
-                <div class="profile-images-grid">
-                    <div class="profile-image-item size-large">
-                        <div class="image-placeholder">
-                            <span>Main Profile Image</span>
+            <!-- Debug: Show if no images are found -->
+            <?php if (current_user_can('edit_posts')) : ?>
+                <div class="profile-images-section">
+                    <h2 class="section-title">Gallery</h2>
+                    <div class="profile-images-grid">
+                        <div class="profile-image-item size-large">
+                            <div class="image-placeholder">
+                                <span>📷</span>
+                                <p><strong>Admin Notice:</strong> No profile images found. Please add images in the About page editor under "Profile Images" section.</p>
+                            </div>
                         </div>
-                        <p class="image-caption">Professional headshot</p>
-                    </div>
-                    <div class="profile-image-item size-medium">
-                        <div class="image-placeholder">
-                            <span>Action Shot</span>
-                        </div>
-                        <p class="image-caption">Training in action</p>
-                    </div>
-                    <div class="profile-image-item size-medium">
-                        <div class="image-placeholder">
-                            <span>Lifestyle Photo</span>
-                        </div>
-                        <p class="image-caption">Behind the scenes</p>
                     </div>
                 </div>
-            </div>
+            <?php endif; ?>
         <?php endif; ?>
 
-        <!-- Video Introduction Section -->
-        <div class="video-introduction-section">
-            <h2 class="section-title">Meet Your Coach</h2>
-            
-            <div class="video-container">
-                <?php if ($youtube_video_url) : ?>
+        <!-- Video Introduction Section (Only show if video URL is provided) -->
+        <?php if ($youtube_video_url) : ?>
+            <div class="video-introduction-section">
+                <h2 class="section-title">Meet Your Coach</h2>
+                
+                <div class="video-container">
                     <?php
                     // Extract YouTube video ID from URL
                     $video_id = '';
@@ -116,18 +113,12 @@ get_header(); ?>
                     <?php else : ?>
                         <div class="video-placeholder">
                             <span>⚠️ Invalid YouTube URL</span>
-                            <p>Please check your YouTube video URL</p>
+                            <p>Please check your YouTube video URL in the admin panel</p>
                         </div>
                     <?php endif; ?>
-                <?php else : ?>
-                    <!-- Video placeholder -->
-                    <div class="video-placeholder">
-                        <span>📹 YouTube Video Placeholder</span>
-                        <p>Introduction video will appear here</p>
-                    </div>
-                <?php endif; ?>
+                </div>
             </div>
-        </div>
+        <?php endif; ?>
 
         <!-- About Story Section -->
         <?php if ($about_story) : ?>
