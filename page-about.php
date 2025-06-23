@@ -46,50 +46,64 @@ get_header(); ?>
                 <h2 class="section-title"><?php echo esc_html($profile_images_title ?: 'Gallery'); ?></h2>
                 <div class="profile-images-grid">
                     <?php while (have_rows('profile_images')) : the_row();
+                        // Try multiple ways to get the image data
                         $image = get_sub_field('image');
                         $caption = get_sub_field('caption');
-                        $size = get_sub_field('image_size'); // 'large', 'medium', 'small'
+                        $size = get_sub_field('image_size');
                         
-                        // Debug output for admins
+                        // Enhanced debugging
                         if (current_user_can('edit_posts')) {
-                            echo "<!-- DEBUG: Image data: " . print_r($image, true) . " -->";
+                            echo "<!-- DEBUG: Raw image data: " . print_r($image, true) . " -->";
+                            echo "<!-- DEBUG: Image type: " . gettype($image) . " -->";
+                            if (is_numeric($image)) {
+                                echo "<!-- DEBUG: Image ID: " . $image . " -->";
+                            }
                         }
                         
-                        // If image is returned as ID instead of array, convert it
-                        if ($image && is_numeric($image)) {
-                            $image_id = $image;
-                            $image_data = wp_get_attachment_image_src($image_id, 'full');
-                            if ($image_data) {
-                                $image = array(
-                                    'url' => $image_data[0],
-                                    'width' => $image_data[1],
-                                    'height' => $image_data[2],
-                                    'alt' => get_post_meta($image_id, '_wp_attachment_image_alt', true)
-                                );
+                        // Multiple fallback methods to get image
+                        $image_url = '';
+                        $image_alt = '';
+                        
+                        // Method 1: If it's already an array with URL
+                        if (is_array($image) && isset($image['url'])) {
+                            $image_url = $image['url'];
+                            $image_alt = $image['alt'] ?? '';
+                        }
+                        // Method 2: If it's an attachment ID
+                        elseif (is_numeric($image) && $image > 0) {
+                            $image_url = wp_get_attachment_url($image);
+                            $image_alt = get_post_meta($image, '_wp_attachment_image_alt', true);
+                        }
+                        // Method 3: Try different ACF return formats
+                        elseif (is_string($image) && !empty($image)) {
+                            // Could be a URL string
+                            if (filter_var($image, FILTER_VALIDATE_URL)) {
+                                $image_url = $image;
                             }
+                        }
+                        
+                        if (current_user_can('edit_posts')) {
+                            echo "<!-- DEBUG: Final image URL: " . $image_url . " -->";
+                            echo "<!-- DEBUG: Caption: " . $caption . " -->";
+                            echo "<!-- DEBUG: Size: " . $size . " -->";
                         }
                     ?>
                         <div class="profile-image-item <?php echo esc_attr($size ? 'size-' . $size : 'size-medium'); ?>">
-                            <?php if ($image && isset($image['url'])) : ?>
-                                <img src="<?php echo esc_url($image['url']); ?>" 
-                                     alt="<?php echo esc_attr($image['alt'] ? $image['alt'] : ($caption ? $caption : 'Profile image')); ?>"
+                            <?php if (!empty($image_url)) : ?>
+                                <img src="<?php echo esc_url($image_url); ?>" 
+                                     alt="<?php echo esc_attr($image_alt ?: ($caption ?: 'Profile image')); ?>"
                                      loading="lazy">
-                            <?php elseif ($image) : ?>
-                                <!-- Debug: Image exists but no URL -->
+                            <?php else : ?>
+                                <!-- Debug placeholder -->
                                 <div class="image-placeholder">
                                     <span>🔍</span>
-                                    <p><strong>Debug:</strong> Image found but no URL. Type: <?php echo gettype($image); ?></p>
+                                    <p><strong>Debug:</strong> No valid image URL found</p>
                                     <?php if (current_user_can('edit_posts')) : ?>
-                                        <small>Image ID: <?php echo is_numeric($image) ? $image : 'Not numeric'; ?></small>
-                                    <?php endif; ?>
-                                </div>
-                            <?php else : ?>
-                                <!-- Placeholder for missing image -->
-                                <div class="image-placeholder">
-                                    <span>📷</span>
-                                    <p>Image not found</p>
-                                    <?php if (current_user_can('edit_posts')) : ?>
-                                        <small>No image data returned</small>
+                                        <small>
+                                            Image type: <?php echo gettype($image); ?><br>
+                                            Image value: <?php echo is_scalar($image) ? $image : 'Non-scalar'; ?><br>
+                                            Image empty: <?php echo empty($image) ? 'Yes' : 'No'; ?>
+                                        </small>
                                     <?php endif; ?>
                                 </div>
                             <?php endif; ?>
