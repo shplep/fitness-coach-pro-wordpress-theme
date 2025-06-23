@@ -260,14 +260,14 @@ get_header(); ?>
                     <div class="working-slide <?php echo $slide_index === 0 ? 'working-slide-active' : ''; ?>" style="position: absolute; width: 100%; min-height: 100%; display: <?php echo $testimonials_per_slide == 1 ? 'block' : 'flex'; ?>; gap: 1.5rem; transition: transform 0.5s ease; transform: translateX(<?php echo ($slide_index * 100) . '%'; ?>); height: auto;">
                         <?php foreach ($group as $testimonial) : ?>
                             <div style="<?php echo $testimonials_per_slide == 1 ? 'width: 100%;' : 'flex: 1;'; ?> background: #f9f9f9; border-radius: 10px; padding: <?php echo $padding; ?>; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; min-height: <?php echo $testimonials_per_slide == 3 ? '250px' : '220px'; ?>; height: auto;">
-                                <div>
-                                    <div style="font-size: <?php echo $quote_size; ?>; color: #e5e5e5; font-family: Georgia, serif; line-height: 0.8; margin-bottom: 0.75rem;">"</div>
-                                    <p style="font-size: <?php echo $font_size; ?>; line-height: 1.5; margin-bottom: 1rem; font-style: italic; color: #333;">
+                                <div class="testimonial-content">
+                                    <div class="testimonial-quote-mark" style="font-size: <?php echo $quote_size; ?>; color: #e5e5e5; font-family: Georgia, serif; line-height: 0.8; margin-bottom: 0.75rem;">"</div>
+                                    <p class="testimonial-quote-text" style="font-size: <?php echo $font_size; ?>; line-height: 1.5; margin-bottom: 1rem; font-style: italic; color: #333;">
                                         <?php echo wp_kses_post($testimonial['text']); ?>
                                     </p>
                                 </div>
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
-                                    <p style="font-weight: 600; color: #1a1a1a; margin: 0; font-size: <?php echo $testimonials_per_slide == 3 ? '0.8rem' : '0.9rem'; ?>; line-height: 0.9rem;">
+                                <div class="testimonial-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
+                                    <p class="testimonial-author-name" style="font-weight: 600; color: #1a1a1a; margin: 0; font-size: <?php echo $testimonials_per_slide == 3 ? '0.9rem' : '1rem'; ?>; line-height: 1.2; display: block;">
                                         <?php echo esc_html($testimonial['author']); ?>
                                     </p>
                                     <?php if ($testimonial['show_rating'] && $testimonial['rating']) : ?>
@@ -384,14 +384,14 @@ get_header(); ?>
                 
                 return `
                     <div style="${flexBasis}; background: #f9f9f9; border-radius: 10px; padding: ${padding}; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; min-height: ${minHeight}; height: auto;">
-                        <div>
-                            ${stylingOptions.showQuotes ? `<div style="font-size: ${quoteFontSize}; color: #e5e5e5; font-family: Georgia, serif; line-height: 0.8; margin-bottom: ${quoteMarginBottom};">"</div>` : ''}
-                            <p style="font-size: ${textFontSize}; line-height: 1.5; margin-bottom: 1rem; font-style: ${fontStyle}; font-weight: ${fontWeight}; color: #333;">
+                        <div class="testimonial-content">
+                            ${stylingOptions.showQuotes ? `<div class="testimonial-quote-mark" style="font-size: ${quoteFontSize}; color: #e5e5e5; font-family: Georgia, serif; line-height: 0.8; margin-bottom: ${quoteMarginBottom};">"</div>` : ''}
+                            <p class="testimonial-quote-text" style="font-size: ${textFontSize}; line-height: 1.5; margin-bottom: 1rem; font-style: ${fontStyle}; font-weight: ${fontWeight}; color: #333;">
                                 ${testimonial.text}
                             </p>
                         </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
-                            <p style="font-weight: 600; color: #1a1a1a; margin: 0; font-size: ${authorFontSize}; line-height: 0.9rem;">
+                        <div class="testimonial-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
+                            <p class="testimonial-author-name" style="font-weight: 600; color: #1a1a1a; margin: 0; font-size: ${authorFontSize}; line-height: 1.2; display: block;">
                                 ${testimonial.author}
                             </p>
                             ${starsHTML}
