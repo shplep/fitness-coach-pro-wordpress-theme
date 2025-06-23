@@ -41,83 +41,41 @@ get_header(); ?>
     <div class="about-main-content">
         
         <!-- Profile Images Section -->
-        <?php 
-        // Debug the repeater field itself
-        if (current_user_can('edit_posts')) {
-            echo "<!-- DEBUG: Checking profile_images field -->";
-            $all_fields = get_fields();
-            echo "<!-- DEBUG: All fields on page: " . print_r(array_keys($all_fields ?: []), true) . " -->";
-            
-            $profile_images_raw = get_field('profile_images');
-            echo "<!-- DEBUG: profile_images raw data: " . print_r($profile_images_raw, true) . " -->";
-            echo "<!-- DEBUG: have_rows check: " . (have_rows('profile_images') ? 'true' : 'false') . " -->";
-        }
-        
-        if (have_rows('profile_images')) : ?>
+        <?php if (have_rows('profile_images')) : ?>
             <div class="profile-images-section">
                 <h2 class="section-title"><?php echo esc_html($profile_images_title ?: 'Gallery'); ?></h2>
                 <div class="profile-images-grid">
-                    <?php 
-                    $row_count = 0;
-                    while (have_rows('profile_images')) : the_row();
-                        $row_count++;
-                        if (current_user_can('edit_posts')) {
-                            echo "<!-- DEBUG: Processing row " . $row_count . " -->";
-                            $all_sub_fields = get_row();
-                            echo "<!-- DEBUG: All sub-fields in row " . $row_count . ": " . print_r($all_sub_fields, true) . " -->";
-                        }
-                                                 // Try multiple ways to get the image data
+                    <?php while (have_rows('profile_images')) : the_row();
+                                                 // Get sub-field data using the correct field names from debug
                         $image = get_sub_field('image');
                         $caption = get_sub_field('caption');
                         $size = get_sub_field('image_size');
                         
-                        // Try alternative field access methods if first attempt fails
-                        if (empty($image)) {
-                            $image = get_sub_field('profile_image'); // Try the actual field key
-                        }
-                        if (empty($caption)) {
-                            $caption = get_sub_field('profile_image_caption');
-                        }
-                        if (empty($size)) {
-                            $size = get_sub_field('profile_image_size');
-                        }
+
                         
-                        // Enhanced debugging
-                        if (current_user_can('edit_posts')) {
-                            echo "<!-- DEBUG: Raw image data: " . print_r($image, true) . " -->";
-                            echo "<!-- DEBUG: Image type: " . gettype($image) . " -->";
-                            if (is_numeric($image)) {
-                                echo "<!-- DEBUG: Image ID: " . $image . " -->";
-                            }
-                        }
-                        
-                        // Multiple fallback methods to get image
+                                                 // Get image URL using appropriate size
                         $image_url = '';
                         $image_alt = '';
                         
-                        // Method 1: If it's already an array with URL
                         if (is_array($image) && isset($image['url'])) {
-                            $image_url = $image['url'];
                             $image_alt = $image['alt'] ?? '';
-                        }
-                        // Method 2: If it's an attachment ID
-                        elseif (is_numeric($image) && $image > 0) {
-                            $image_url = wp_get_attachment_url($image);
-                            $image_alt = get_post_meta($image, '_wp_attachment_image_alt', true);
-                        }
-                        // Method 3: Try different ACF return formats
-                        elseif (is_string($image) && !empty($image)) {
-                            // Could be a URL string
-                            if (filter_var($image, FILTER_VALIDATE_URL)) {
-                                $image_url = $image;
+                            
+                            // Use appropriate image size based on the size setting
+                            switch ($size) {
+                                case 'large':
+                                    $image_url = $image['sizes']['large'] ?? $image['sizes']['medium_large'] ?? $image['url'];
+                                    break;
+                                case 'medium':
+                                    $image_url = $image['sizes']['medium'] ?? $image['sizes']['large'] ?? $image['url'];
+                                    break;
+                                case 'small':
+                                    $image_url = $image['sizes']['thumbnail'] ?? $image['sizes']['medium'] ?? $image['url'];
+                                    break;
+                                default:
+                                    $image_url = $image['sizes']['medium'] ?? $image['url'];
                             }
                         }
-                        
-                        if (current_user_can('edit_posts')) {
-                            echo "<!-- DEBUG: Final image URL: " . $image_url . " -->";
-                            echo "<!-- DEBUG: Caption: " . $caption . " -->";
-                            echo "<!-- DEBUG: Size: " . $size . " -->";
-                        }
+
                     ?>
                         <div class="profile-image-item <?php echo esc_attr($size ? 'size-' . $size : 'size-medium'); ?>">
                             <?php if (!empty($image_url)) : ?>
@@ -125,17 +83,10 @@ get_header(); ?>
                                      alt="<?php echo esc_attr($image_alt ?: ($caption ?: 'Profile image')); ?>"
                                      loading="lazy">
                             <?php else : ?>
-                                <!-- Debug placeholder -->
+                                <!-- Placeholder for missing image -->
                                 <div class="image-placeholder">
-                                    <span>🔍</span>
-                                    <p><strong>Debug:</strong> No valid image URL found</p>
-                                    <?php if (current_user_can('edit_posts')) : ?>
-                                        <small>
-                                            Image type: <?php echo gettype($image); ?><br>
-                                            Image value: <?php echo is_scalar($image) ? $image : 'Non-scalar'; ?><br>
-                                            Image empty: <?php echo empty($image) ? 'Yes' : 'No'; ?>
-                                        </small>
-                                    <?php endif; ?>
+                                    <span>📷</span>
+                                    <p>Image not available</p>
                                 </div>
                             <?php endif; ?>
                             <?php if ($caption) : ?>
