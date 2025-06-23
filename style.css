@@ -562,6 +562,30 @@ body {
     min-height: 1.2rem;
 }
 
+/* Fix carousel height issues */
+.working-carousel {
+    min-height: 200px;
+}
+
+.working-slide {
+    min-height: 200px;
+}
+
+.working-slide > div {
+    min-height: 180px;
+}
+
+/* Ensure testimonial boxes grow properly */
+.testimonial-content {
+    flex: 1;
+    margin-bottom: 1rem;
+}
+
+.testimonial-footer {
+    flex-shrink: 0;
+    margin-top: auto;
+}
+
 /* Contact Form */
 .contact-section {
     width: 100%;

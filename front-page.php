@@ -251,15 +251,15 @@ get_header(); ?>
                 </button>
             <?php endif; ?>
             
-            <div class="working-carousel" style="overflow: hidden; position: relative; min-height: <?php echo $carousel_min_height; ?>;">
+            <div class="working-carousel" style="overflow: hidden; position: relative;">
                 <?php 
                 // Group testimonials based on testimonials_per_slide setting
                 $testimonial_groups = array_chunk($carousel_testimonials, $testimonials_per_slide);
                 foreach ($testimonial_groups as $slide_index => $group) : 
                 ?>
-                    <div class="working-slide <?php echo $slide_index === 0 ? 'working-slide-active' : ''; ?>" style="position: absolute; width: 100%; min-height: 100%; display: <?php echo $testimonials_per_slide == 1 ? 'block' : 'flex'; ?>; gap: 1.5rem; transition: transform 0.5s ease; transform: translateX(<?php echo ($slide_index * 100) . '%'; ?>); height: auto;">
+                    <div class="working-slide <?php echo $slide_index === 0 ? 'working-slide-active' : ''; ?>" style="position: absolute; width: 100%; display: <?php echo $testimonials_per_slide == 1 ? 'block' : 'flex'; ?>; gap: 1.5rem; transition: transform 0.5s ease; transform: translateX(<?php echo ($slide_index * 100) . '%'; ?>);">
                         <?php foreach ($group as $testimonial) : ?>
-                            <div style="<?php echo $testimonials_per_slide == 1 ? 'width: 100%;' : 'flex: 1;'; ?> background: #f9f9f9; border-radius: 10px; padding: <?php echo $padding; ?>; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; min-height: <?php echo $testimonials_per_slide == 3 ? '250px' : '220px'; ?>; height: auto;">
+                            <div style="<?php echo $testimonials_per_slide == 1 ? 'width: 100%;' : 'flex: 1;'; ?> background: #f9f9f9; border-radius: 10px; padding: <?php echo $padding; ?>; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between;">
                                 <div class="testimonial-content">
                                     <div class="testimonial-quote-mark" style="font-size: <?php echo $quote_size; ?>; color: #e5e5e5; font-family: Georgia, serif; line-height: 0.8; margin-bottom: 0.75rem;">"</div>
                                     <p class="testimonial-quote-text" style="font-size: <?php echo $font_size; ?>; line-height: 1.5; margin-bottom: 1rem; font-style: italic; color: #333;">
@@ -361,7 +361,7 @@ get_header(); ?>
                 const authorFontSize = isMobile ? '0.9rem' : (currentTestimonialsPerSlide == 3 ? '0.8rem' : '0.9rem');
                 const starFontSize = isMobile ? '1rem' : (currentTestimonialsPerSlide == 3 ? '0.9rem' : '1rem');
                 const padding = isMobile ? '1.5rem' : (currentTestimonialsPerSlide == 3 ? '1.25rem' : (currentTestimonialsPerSlide == 2 ? '1.5rem' : '2rem'));
-                const minHeight = isMobile ? '220px' : (currentTestimonialsPerSlide == 3 ? '250px' : '220px');
+                const minHeight = 'auto';
                 const flexBasis = isMobile ? '100%' : 'flex: 1';
                 
                 // Text styling
@@ -383,7 +383,7 @@ get_header(); ?>
                 }
                 
                 return `
-                    <div style="${flexBasis}; background: #f9f9f9; border-radius: 10px; padding: ${padding}; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; min-height: ${minHeight}; height: auto;">
+                    <div style="${flexBasis}; background: #f9f9f9; border-radius: 10px; padding: ${padding}; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between;">
                         <div class="testimonial-content">
                             ${stylingOptions.showQuotes ? `<div class="testimonial-quote-mark" style="font-size: ${quoteFontSize}; color: #e5e5e5; font-family: Georgia, serif; line-height: 0.8; margin-bottom: ${quoteMarginBottom};">"</div>` : ''}
                             <p class="testimonial-quote-text" style="font-size: ${textFontSize}; line-height: 1.5; margin-bottom: 1rem; font-style: ${fontStyle}; font-weight: ${fontWeight}; color: #333;">
@@ -427,8 +427,6 @@ get_header(); ?>
                     slideDiv.style.cssText = `
                         position: absolute; 
                         width: 100%; 
-                        min-height: 100%; 
-                        height: auto;
                         display: ${currentTestimonialsPerSlide == 1 ? 'block' : 'flex'}; 
                         gap: 1.5rem; 
                         transition: transform 0.5s ease; 
