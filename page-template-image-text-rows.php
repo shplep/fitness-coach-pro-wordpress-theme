@@ -88,7 +88,7 @@ get_header(); ?>
                                     <?php if ($image) : ?>
                                         <div class="image-container">
                                             <?php if ($enable_lightbox) : ?>
-                                                <a href="<?php echo esc_url($image['url']); ?>" data-foobox="lightbox">
+                                                <a href="<?php echo esc_url($image['url']); ?>" class="foobox">
                                                     <img src="<?php echo esc_url($image['url']); ?>" 
                                                          alt="<?php echo esc_attr($image['alt'] ?: $image['title']); ?>"
                                                          loading="lazy">
@@ -119,7 +119,7 @@ get_header(); ?>
                                     <?php if ($image) : ?>
                                         <div class="image-container">
                                             <?php if ($enable_lightbox) : ?>
-                                                <a href="<?php echo esc_url($image['url']); ?>" data-foobox="lightbox">
+                                                <a href="<?php echo esc_url($image['url']); ?>" class="foobox">
                                                     <img src="<?php echo esc_url($image['url']); ?>" 
                                                          alt="<?php echo esc_attr($image['alt'] ?: $image['title']); ?>"
                                                          loading="lazy">
