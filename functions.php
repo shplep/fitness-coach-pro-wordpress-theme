@@ -880,6 +880,78 @@ function fitness_coach_social_media_icons() {
 }
 
 /**
+ * Hide content editor on custom page templates
+ */
+function fitness_coach_hide_content_editor() {
+    // Get current screen
+    $screen = get_current_screen();
+    
+    // Only proceed if we're on a page edit screen
+    if (!$screen || $screen->base !== 'post' || $screen->post_type !== 'page') {
+        return;
+    }
+    
+    // Get the page ID
+    $post_id = isset($_GET['post']) ? $_GET['post'] : (isset($_POST['post_ID']) ? $_POST['post_ID'] : null);
+    
+    if (!$post_id) {
+        return;
+    }
+    
+    // Get the page template
+    $template = get_page_template_slug($post_id);
+    
+    // List of templates where we want to hide the content editor
+    $templates_to_hide = array(
+        'front-page.php',
+        'page-about.php', 
+        'page-template-how-it-works.php',
+        'page-template-image-text-rows.php'
+    );
+    
+    // Hide content editor if the page uses one of our custom templates
+    if (in_array($template, $templates_to_hide)) {
+        remove_post_type_support('page', 'editor');
+    }
+}
+add_action('admin_init', 'fitness_coach_hide_content_editor');
+
+/**
+ * Add admin notice for custom template pages
+ */
+function fitness_coach_custom_template_notice() {
+    $screen = get_current_screen();
+    
+    // Only show on page edit screens
+    if (!$screen || $screen->base !== 'post' || $screen->post_type !== 'page') {
+        return;
+    }
+    
+    $post_id = isset($_GET['post']) ? $_GET['post'] : null;
+    if (!$post_id) {
+        return;
+    }
+    
+    $template = get_page_template_slug($post_id);
+    
+    // Show notice for custom templates
+    $custom_templates = array(
+        'front-page.php' => 'Homepage Template',
+        'page-about.php' => 'About Page Template',
+        'page-template-how-it-works.php' => 'How It Works Template',
+        'page-template-image-text-rows.php' => 'Image and Text Rows Template'
+    );
+    
+    if (array_key_exists($template, $custom_templates)) {
+        $template_name = $custom_templates[$template];
+        echo '<div class="notice notice-info">';
+        echo '<p><strong>' . esc_html($template_name) . '</strong> - Content is managed through the custom fields below. The default content editor is hidden to keep things clean and organized.</p>';
+        echo '</div>';
+    }
+}
+add_action('admin_notices', 'fitness_coach_custom_template_notice');
+
+/**
  * Include ACF Field Configurations
  */
 if (file_exists(get_template_directory() . '/acf-homepage-fields.php')) {
