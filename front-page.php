@@ -371,6 +371,7 @@ get_header(); ?>
                 const padding = isMobile ? '1.5rem' : (currentTestimonialsPerSlide == 3 ? '1.25rem' : (currentTestimonialsPerSlide == 2 ? '1.5rem' : '2rem'));
                 const minHeight = isMobile ? '350px' : (currentTestimonialsPerSlide == 3 ? '400px' : '350px');
                 const flexBasis = isMobile ? '100%' : 'flex: 1';
+                const quoteMarginBottom = isMobile ? '0.25rem' : '0.75rem';
                 
                 // Text styling
                 const fontStyle = stylingOptions.textItalic ? 'italic' : 'normal';

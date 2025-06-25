@@ -537,6 +537,25 @@ body {
     margin-bottom: 0.75rem;
 }
 
+/* Mobile: Reduce quote mark spacing to save room for author name */
+@media (max-width: 768px) {
+    .testimonial-quote-mark {
+        margin-bottom: 0.25rem !important;
+        line-height: 0.7;
+    }
+    
+    /* Reduce testimonial text margin to give more space for author name */
+    .testimonial-quote-text {
+        margin-bottom: 0.75rem !important;
+    }
+    
+    /* Ensure testimonial footer has proper spacing */
+    .testimonial-footer {
+        margin-top: 0.5rem !important;
+        padding-top: 0.25rem !important;
+    }
+}
+
 .testimonial-quote-text {
     font-style: italic;
     color: #333;
