@@ -917,6 +917,92 @@ function fitness_coach_hide_content_editor() {
 add_action('admin_init', 'fitness_coach_hide_content_editor');
 
 /**
+ * Alternative method: Hide editor via CSS and JavaScript for custom templates
+ */
+function fitness_coach_hide_editor_admin_script() {
+    $screen = get_current_screen();
+    
+    // Only on page edit screens
+    if (!$screen || $screen->base !== 'post' || $screen->post_type !== 'page') {
+        return;
+    }
+    
+    $post_id = isset($_GET['post']) ? $_GET['post'] : null;
+    if (!$post_id) {
+        return;
+    }
+    
+    $template = get_page_template_slug($post_id);
+    
+    // List of templates where we want to hide the content editor
+    $templates_to_hide = array(
+        'front-page.php',
+        'page-about.php', 
+        'page-template-how-it-works.php',
+        'page-template-image-text-rows.php'
+    );
+    
+    if (in_array($template, $templates_to_hide)) {
+        ?>
+        <style>
+            #postdivrich, 
+            #wp-content-wrap,
+            #wp-content-editor-tools,
+            #ed_toolbar {
+                display: none !important;
+            }
+            .acf-postbox {
+                margin-top: 20px;
+            }
+        </style>
+        <script>
+            jQuery(document).ready(function($) {
+                // Hide the content editor
+                $('#postdivrich').hide();
+                $('#wp-content-wrap').hide();
+                $('#wp-content-editor-tools').hide();
+                $('#ed_toolbar').hide();
+                
+                // Also hide any TinyMCE instances
+                if (typeof tinymce !== 'undefined') {
+                    var editor = tinymce.get('content');
+                    if (editor) {
+                        $('#wp-content-wrap').hide();
+                    }
+                }
+            });
+        </script>
+        <?php
+    }
+}
+add_action('admin_head', 'fitness_coach_hide_editor_admin_script');
+
+/**
+ * Additional method: Remove editor meta box for custom templates
+ */
+function fitness_coach_remove_editor_metabox() {
+    $post_id = isset($_GET['post']) ? $_GET['post'] : null;
+    if (!$post_id) {
+        return;
+    }
+    
+    $template = get_page_template_slug($post_id);
+    
+    // List of templates where we want to hide the content editor
+    $templates_to_hide = array(
+        'front-page.php',
+        'page-about.php', 
+        'page-template-how-it-works.php',
+        'page-template-image-text-rows.php'
+    );
+    
+    if (in_array($template, $templates_to_hide)) {
+        remove_meta_box('postdivrich', 'page', 'normal');
+    }
+}
+add_action('do_meta_boxes', 'fitness_coach_remove_editor_metabox');
+
+/**
  * Add admin notice for custom template pages
  */
 function fitness_coach_custom_template_notice() {
