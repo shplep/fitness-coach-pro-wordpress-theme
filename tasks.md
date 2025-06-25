@@ -153,6 +153,14 @@
 - [x] Update front-page.php to use new button settings
 - [x] Add CSS styling for all button size variations
 
+## Phase 17: Image Link Enhancement ✅
+- [x] Add optional URL field for images in Image and Text Rows template
+- [x] Implement conditional image linking functionality
+- [x] Add link target option (same window/new tab)
+- [x] Update ACF fields configuration with conditional logic
+- [x] Modify page template to wrap images in links when URL is provided
+- [x] Maintain accessibility with proper alt text on linked images
+
 ## Current Status: ✅ COMPLETED - All Phases Complete!
 
 ## Installation Instructions

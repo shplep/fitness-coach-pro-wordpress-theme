@@ -40,6 +40,8 @@ get_header(); ?>
                     $layout = $row['row_layout'] ?? 'text_left';
                     $text_content = $row['text_content'] ?? '';
                     $image = $row['row_image'] ?? null;
+                    $image_url = $row['image_url'] ?? '';
+                    $image_link_target = $row['image_link_target'] ?? '_self';
                     $background = $row['row_background'] ?? 'white';
                     $padding_top = $row['padding_top'] ?? 'default';
                     $padding_bottom = $row['padding_bottom'] ?? 'default';
@@ -84,9 +86,17 @@ get_header(); ?>
                                 <div class="image-section">
                                     <?php if ($image) : ?>
                                         <div class="image-container">
-                                            <img src="<?php echo esc_url($image['url']); ?>" 
-                                                 alt="<?php echo esc_attr($image['alt'] ?: $image['title']); ?>"
-                                                 loading="lazy">
+                                            <?php if (!empty($image_url)) : ?>
+                                                <a href="<?php echo esc_url($image_url); ?>" target="<?php echo esc_attr($image_link_target); ?>">
+                                                    <img src="<?php echo esc_url($image['url']); ?>" 
+                                                         alt="<?php echo esc_attr($image['alt'] ?: $image['title']); ?>"
+                                                         loading="lazy">
+                                                </a>
+                                            <?php else : ?>
+                                                <img src="<?php echo esc_url($image['url']); ?>" 
+                                                     alt="<?php echo esc_attr($image['alt'] ?: $image['title']); ?>"
+                                                     loading="lazy">
+                                            <?php endif; ?>
                                         </div>
                                     <?php else : ?>
                                         <div class="image-placeholder">
@@ -101,9 +111,17 @@ get_header(); ?>
                                 <div class="image-section">
                                     <?php if ($image) : ?>
                                         <div class="image-container">
-                                            <img src="<?php echo esc_url($image['url']); ?>" 
-                                                 alt="<?php echo esc_attr($image['alt'] ?: $image['title']); ?>"
-                                                 loading="lazy">
+                                            <?php if (!empty($image_url)) : ?>
+                                                <a href="<?php echo esc_url($image_url); ?>" target="<?php echo esc_attr($image_link_target); ?>">
+                                                    <img src="<?php echo esc_url($image['url']); ?>" 
+                                                         alt="<?php echo esc_attr($image['alt'] ?: $image['title']); ?>"
+                                                         loading="lazy">
+                                                </a>
+                                            <?php else : ?>
+                                                <img src="<?php echo esc_url($image['url']); ?>" 
+                                                     alt="<?php echo esc_attr($image['alt'] ?: $image['title']); ?>"
+                                                     loading="lazy">
+                                            <?php endif; ?>
                                         </div>
                                     <?php else : ?>
                                         <div class="image-placeholder">

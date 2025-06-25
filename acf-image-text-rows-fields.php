@@ -148,6 +148,62 @@ if (function_exists('acf_add_local_field_group')) {
                         'type' => 'text',
                         'instructions' => 'Alternative text for the image (important for accessibility)',
                         'placeholder' => 'Describe what the image shows...',
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field' => 'field_row_layout',
+                                    'operator' => '!=',
+                                    'value' => 'text_only',
+                                ),
+                            ),
+                        ),
+                    ),
+                    
+                    // Image Link URL (optional)
+                    array(
+                        'key' => 'field_image_url',
+                        'label' => 'Image Link URL (Optional)',
+                        'name' => 'image_url',
+                        'type' => 'url',
+                        'instructions' => 'Optional: Add a URL to make the image clickable (leave empty for no link)',
+                        'placeholder' => 'https://example.com',
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field' => 'field_row_layout',
+                                    'operator' => '!=',
+                                    'value' => 'text_only',
+                                ),
+                            ),
+                        ),
+                    ),
+                    
+                    // Link Target (for image URL)
+                    array(
+                        'key' => 'field_image_link_target',
+                        'label' => 'Open Link In',
+                        'name' => 'image_link_target',
+                        'type' => 'select',
+                        'instructions' => 'Choose how the link should open',
+                        'choices' => array(
+                            '_self' => 'Same window/tab',
+                            '_blank' => 'New window/tab',
+                        ),
+                        'default_value' => '_self',
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field' => 'field_row_layout',
+                                    'operator' => '!=',
+                                    'value' => 'text_only',
+                                ),
+                                array(
+                                    'field' => 'field_image_url',
+                                    'operator' => '!=',
+                                    'value' => '',
+                                ),
+                            ),
+                        ),
                     ),
                     
                     // Background Color
