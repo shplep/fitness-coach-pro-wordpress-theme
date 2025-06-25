@@ -275,11 +275,68 @@ acf_add_local_field_group(array(
             'placement' => 'top',
         ),
         array(
+            'key' => 'field_testimonials_display_type',
+            'label' => 'Testimonials Display Type',
+            'name' => 'testimonials_display_type',
+            'type' => 'radio',
+            'instructions' => 'Choose how to display testimonials on the homepage',
+            'choices' => array(
+                'built_in' => 'Use Built-in Testimonials (theme carousel)',
+                'plugin_shortcode' => 'Use Plugin Shortcodes (Strong Testimonials, etc.)',
+                'disabled' => 'Disable Testimonials Section',
+            ),
+            'default_value' => 'built_in',
+            'layout' => 'vertical',
+        ),
+        array(
             'key' => 'field_testimonials_title',
             'label' => 'Testimonials Title',
             'name' => 'testimonials_title',
             'type' => 'text',
             'placeholder' => 'What My Clients Say',
+            'conditional_logic' => array(
+                array(
+                    array(
+                        'field' => 'field_testimonials_display_type',
+                        'operator' => '!=',
+                        'value' => 'disabled',
+                    ),
+                ),
+            ),
+        ),
+        array(
+            'key' => 'field_testimonials_desktop_shortcode',
+            'label' => 'Desktop Testimonials Shortcode',
+            'name' => 'testimonials_desktop_shortcode',
+            'type' => 'text',
+            'instructions' => 'Enter the shortcode for desktop testimonials display (e.g., [testimonials view="slider" count="3"])',
+            'placeholder' => '[testimonials view="slider" count="3"]',
+            'conditional_logic' => array(
+                array(
+                    array(
+                        'field' => 'field_testimonials_display_type',
+                        'operator' => '==',
+                        'value' => 'plugin_shortcode',
+                    ),
+                ),
+            ),
+        ),
+        array(
+            'key' => 'field_testimonials_mobile_shortcode',
+            'label' => 'Mobile Testimonials Shortcode',
+            'name' => 'testimonials_mobile_shortcode',
+            'type' => 'text',
+            'instructions' => 'Enter the shortcode for mobile testimonials display (e.g., [testimonials view="slider" count="1"])',
+            'placeholder' => '[testimonials view="slider" count="1"]',
+            'conditional_logic' => array(
+                array(
+                    array(
+                        'field' => 'field_testimonials_display_type',
+                        'operator' => '==',
+                        'value' => 'plugin_shortcode',
+                    ),
+                ),
+            ),
         ),
         array(
             'key' => 'field_testimonials_source',
@@ -293,6 +350,15 @@ acf_add_local_field_group(array(
             ),
             'default_value' => 'post_type',
             'layout' => 'vertical',
+            'conditional_logic' => array(
+                array(
+                    array(
+                        'field' => 'field_testimonials_display_type',
+                        'operator' => '==',
+                        'value' => 'built_in',
+                    ),
+                ),
+            ),
         ),
         array(
             'key' => 'field_custom_testimonials',
@@ -304,6 +370,11 @@ acf_add_local_field_group(array(
             'button_label' => 'Add Testimonial',
             'conditional_logic' => array(
                 array(
+                    array(
+                        'field' => 'field_testimonials_display_type',
+                        'operator' => '==',
+                        'value' => 'built_in',
+                    ),
                     array(
                         'field' => 'field_testimonials_source',
                         'operator' => '==',
@@ -378,6 +449,15 @@ acf_add_local_field_group(array(
             'name' => '',
             'type' => 'tab',
             'placement' => 'top',
+            'conditional_logic' => array(
+                array(
+                    array(
+                        'field' => 'field_testimonials_display_type',
+                        'operator' => '==',
+                        'value' => 'built_in',
+                    ),
+                ),
+            ),
         ),
         array(
             'key' => 'field_testimonials_desktop_behavior',

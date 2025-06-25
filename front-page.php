@@ -152,7 +152,10 @@ get_header(); ?>
 
     <?php
     // Testimonials Section
+    $testimonials_display_type = get_field('testimonials_display_type'); // 'built_in', 'plugin_shortcode', or 'disabled'
     $testimonials_title = get_field('testimonials_title');
+    $testimonials_desktop_shortcode = get_field('testimonials_desktop_shortcode');
+    $testimonials_mobile_shortcode = get_field('testimonials_mobile_shortcode');
     $testimonials_source = get_field('testimonials_source'); // 'post_type' or 'custom'
     $desktop_behavior = get_field('testimonials_desktop_behavior'); // 'carousel' or 'static'
     $mobile_behavior = get_field('testimonials_mobile_behavior'); // 'carousel' or 'static'
@@ -166,6 +169,7 @@ get_header(); ?>
     $text_weight = get_field('testimonials_text_weight');
     
     // Set defaults if not set
+    $testimonials_display_type = $testimonials_display_type ?: 'built_in';
     $desktop_behavior = $desktop_behavior ?: 'carousel';
     $mobile_behavior = $mobile_behavior ?: 'carousel';
     $show_dots = ($show_dots !== null) ? $show_dots : true;
@@ -178,13 +182,53 @@ get_header(); ?>
     $text_weight = $text_weight ?: 'normal';
     ?>
     
-    <!-- Testimonials Section - Using Working Debug Carousel Structure -->
+    <!-- Testimonials Section -->
+    <?php if ($testimonials_display_type !== 'disabled') : ?>
     <div class="testimonials-section">
         <?php if ($testimonials_title) : ?>
             <h2 class="section-title"><?php echo esc_html($testimonials_title); ?></h2>
         <?php else : ?>
             <h2 class="section-title">What My Clients Say</h2>
         <?php endif; ?>
+        
+        <?php if ($testimonials_display_type === 'plugin_shortcode') : ?>
+            <!-- Plugin Shortcode Display (Desktop/Mobile) -->
+            <?php if ($testimonials_desktop_shortcode && $testimonials_mobile_shortcode) : ?>
+                <div class="testimonials-shortcode-desktop" style="display: none;">
+                    <?php echo do_shortcode($testimonials_desktop_shortcode); ?>
+                </div>
+                <div class="testimonials-shortcode-mobile" style="display: none;">
+                    <?php echo do_shortcode($testimonials_mobile_shortcode); ?>
+                </div>
+                
+                <script>
+                // Show appropriate shortcode based on screen size
+                (function() {
+                    const desktopDiv = document.querySelector('.testimonials-shortcode-desktop');
+                    const mobileDiv = document.querySelector('.testimonials-shortcode-mobile');
+                    
+                    function updateShortcodeDisplay() {
+                        const isMobile = window.innerWidth <= 768;
+                        if (desktopDiv) desktopDiv.style.display = isMobile ? 'none' : 'block';
+                        if (mobileDiv) mobileDiv.style.display = isMobile ? 'block' : 'none';
+                    }
+                    
+                    // Initialize
+                    updateShortcodeDisplay();
+                    
+                    // Update on resize
+                    window.addEventListener('resize', updateShortcodeDisplay);
+                })();
+                </script>
+                
+            <?php elseif ($testimonials_desktop_shortcode) : ?>
+                <!-- Single shortcode for all screens -->
+                <?php echo do_shortcode($testimonials_desktop_shortcode); ?>
+            <?php else : ?>
+                <p style="text-align: center; color: #666; font-style: italic;">Please add testimonials shortcodes in the admin panel.</p>
+            <?php endif; ?>
+            
+        <?php elseif ($testimonials_display_type === 'built_in') : ?>
         
                 <?php
         // Collect all testimonials into an array for the carousel
@@ -720,9 +764,10 @@ get_header(); ?>
             console.log('Responsive testimonials carousel initialized with', totalSlides, 'slides (' + currentTestimonialsPerSlide + ' testimonials per slide), autoplay:', autoplaySpeed + 'ms');
         })();
         </script>
+        
+        <?php endif; ?> <!-- End built_in display type -->
     </div>
-
-
+    <?php endif; ?> <!-- End testimonials section -->
 
     <?php
     // Contact/Application Section
