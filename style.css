@@ -1523,7 +1523,7 @@ body .footer-content a:active {
 
 .how-it-works-hero {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    padding: 4rem 0;
+    padding: 2.5rem 0;
     text-align: center;
 }
 
@@ -1536,7 +1536,7 @@ body .footer-content a:active {
 .hero-subtitle {
     font-size: 1.25rem;
     color: #6c757d;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
