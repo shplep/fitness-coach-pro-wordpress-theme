@@ -14,6 +14,8 @@ get_header(); ?>
     $profile_images_title = get_field('profile_images_title');
     $profile_images_gallery = get_field('profile_images_gallery');
     $profile_images_layout = get_field('profile_images_layout');
+    $enable_profile_lightbox = get_field('enable_profile_lightbox');
+    $profile_gallery_name = get_field('profile_gallery_name');
     $video_section_title = get_field('video_section_title');
     $youtube_video_url = get_field('youtube_video_url');
     $about_story = get_field('about_story');
@@ -48,13 +50,33 @@ get_header(); ?>
                 <h2 class="section-title"><?php echo esc_html($profile_images_title ?: 'Gallery'); ?></h2>
                 
                 <div class="profile-images-grid layout-<?php echo esc_attr($profile_images_layout ?: 'grid'); ?>">
+                    <?php 
+                    // Prepare lightbox attributes
+                    $lightbox_class = '';
+                    $lightbox_rel = '';
+                    if ($enable_profile_lightbox) {
+                        $lightbox_class = 'class="foobox"';
+                        $gallery_name = $profile_gallery_name ?: 'profile';
+                        $lightbox_rel = 'rel="' . esc_attr($gallery_name) . '"';
+                    }
+                    ?>
+                    
                     <?php foreach ($profile_images_gallery as $image) : ?>
                         <div class="profile-image-item">
                             <?php if (is_array($image) && isset($image['url'])) : ?>
-                                <img src="<?php echo esc_url($image['url']); ?>" 
-                                     alt="<?php echo esc_attr($image['alt'] ?: 'Gallery image'); ?>"
-                                     title="<?php echo esc_attr($image['title'] ?: ''); ?>"
-                                     loading="lazy">
+                                <?php if ($enable_profile_lightbox) : ?>
+                                    <a href="<?php echo esc_url($image['url']); ?>" <?php echo $lightbox_class; ?> <?php echo $lightbox_rel; ?>>
+                                        <img src="<?php echo esc_url($image['url']); ?>" 
+                                             alt="<?php echo esc_attr($image['alt'] ?: 'Gallery image'); ?>"
+                                             title="<?php echo esc_attr($image['title'] ?: ''); ?>"
+                                             loading="lazy">
+                                    </a>
+                                <?php else : ?>
+                                    <img src="<?php echo esc_url($image['url']); ?>" 
+                                         alt="<?php echo esc_attr($image['alt'] ?: 'Gallery image'); ?>"
+                                         title="<?php echo esc_attr($image['title'] ?: ''); ?>"
+                                         loading="lazy">
+                                <?php endif; ?>
                                 <?php if (!empty($image['caption'])) : ?>
                                     <p class="image-caption"><?php echo esc_html($image['caption']); ?></p>
                                 <?php endif; ?>
@@ -66,9 +88,17 @@ get_header(); ?>
                                 $image_caption = wp_get_attachment_caption($image);
                                 ?>
                                 <?php if ($image_url) : ?>
-                                    <img src="<?php echo esc_url($image_url); ?>" 
-                                         alt="<?php echo esc_attr($image_alt ?: 'Gallery image'); ?>"
-                                         loading="lazy">
+                                    <?php if ($enable_profile_lightbox) : ?>
+                                        <a href="<?php echo esc_url($image_url); ?>" <?php echo $lightbox_class; ?> <?php echo $lightbox_rel; ?>>
+                                            <img src="<?php echo esc_url($image_url); ?>" 
+                                                 alt="<?php echo esc_attr($image_alt ?: 'Gallery image'); ?>"
+                                                 loading="lazy">
+                                        </a>
+                                    <?php else : ?>
+                                        <img src="<?php echo esc_url($image_url); ?>" 
+                                             alt="<?php echo esc_attr($image_alt ?: 'Gallery image'); ?>"
+                                             loading="lazy">
+                                    <?php endif; ?>
                                     <?php if ($image_caption) : ?>
                                         <p class="image-caption"><?php echo esc_html($image_caption); ?></p>
                                     <?php endif; ?>

@@ -85,6 +85,33 @@ acf_add_local_field_group(array(
             ),
             'default_value' => 'grid',
         ),
+        array(
+            'key' => 'field_enable_profile_lightbox',
+            'label' => 'Enable Lightbox for Gallery',
+            'name' => 'enable_profile_lightbox',
+            'type' => 'true_false',
+            'instructions' => 'Enable lightbox functionality for the profile image gallery - users can click images to view them larger',
+            'default_value' => 1,
+            'ui' => 1,
+        ),
+        array(
+            'key' => 'field_profile_gallery_name',
+            'label' => 'Gallery Name',
+            'name' => 'profile_gallery_name',
+            'type' => 'text',
+            'instructions' => 'Name for this gallery group (all images will be navigable together)',
+            'default_value' => 'profile',
+            'placeholder' => 'profile, about, gallery',
+            'conditional_logic' => array(
+                array(
+                    array(
+                        'field' => 'field_enable_profile_lightbox',
+                        'operator' => '==',
+                        'value' => '1',
+                    ),
+                ),
+            ),
+        ),
         
         // Video Section Tab
         array(

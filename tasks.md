@@ -166,6 +166,10 @@
 - [x] Add gallery functionality with optional gallery name field
 - [x] Implement rel attribute for grouping images in lightbox galleries
 - [x] Allow users to navigate between images in same gallery
+- [x] Add FooBox lightbox integration to About page Profile Image Gallery
+- [x] Include enable/disable lightbox option for About page gallery
+- [x] Add gallery name field for About page profile images
+- [x] Support both array and ID image formats in About page lightbox
 
 ## Current Status: ✅ COMPLETED - All Phases Complete!
 
