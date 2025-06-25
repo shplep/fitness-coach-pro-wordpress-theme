@@ -154,6 +154,8 @@ get_header(); ?>
     // Testimonials Section
     $testimonials_title = get_field('testimonials_title');
     $testimonials_source = get_field('testimonials_source'); // 'post_type' or 'custom'
+    $desktop_behavior = get_field('testimonials_desktop_behavior'); // 'carousel' or 'static'
+    $mobile_behavior = get_field('testimonials_mobile_behavior'); // 'carousel' or 'static'
     $show_dots = get_field('testimonials_show_dots');
     $show_arrows = get_field('testimonials_show_arrows');
     $autoplay_speed = get_field('testimonials_autoplay');
@@ -164,6 +166,8 @@ get_header(); ?>
     $text_weight = get_field('testimonials_text_weight');
     
     // Set defaults if not set
+    $desktop_behavior = $desktop_behavior ?: 'carousel';
+    $mobile_behavior = $mobile_behavior ?: 'carousel';
     $show_dots = ($show_dots !== null) ? $show_dots : true;
     $show_arrows = ($show_arrows !== null) ? $show_arrows : true;
     $autoplay_speed = ($autoplay_speed !== null) ? $autoplay_speed : 6;
@@ -250,14 +254,47 @@ get_header(); ?>
         $padding = $testimonials_per_slide == 3 ? '1.25rem' : ($testimonials_per_slide == 2 ? '1.5rem' : '2rem');
         ?>
         
-        <div class="working-carousel-wrapper" style="position: relative; max-width: <?php echo $max_width; ?>; margin: 0 auto; padding: 0 60px;">
-            <?php if ($show_arrows && $total_testimonials > $testimonials_per_slide) : ?>
-                <button class="working-prev" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.9); border: 2px solid #ddd; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; color: #333; transition: all 0.3s ease;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="15,18 9,12 15,6"></polyline>
-                    </svg>
-                </button>
-            <?php endif; ?>
+        <!-- Desktop Static Display (3 testimonials side by side) -->
+        <div class="testimonials-desktop-static" style="display: none; max-width: <?php echo $max_width; ?>; margin: 0 auto; padding: 0 2rem;">
+            <div style="display: flex; gap: 1.5rem; align-items: stretch;">
+                <?php 
+                // Display first 3 testimonials for static desktop view
+                $static_testimonials = array_slice($carousel_testimonials, 0, 3);
+                foreach ($static_testimonials as $testimonial) : 
+                ?>
+                    <div style="flex: 1; background: #f9f9f9; border-radius: 10px; padding: <?php echo $padding; ?>; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; min-height: 350px;">
+                        <div class="testimonial-content">
+                            <?php if ($show_quotes) : ?>
+                                <div class="testimonial-quote-mark" style="font-size: 2rem; color: #e5e5e5; font-family: Georgia, serif; line-height: 0.8; margin-bottom: 0.75rem;">"</div>
+                            <?php endif; ?>
+                            <p class="testimonial-quote-text" style="font-size: 0.9rem; line-height: 1.25; margin-bottom: 0.5rem; font-style: <?php echo $text_italic ? 'italic' : 'normal'; ?>; color: #333; font-weight: <?php echo $text_weight === 'bold' ? '600' : ($text_weight === 'medium' ? '500' : '400'); ?>;">
+                                <?php echo wp_kses_post($testimonial['text']); ?>
+                            </p>
+                        </div>
+                        <div class="testimonial-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
+                            <p class="testimonial-author-name" style="font-weight: 600; color: #1a1a1a; margin: 0; font-size: 0.9rem; line-height: 1.2; display: block;">
+                                — <?php echo esc_html($testimonial['author']); ?>
+                            </p>
+                            <?php if ($testimonial['show_rating'] && $testimonial['rating']) : ?>
+                                <div style="color: #fbbf24; letter-spacing: 0.05rem;">
+                                    <?php for ($i = 1; $i <= 5; $i++) : ?>
+                                        <span style="font-size: 0.9rem;"><?php echo $i <= $testimonial['rating'] ? '★' : '☆'; ?></span>
+                                    <?php endfor; ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+
+        <!-- Carousel Display (for both desktop carousel mode and mobile) -->
+        <div class="testimonials-carousel-display" style="position: relative; max-width: <?php echo $max_width; ?>; margin: 0 auto; padding: 0 60px;">
+            <button class="working-prev" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.9); border: 2px solid #ddd; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; color: #333; transition: all 0.3s ease;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15,18 9,12 15,6"></polyline>
+                </svg>
+            </button>
             
             <div class="working-carousel" style="overflow: hidden; position: relative; min-height: <?php echo $carousel_min_height; ?>;">
                 <?php 
@@ -269,8 +306,10 @@ get_header(); ?>
                         <?php foreach ($group as $testimonial) : ?>
                             <div style="<?php echo $testimonials_per_slide == 1 ? 'width: 100%;' : 'flex: 1;'; ?> background: #f9f9f9; border-radius: 10px; padding: <?php echo $padding; ?>; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; min-height: <?php echo $testimonials_per_slide == 3 ? '400px' : '350px'; ?>; height: auto;">
                                 <div class="testimonial-content">
-                                    <div class="testimonial-quote-mark" style="font-size: <?php echo $quote_size; ?>; color: #e5e5e5; font-family: Georgia, serif; line-height: 0.8; margin-bottom: 0.75rem;">"</div>
-                                    <p class="testimonial-quote-text" style="font-size: <?php echo $font_size; ?>; line-height: 1.25; margin-bottom: 0.5rem; font-style: italic; color: #333;">
+                                    <?php if ($show_quotes) : ?>
+                                        <div class="testimonial-quote-mark" style="font-size: <?php echo $quote_size; ?>; color: #e5e5e5; font-family: Georgia, serif; line-height: 0.8; margin-bottom: 0.75rem;">"</div>
+                                    <?php endif; ?>
+                                    <p class="testimonial-quote-text" style="font-size: <?php echo $font_size; ?>; line-height: 1.25; margin-bottom: 0.5rem; font-style: <?php echo $text_italic ? 'italic' : 'normal'; ?>; color: #333; font-weight: <?php echo $text_weight === 'bold' ? '600' : ($text_weight === 'medium' ? '500' : '400'); ?>;">
                                         <?php echo wp_kses_post($testimonial['text']); ?>
                                     </p>
                                 </div>
@@ -283,9 +322,9 @@ get_header(); ?>
                                             <?php for ($i = 1; $i <= 5; $i++) : ?>
                                                 <span style="font-size: <?php echo $testimonials_per_slide == 3 ? '0.9rem' : '1rem'; ?>;"><?php echo $i <= $testimonial['rating'] ? '★' : '☆'; ?></span>
                                             <?php endfor; ?>
-                            </div>
+                                        </div>
                                     <?php endif; ?>
-                        </div>
+                                </div>
                             </div>
                         <?php endforeach; ?>
                         
@@ -299,30 +338,30 @@ get_header(); ?>
                 <?php endforeach; ?>
             </div>
             
-            <?php if ($show_arrows && $total_testimonials > $testimonials_per_slide) : ?>
-                <button class="working-next" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.9); border: 2px solid #ddd; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; color: #333; transition: all 0.3s ease;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="9,18 15,12 9,6"></polyline>
-                    </svg>
-                </button>
-            <?php endif; ?>
-                    </div>
+            <button class="working-next" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.9); border: 2px solid #ddd; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; color: #333; transition: all 0.3s ease;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9,18 15,12 9,6"></polyline>
+                </svg>
+            </button>
+        </div>
 
-        <?php if ($show_dots && $total_slides > 1) : ?>
-            <div class="working-dots" style="display: flex; justify-content: center; gap: 0.5rem; margin-top: 2rem;">
-                <?php for ($i = 0; $i < $total_slides; $i++) : ?>
-                    <button class="working-dot <?php echo $i === 0 ? 'working-dot-active' : ''; ?>" data-slide="<?php echo $i; ?>" style="width: 12px; height: 12px; border-radius: 50%; border: none; background: <?php echo $i === 0 ? '#333' : '#ddd'; ?>; cursor: pointer; transition: all 0.3s ease;"></button>
-                <?php endfor; ?>
-                            </div>
-        <?php endif; ?>
+        <div class="working-dots" style="display: flex; justify-content: center; gap: 0.5rem; margin-top: 2rem;">
+            <?php for ($i = 0; $i < $total_slides; $i++) : ?>
+                <button class="working-dot <?php echo $i === 0 ? 'working-dot-active' : ''; ?>" data-slide="<?php echo $i; ?>" style="width: 12px; height: 12px; border-radius: 50%; border: none; background: <?php echo $i === 0 ? '#333' : '#ddd'; ?>; cursor: pointer; transition: all 0.3s ease;"></button>
+            <?php endfor; ?>
+        </div>
         
         <script>
-        // Working carousel JavaScript for dynamic testimonials per slide with mobile responsiveness
+        // Advanced testimonials JavaScript with desktop/mobile behavior options
         (function() {
             let currentSlide = 0;
             const totalTestimonials = <?php echo $total_testimonials; ?>;
             const desktopTestimonialsPerSlide = <?php echo $testimonials_per_slide; ?>;
             const autoplaySpeed = <?php echo $autoplay_speed * 1000; ?>; // Convert to milliseconds
+            const desktopBehavior = '<?php echo $desktop_behavior; ?>'; // 'carousel' or 'static'
+            const mobileBehavior = '<?php echo $mobile_behavior; ?>'; // 'carousel' or 'static'
+            const showDots = <?php echo $show_dots ? 'true' : 'false'; ?>;
+            const showArrows = <?php echo $show_arrows ? 'true' : 'false'; ?>;
             let autoplayTimer = null;
             let isMobile = window.innerWidth <= 768;
             let currentTestimonialsPerSlide = isMobile ? 1 : desktopTestimonialsPerSlide;
@@ -330,9 +369,39 @@ get_header(); ?>
             
             // Get elements
             const carousel = document.querySelector('.working-carousel');
-            const wrapper = document.querySelector('.working-carousel-wrapper');
+            const carouselDisplay = document.querySelector('.testimonials-carousel-display');
+            const staticDisplay = document.querySelector('.testimonials-desktop-static');
             const dotsContainer = document.querySelector('.working-dots');
             let slides, dots, prevBtn, nextBtn;
+            
+            // Function to update display based on screen size and behavior settings
+            function updateDisplay() {
+                const currentBehavior = isMobile ? mobileBehavior : desktopBehavior;
+                
+                if (currentBehavior === 'static' && !isMobile) {
+                    // Desktop static mode: show static display, hide carousel
+                    if (staticDisplay) staticDisplay.style.display = 'block';
+                    if (carouselDisplay) carouselDisplay.style.display = 'none';
+                    if (dotsContainer) dotsContainer.style.display = 'none';
+                    stopAutoplay();
+                } else {
+                    // Carousel mode (desktop carousel or mobile): show carousel, hide static
+                    if (staticDisplay) staticDisplay.style.display = 'none';
+                    if (carouselDisplay) carouselDisplay.style.display = 'block';
+                    if (dotsContainer) dotsContainer.style.display = totalSlides > 1 ? 'flex' : 'none';
+                    
+                    // Update navigation visibility based on settings
+                    const showNavigation = totalTestimonials > currentTestimonialsPerSlide && totalSlides > 1;
+                    const prevBtn = document.querySelector('.working-prev');
+                    const nextBtn = document.querySelector('.working-next');
+                    
+                    if (prevBtn) prevBtn.style.display = (showArrows && showNavigation) ? 'flex' : 'none';
+                    if (nextBtn) nextBtn.style.display = (showArrows && showNavigation) ? 'flex' : 'none';
+                    if (dotsContainer) dotsContainer.style.display = (showDots && totalSlides > 1) ? 'flex' : 'none';
+                    
+                    startAutoplay();
+                }
+            }
             
             // Get all individual testimonials data and styling options
             const testimonialsData = [
@@ -490,8 +559,8 @@ get_header(); ?>
                 const showNavigation = totalTestimonials > currentTestimonialsPerSlide && totalSlides > 1;
                 
                 // Update arrows
-                prevBtn = wrapper.querySelector('.working-prev');
-                nextBtn = wrapper.querySelector('.working-next');
+                prevBtn = carouselDisplay.querySelector('.working-prev');
+                nextBtn = carouselDisplay.querySelector('.working-next');
                 
                 if (prevBtn) prevBtn.style.display = showNavigation ? 'flex' : 'none';
                 if (nextBtn) nextBtn.style.display = showNavigation ? 'flex' : 'none';
@@ -572,10 +641,10 @@ get_header(); ?>
                     });
                 });
                 
-                // Hover effects for wrapper
-                if (wrapper) {
-                    wrapper.addEventListener('mouseenter', stopAutoplay);
-                    wrapper.addEventListener('mouseleave', startAutoplay);
+                // Hover effects for carousel display
+                if (carouselDisplay) {
+                    carouselDisplay.addEventListener('mouseenter', stopAutoplay);
+                    carouselDisplay.addEventListener('mouseleave', startAutoplay);
                 }
                 
                 // Arrow hover effects
@@ -628,19 +697,22 @@ get_header(); ?>
                 isMobile = window.innerWidth <= 768;
                 const newTestimonialsPerSlide = isMobile ? 1 : desktopTestimonialsPerSlide;
                 
+                // Update display based on new screen size
+                updateDisplay();
+                
                 if (newTestimonialsPerSlide !== currentTestimonialsPerSlide) {
                     stopAutoplay();
                     currentTestimonialsPerSlide = newTestimonialsPerSlide;
                     rebuildCarousel();
                     updateCarousel();
-                    startAutoplay();
+                    // updateDisplay() will handle autoplay based on current behavior
                 }
             }
             
             // Initialize
             rebuildCarousel();
             updateCarousel();
-            startAutoplay();
+            updateDisplay(); // This will handle autoplay based on current behavior
             
             // Add resize listener
             window.addEventListener('resize', handleResize);

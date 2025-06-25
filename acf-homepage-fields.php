@@ -380,6 +380,38 @@ acf_add_local_field_group(array(
             'placement' => 'top',
         ),
         array(
+            'key' => 'field_testimonials_desktop_behavior',
+            'label' => 'Desktop Display Behavior',
+            'name' => 'testimonials_desktop_behavior',
+            'type' => 'radio',
+            'instructions' => 'Choose how testimonials behave on desktop screens (768px and wider)',
+            'choices' => array(
+                'carousel' => 'Carousel/Slider (with navigation)',
+                'static' => 'Static Display (no sliding)',
+            ),
+            'default_value' => 'carousel',
+            'layout' => 'vertical',
+            'wrapper' => array(
+                'width' => '50',
+            ),
+        ),
+        array(
+            'key' => 'field_testimonials_mobile_behavior',
+            'label' => 'Mobile Display Behavior',
+            'name' => 'testimonials_mobile_behavior',
+            'type' => 'radio',
+            'instructions' => 'Choose how testimonials behave on mobile screens (under 768px)',
+            'choices' => array(
+                'carousel' => 'Carousel/Slider (with navigation)',
+                'static' => 'Static Display (no sliding)',
+            ),
+            'default_value' => 'carousel',
+            'layout' => 'vertical',
+            'wrapper' => array(
+                'width' => '50',
+            ),
+        ),
+        array(
             'key' => 'field_testimonials_show_dots',
             'label' => 'Show Navigation Dots',
             'name' => 'testimonials_show_dots',
