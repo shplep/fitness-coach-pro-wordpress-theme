@@ -160,6 +160,9 @@
 - [x] Update ACF fields configuration with conditional logic
 - [x] Modify page template to wrap images in links when URL is provided
 - [x] Maintain accessibility with proper alt text on linked images
+- [x] Add FooBox Image Lightbox integration with optional lightbox field
+- [x] Implement priority system: lightbox > URL link > no link
+- [x] Add data-foobox attribute for automatic lightbox detection
 
 ## Current Status: ✅ COMPLETED - All Phases Complete!
 

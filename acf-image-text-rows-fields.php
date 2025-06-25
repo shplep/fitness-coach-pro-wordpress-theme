@@ -206,6 +206,26 @@ if (function_exists('acf_add_local_field_group')) {
                         ),
                     ),
                     
+                    // Enable Lightbox
+                    array(
+                        'key' => 'field_enable_lightbox',
+                        'label' => 'Open Image in Lightbox',
+                        'name' => 'enable_lightbox',
+                        'type' => 'true_false',
+                        'instructions' => 'Enable this to open the image in a lightbox overlay when clicked (overrides URL link if both are set)',
+                        'default_value' => 0,
+                        'ui' => 1,
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field' => 'field_row_layout',
+                                    'operator' => '!=',
+                                    'value' => 'text_only',
+                                ),
+                            ),
+                        ),
+                    ),
+                    
                     // Background Color
                     array(
                         'key' => 'field_row_background',
