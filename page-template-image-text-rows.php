@@ -43,6 +43,7 @@ get_header(); ?>
                     $image_url = $row['image_url'] ?? '';
                     $image_link_target = $row['image_link_target'] ?? '_self';
                     $enable_lightbox = $row['enable_lightbox'] ?? false;
+                    $gallery_name = $row['gallery_name'] ?? '';
                     $background = $row['row_background'] ?? 'white';
                     $padding_top = $row['padding_top'] ?? 'default';
                     $padding_bottom = $row['padding_bottom'] ?? 'default';
@@ -87,8 +88,10 @@ get_header(); ?>
                                 <div class="image-section">
                                     <?php if ($image) : ?>
                                         <div class="image-container">
-                                            <?php if ($enable_lightbox) : ?>
-                                                <a href="<?php echo esc_url($image['url']); ?>" class="foobox">
+                                            <?php if ($enable_lightbox) : 
+                                                $lightbox_rel = !empty($gallery_name) ? 'rel="' . esc_attr($gallery_name) . '"' : '';
+                                            ?>
+                                                <a href="<?php echo esc_url($image['url']); ?>" class="foobox" <?php echo $lightbox_rel; ?>>
                                                     <img src="<?php echo esc_url($image['url']); ?>" 
                                                          alt="<?php echo esc_attr($image['alt'] ?: $image['title']); ?>"
                                                          loading="lazy">
@@ -118,8 +121,10 @@ get_header(); ?>
                                 <div class="image-section">
                                     <?php if ($image) : ?>
                                         <div class="image-container">
-                                            <?php if ($enable_lightbox) : ?>
-                                                <a href="<?php echo esc_url($image['url']); ?>" class="foobox">
+                                            <?php if ($enable_lightbox) : 
+                                                $lightbox_rel = !empty($gallery_name) ? 'rel="' . esc_attr($gallery_name) . '"' : '';
+                                            ?>
+                                                <a href="<?php echo esc_url($image['url']); ?>" class="foobox" <?php echo $lightbox_rel; ?>>
                                                     <img src="<?php echo esc_url($image['url']); ?>" 
                                                          alt="<?php echo esc_attr($image['alt'] ?: $image['title']); ?>"
                                                          loading="lazy">

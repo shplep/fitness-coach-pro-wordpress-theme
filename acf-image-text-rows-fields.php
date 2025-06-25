@@ -226,6 +226,30 @@ if (function_exists('acf_add_local_field_group')) {
                         ),
                     ),
                     
+                    // Gallery Name (for grouping lightbox images)
+                    array(
+                        'key' => 'field_gallery_name',
+                        'label' => 'Gallery Name (Optional)',
+                        'name' => 'gallery_name',
+                        'type' => 'text',
+                        'instructions' => 'Group this image with others by giving them the same gallery name. Users can navigate between images in the same gallery.',
+                        'placeholder' => 'e.g., portfolio, before-after, workouts',
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field' => 'field_row_layout',
+                                    'operator' => '!=',
+                                    'value' => 'text_only',
+                                ),
+                                array(
+                                    'field' => 'field_enable_lightbox',
+                                    'operator' => '==',
+                                    'value' => '1',
+                                ),
+                            ),
+                        ),
+                    ),
+                    
                     // Background Color
                     array(
                         'key' => 'field_row_background',

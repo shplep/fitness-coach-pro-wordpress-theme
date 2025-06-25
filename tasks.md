@@ -163,6 +163,9 @@
 - [x] Add FooBox Image Lightbox integration with optional lightbox field
 - [x] Implement priority system: lightbox > URL link > no link
 - [x] Add data-foobox attribute for automatic lightbox detection
+- [x] Add gallery functionality with optional gallery name field
+- [x] Implement rel attribute for grouping images in lightbox galleries
+- [x] Allow users to navigate between images in same gallery
 
 ## Current Status: ✅ COMPLETED - All Phases Complete!
 
